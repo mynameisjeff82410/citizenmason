@@ -35,10 +35,10 @@ export function Start() {
           </Text>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <Button size="lg" asChild>
-              <a href="#">Book a discovery call</a>
+              <a href="mailto:jeff@citizenmason.com?subject=Discovery%20call">Book a discovery call</a>
             </Button>
             <Button variant="link" size="lg" asChild>
-              <a href="#">Or get your AI opportunity plan</a>
+              <a href="mailto:jeff@citizenmason.com?subject=AI%20opportunity%20plan">Or get your AI opportunity plan</a>
             </Button>
           </div>
         </div>
