@@ -1,0 +1,137 @@
+/**
+ * Citizen Mason stylesheet entry — the self-contained equivalent of the kit's
+ * packages/ui/src/styles/kit.css. The kit imports "@kit/tokens/css" and
+ * "@kit/tokens/tailwind" (workspace paths that do not resolve outside the kit);
+ * here those are swapped for local copies under ./tokens.
+ *
+ * Order matters:
+ *   1. Tailwind core.
+ *   2. tw-animate-css — enter/exit utilities used by Radix-backed primitives.
+ *   3. Token variables — defines every --color-*, --radius-*, … under
+ *      [data-theme="citizen-mason"], generated from the kit's citizen-mason theme.
+ *   4. The @theme map that turns those vars into Tailwind utilities.
+ *
+ * Switch theme with data-theme on <html> (data-theme="citizen-mason"); toggle
+ * dark with the `dark` class.
+ */
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./tokens/citizen-mason.css";
+@import "./tokens/tailwind.css";
+
+/* Tailwind 4 content sources: scan the app, the vendored kit components, and
+ * the kit hooks so their utility classes are generated. */
+@source "./**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
+@source "../hooks/**/*.{ts,tsx}";
+
+/* Accordion open/close keyframes (Radix sets --radix-accordion-content-height). */
+@theme {
+  --animate-accordion-down: accordion-down 0.2s var(--ease-standard);
+  --animate-accordion-up: accordion-up 0.2s var(--ease-standard);
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
+
+/* Motion vocabulary — dependency-free entrance/idle animations. Use the
+ * `animate-*` utilities; all are disabled by the reduced-motion guard below. */
+@theme {
+  --animate-fade-in: fade-in 0.5s var(--ease-standard) both;
+  --animate-slide-up: slide-up 0.5s var(--ease-standard) both;
+  --animate-scale-in: scale-in 0.3s var(--ease-standard) both;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+/* Feature card — edge shimmer. A low-opacity amber gradient sweeps the card's
+ * top hairline once on scroll-reveal and again on hover. The reduced-motion
+ * guard below zeroes all animation durations, landing on the static state. */
+.edge-sweep {
+  background-image: linear-gradient(
+    90deg,
+    rgba(217, 138, 30, 0) 0%,
+    rgba(217, 138, 30, 0) 35%,
+    rgba(217, 138, 30, 0.55) 50%,
+    rgba(217, 138, 30, 0) 65%,
+    rgba(217, 138, 30, 0) 100%
+  );
+  background-size: 200% 100%;
+  background-position: 150% 0;
+  opacity: 0;
+}
+.edge-sweep--reveal {
+  animation: edge-sweep 1.1s var(--ease-standard) 0.15s both;
+}
+.group:hover .edge-sweep {
+  animation: edge-sweep 1.1s var(--ease-standard) both;
+}
+@keyframes edge-sweep {
+  0%   { background-position: 150% 0; opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { background-position: -50% 0; opacity: 0; }
+}
+
+/* Base element defaults bound to semantic tokens. */
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+  * {
+    border-color: var(--color-border);
+  }
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+}
+
+/* Honor reduced-motion: neutralize the accordion keyframes, the tw-animate
+ * enter/exit utilities, and component transitions site-wide. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .edge-sweep,
+  .edge-sweep--reveal,
+  .group:hover .edge-sweep {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
