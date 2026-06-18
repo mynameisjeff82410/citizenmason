@@ -4,42 +4,98 @@ import { cn } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
 import { Heading } from "@/components/ui/heading";
 import { Text, Eyebrow } from "@/components/ui/text";
-import { Badge } from "@/components/ui/badge";
 import { FeatureCard, SectionDivider } from "@/components/ui/feature-card";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
+
+type Pill = { label: string; icon?: string; href?: string };
 
 const ITEMS: {
   title: string;
   description: string;
   badge: string;
-  links?: { label: string; href: string }[];
+  pills?: Pill[];
 }[] = [
   {
     title: "For a high-craft studio",
-    description: "A morning brief and an email autofiler, in production.",
+    description:
+      "The team starts the day knowing what needs action, and project email files itself into the right folders.",
     badge: "In production",
+    pills: [{ label: "Morning Brief" }, { label: "Email Autofiler" }],
   },
   {
     title: "For a data-center operator",
-    description: "An AI-visibility baseline and a CapEx model, in use.",
-    badge: "In production",
+    description:
+      "They can see whether ChatGPT and Perplexity cite them, and the finance team models spend in the tool they already use.",
+    badge: "In use",
+    pills: [{ label: "AI Visibility Baseline" }, { label: "CapEx Model" }],
   },
   {
     title: "Live products",
-    description: "CFO Agent, ProductOS, and The Dugout.",
+    description: "Built and led, all live now.",
     badge: "Live",
-    links: [
-      { label: "CFO Agent", href: "https://cfoagent-psi.vercel.app" },
-      { label: "ProductOS", href: "https://product-os-psi.vercel.app" },
-      { label: "The Dugout", href: "https://trydugout.vercel.app" },
+    pills: [
+      { label: "Crafted", icon: "/logos/crafted.svg", href: "https://craftedplayers.com" },
+      { label: "Phase", icon: "/logos/phase.svg", href: "https://www.phase.cc" },
+      { label: "Netrunner", icon: "/logos/netrunner.png", href: "https://www.netrunner.tax" },
+      { label: "Magic Eden", icon: "/logos/magiceden.png", href: "https://magiceden.us" },
     ],
   },
   {
     title: "Fifteen years shipping product",
-    description: "Across crypto, fintech, gaming, and media.",
+    description: "Shipped for teams in consulting, media, sports, and crypto.",
     badge: "Track record",
+    pills: [
+      { label: "Deloitte", icon: "/logos/deloitte.png" },
+      { label: "NFL", icon: "/logos/nfl.png" },
+      { label: "Kraken Exchange", icon: "/logos/kraken.png" },
+      { label: "Miami HEAT", icon: "/logos/heat.png" },
+    ],
   },
 ];
+
+function Pills({ pills }: { pills: Pill[] }) {
+  return (
+    <span className="mt-3 flex flex-wrap gap-1.5">
+      {pills.map((pill) => {
+        const inner = (
+          <>
+            {pill.icon && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={pill.icon}
+                alt=""
+                aria-hidden
+                className="h-4 w-4 shrink-0 rounded-[3px] object-contain"
+              />
+            )}
+            <span>{pill.label}</span>
+          </>
+        );
+        const base =
+          "inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-medium";
+        return pill.href ? (
+          <a
+            key={pill.label}
+            href={pill.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              base,
+              "text-foreground transition-colors hover:border-link hover:text-link",
+              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+            )}
+          >
+            {inner}
+          </a>
+        ) : (
+          <span key={pill.label} className={cn(base, "text-muted-foreground")}>
+            {inner}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
 
 export function Range() {
   const { ref, revealed } = useScrollReveal();
@@ -63,7 +119,7 @@ export function Range() {
               The workflows are new. The builder is not.
             </Heading>
             <Text tone="muted" size="base" className="max-w-2xl">
-              A track record of shipping, across very different rooms.
+              Real systems and live products, shipped for real businesses.
             </Text>
           </div>
 
@@ -78,21 +134,7 @@ export function Range() {
                 title={item.title}
               >
                 {item.description}
-                {item.links && (
-                  <span className="mt-2 flex flex-wrap gap-3">
-                    {item.links.map((link) => (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-sm text-xs font-medium text-link underline underline-offset-2 transition-colors hover:text-link-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </span>
-                )}
+                {item.pills && <Pills pills={item.pills} />}
               </FeatureCard>
             ))}
           </div>

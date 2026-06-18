@@ -9,19 +9,19 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 const STEPS = [
   {
-    title: "Read-only first",
+    title: "I find the expensive friction.",
     description:
-      "We start by reading the work you already produce. Nothing changes in your tools.",
+      "The first call surfaces where your senior time and revenue leak. That's the first build.",
   },
   {
-    title: "Drafts, not sends",
+    title: "I ship one working system, fast.",
     description:
-      "The workflow prepares the work and hands it to you. You review every output before it goes anywhere.",
+      "Live on the tools you already use, built by the person who builds it, hands on the work.",
   },
   {
-    title: "You hit Send. You sign. You decide.",
+    title: "It runs. You stay in control.",
     description:
-      "We earn each step. Send access and anything client-facing are yours to grant, never assumed.",
+      "The routine work runs on its own; anything client-facing waits for your approval. Add the next once this one pays off.",
   },
 ];
 
@@ -42,9 +42,10 @@ export function HowItWorks() {
           )}
         >
           <div className="flex flex-col gap-3">
-            <Eyebrow>How we work</Eyebrow>
+            <Eyebrow>How it works</Eyebrow>
             <Heading as="h2" size="h2">
-              You stay in control.
+              Fifteen years shipping software, now focused on one workflow at a
+              time.
             </Heading>
           </div>
 
@@ -63,8 +64,7 @@ export function HowItWorks() {
           </div>
 
           <Text tone="muted" size="base" className="max-w-2xl">
-            Your tools stay yours. The work runs on copies, and you can revoke
-            access in minutes.
+            The first workflow is usually running within 1 week.
           </Text>
         </div>
       </Container>
