@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason - Conversion C: Conversational single-field</title>
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* ========================================================================
+       CONVERSION C: "CONVERSATIONAL SINGLE-FIELD"  (module layout, neutral kit)
+       ------------------------------------------------------------------------
+       Layout + conversion mechanics only. All color comes from _kit.css tokens.
+       No bespoke palette. The accent lives ONCE, on the form's submit, which IS
+       the discovery-call entry.
+
+       The mechanic: the block reframes booking as starting a conversation. A
+       short form sits in a left-ranged intent column (the spoken opener + the
+       frame-of-reference line + the trust ladder as quiet reassurance) beside a
+       form card on the right (deliberate asymmetry, not a centered box). Three
+       fields read as one sentence the visitor completes: name, email, and one
+       line, "what slows you down most." That single line is the conversation
+       starter, not a survey.
+
+       Hierarchy of asks (one dominant, two demoted):
+         1  PRIMARY   submit "Start the conversation"  -> accent, full weight
+         2  SECONDARY "or grab a time directly"        -> quiet link to scheduler
+         3  TERTIARY  "the AI opportunity plan instead"-> plainest text link
+
+       On submit, JS swaps the card for a calm confirmation that states the next
+       step in plain agency (a reply, then a time you choose). No network, no
+       urgency copy, no countdown.
+       ===================================================================== */
+
+    .convc {
+      position: relative;
+      padding-block: var(--space-11) var(--space-10);
+      background: var(--paper);
+      overflow: clip;
+    }
+
+    /* A single faint structural ruling marks the asymmetric seam so the offset
+       reads as intentional. Not a dot-grid, not a network field. */
+    .convc__seam {
+      position: absolute;
+      top: var(--space-9);
+      bottom: var(--space-9);
+      left: calc(50% + 3.5rem); /* pushed right of center: the split is NOT 50/50 */
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0,
+        var(--line) 14%,
+        var(--line) 86%,
+        transparent 100%);
+      pointer-events: none;
+    }
+
+    .convc__inner {
+      position: relative;
+      width: 100%;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+      display: grid;
+      /* Deliberately unequal: the spoken opener dominates, the form is narrower. */
+      grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.92fr);
+      column-gap: var(--space-9);
+      align-items: start;
+    }
+
+    /* ---------- LEFT: the spoken opener (the conversation), left-ranged ----- */
+    .convc__intent { max-width: 34ch; }
+
+    .convc__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: 0 0 var(--space-5);
+    }
+    /* keystone tick: available equity, kept small and quiet, not a logo claim */
+    .convc__tick {
+      width: 7px;
+      height: 9px;
+      flex: none;
+      background: var(--ink);
+      clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+      opacity: 0.78;
+    }
+
+    .convc__open {
+      font-size: clamp(2rem, 3.6vw, var(--fs-3xl));
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-snug);
+      letter-spacing: var(--tracking-tight);
+      color: var(--ink);
+      margin: 0;
+      text-wrap: balance;
+    }
+    /* the second clause carries quieter weight: type-as-composition, one block */
+    .convc__open em {
+      font-style: normal;
+      color: var(--ink-soft);
+      font-weight: var(--fw-regular);
+    }
+
+    .convc__say {
+      font-size: var(--fs-lg);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+      margin: var(--space-5) 0 0;
+      max-width: 40ch;
+    }
+
+    /* frame-of-reference line: what the visitor is walking into, not urgency */
+    .convc__forl {
+      margin: var(--space-6) 0 0;
+      padding: var(--space-4) 0 0;
+      border-top: 1px solid var(--line);
+      font-size: var(--fs-sm);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+      max-width: 42ch;
+    }
+    .convc__forl .convc__forl-lead {
+      font-family: var(--font-mono);
+      color: var(--ink);
+      letter-spacing: var(--tracking-wide);
+    }
+
+    /* trust ladder, recast as a quiet inline reassurance under the opener.
+       Plain agency, no jargon. Reads as one steady line, not a feature grid. */
+    .convc__ladder {
+      list-style: none;
+      margin: var(--space-7) 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3) var(--space-2);
+    }
+    .convc__rung {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink);
+    }
+    .convc__rung-dot {
+      width: 5px;
+      height: 5px;
+      flex: none;
+      border-radius: var(--radius-full);
+      background: var(--ink-faint);
+    }
+    .convc__rung-sep {
+      color: var(--ink-faint);
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      user-select: none;
+    }
+
+    /* ---------- RIGHT: the form card (one short form) ---------------------- */
+    .convc__formwrap { position: relative; }
+
+    /* mono tag floating above the card: small kinetic-type touch */
+    .convc__formtag {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      margin: 0 0 var(--space-3);
+      padding-left: var(--space-1);
+    }
+
+    .convc__card {
+      background: var(--surface-1);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: var(--space-7);
+    }
+
+    .convc__form { display: flex; flex-direction: column; gap: var(--space-5); }
+
+    /* each field carries a mono index so the three fields read as a sequence,
+       a sentence the visitor completes, not a generic stacked form */
+    .convc__field { display: flex; flex-direction: column; gap: var(--space-2); }
+    .convc__fhead {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-2);
+    }
+    .convc__findex {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-medium);
+      color: var(--ink-faint);
+      letter-spacing: var(--tracking-wide);
+    }
+    .convc__flabel {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink);
+    }
+    .convc__fhint {
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      margin: -2px 0 0;
+    }
+
+    .convc__input,
+    .convc__textarea {
+      font-family: var(--font-sans);
+      font-size: var(--fs-base);
+      color: var(--ink);
+      background: var(--surface-1);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      width: 100%;
+      transition: border-color var(--dur-fast) var(--ease),
+                  box-shadow var(--dur-fast) var(--ease);
+    }
+    .convc__input::placeholder,
+    .convc__textarea::placeholder { color: var(--ink-faint); }
+    .convc__input:focus,
+    .convc__textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-tint);
+    }
+    .convc__textarea {
+      min-height: 78px;
+      resize: vertical;
+      line-height: var(--lh-normal);
+    }
+
+    /* the ONE place the accent lives: the submit IS the discovery-call entry */
+    .convc__submit { margin-top: var(--space-1); }
+
+    /* under-submit microcopy: what happens after the click, plain agency */
+    .convc__after {
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      line-height: var(--lh-normal);
+      margin: 0;
+      text-align: center;
+    }
+
+    /* SECONDARY ask: quiet link to the scheduler, clearly lower weight */
+    .convc__or {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-top: var(--space-2);
+      color: var(--ink-faint);
+      font-size: var(--fs-xs);
+    }
+    .convc__or::before,
+    .convc__or::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .convc__or-word {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
+    }
+    .convc__grab {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      align-self: center;
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink-soft);
+      transition: color var(--dur-fast) var(--ease), gap var(--dur-fast) var(--ease);
+    }
+    .convc__grab:hover { color: var(--ink); gap: var(--space-3); }
+    .convc__grab .arr { font-family: var(--font-mono); }
+
+    /* TERTIARY ask: plainest text link, demoted below the card */
+    .convc__alt {
+      margin: var(--space-5) 0 0;
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      text-align: center;
+      padding-left: var(--space-1);
+    }
+    .convc__alt a {
+      color: var(--ink-soft);
+      text-decoration: underline;
+      text-decoration-color: var(--line-strong);
+      text-underline-offset: 3px;
+      transition: text-decoration-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+    }
+    .convc__alt a:hover { color: var(--ink); text-decoration-color: var(--ink-faint); }
+
+    /* ---------- confirmation state (swaps in on submit) ------------------- */
+    .convc__card.is-sent .convc__form,
+    .convc__card.is-sent .convc__or,
+    .convc__card .convc__done { display: none; }
+    .convc__card.is-sent .convc__done { display: flex; }
+
+    .convc__done {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-4);
+      animation: convc-rise var(--dur) var(--ease) both;
+    }
+    .convc__check {
+      width: 34px;
+      height: 34px;
+      flex: none;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-full);
+      background: var(--accent-tint);
+      color: var(--accent);
+    }
+    .convc__check svg { width: 18px; height: 18px; }
+    .convc__done-title { font-size: var(--fs-xl); font-weight: var(--fw-semibold); margin: 0; color: var(--ink); }
+    .convc__done-body { font-size: var(--fs-sm); color: var(--ink-soft); line-height: var(--lh-relaxed); margin: 0; max-width: 38ch; }
+    .convc__done-body strong { color: var(--ink); font-weight: var(--fw-semibold); }
+
+    /* ---------- entrance motion: fast, earned, reduced-motion aware -------- */
+    @keyframes convc-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .convc__intent > *,
+    .convc__formwrap > * {
+      animation: convc-rise var(--dur) var(--ease) both;
+    }
+    .convc__eyebrow { animation-delay: 0ms; }
+    .convc__open    { animation-delay: 60ms; }
+    .convc__say     { animation-delay: 120ms; }
+    .convc__forl    { animation-delay: 170ms; }
+    .convc__ladder  { animation-delay: 220ms; }
+    .convc__formtag { animation-delay: 200ms; }
+    .convc__card    { animation-delay: 260ms; }
+
+    /* ---------- responsive: collapse the asymmetry to a clean stack -------- */
+    @media (max-width: 960px) {
+      .convc__seam { display: none; }
+      .convc__inner {
+        grid-template-columns: 1fr;
+        row-gap: var(--space-8);
+      }
+      .convc__intent { max-width: 48ch; }
+      .convc__formwrap { max-width: 520px; }
+    }
+    @media (max-width: 760px) {
+      .convc { padding-block: var(--space-9) var(--space-8); }
+      .convc__intent { max-width: none; }
+      .convc__card { padding: var(--space-6); }
+      .convc__say, .convc__forl { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ &#9672; ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#main" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <!-- ===================== CONVERSION C: CONVERSATIONAL SINGLE-FIELD ======= -->
+  <section class="convc" id="main" aria-labelledby="convc-open">
+    <span class="convc__seam" aria-hidden="true"></span>
+    <div class="convc__inner">
+
+      <!-- LEFT: the spoken opener -->
+      <div class="convc__intent">
+        <p class="eyebrow convc__eyebrow">
+          <span class="convc__tick" aria-hidden="true"></span>
+          Start a conversation
+        </p>
+
+        <h2 class="convc__open" id="convc-open">
+          Tell me one thing that slows you down.
+          <em>We find the one workflow worth building first.</em>
+        </h2>
+
+        <p class="convc__say">
+          No deck, no scope, no pitch. A short note from you, a reply from me, then a time you choose.
+        </p>
+
+        <p class="convc__forl">
+          <span class="convc__forl-lead">A 45-minute call.</span> We find the one workflow worth building first. Understanding before scope.
+        </p>
+
+        <ul class="convc__ladder" aria-label="You stay the final word">
+          <li class="convc__rung"><span class="convc__rung-dot" aria-hidden="true"></span> You read it.</li>
+          <li class="convc__rung-sep" aria-hidden="true">/</li>
+          <li class="convc__rung"><span class="convc__rung-dot" aria-hidden="true"></span> You approve the draft.</li>
+          <li class="convc__rung-sep" aria-hidden="true">/</li>
+          <li class="convc__rung"><span class="convc__rung-dot" aria-hidden="true"></span> You hit Send.</li>
+        </ul>
+      </div>
+
+      <!-- RIGHT: the form card -->
+      <div class="convc__formwrap">
+        <span class="convc__formtag">Three lines, that is all</span>
+
+        <div class="convc__card" id="convc-card">
+          <form class="convc__form" id="convc-form" novalidate>
+            <div class="convc__field">
+              <div class="convc__fhead">
+                <span class="convc__findex" aria-hidden="true">01</span>
+                <label class="convc__flabel" for="convc-name">Your name</label>
+              </div>
+              <input class="convc__input" id="convc-name" name="name" type="text"
+                     autocomplete="name" placeholder="Jordan Ellery" required />
+            </div>
+
+            <div class="convc__field">
+              <div class="convc__fhead">
+                <span class="convc__findex" aria-hidden="true">02</span>
+                <label class="convc__flabel" for="convc-email">Where I reply</label>
+              </div>
+              <input class="convc__input" id="convc-email" name="email" type="email"
+                     autocomplete="email" placeholder="jordan@studio.com" required />
+            </div>
+
+            <div class="convc__field">
+              <div class="convc__fhead">
+                <span class="convc__findex" aria-hidden="true">03</span>
+                <label class="convc__flabel" for="convc-line">What slows you down most</label>
+              </div>
+              <p class="convc__fhint">One line is plenty. The thing your team keeps redoing.</p>
+              <textarea class="convc__textarea" id="convc-line" name="line"
+                        placeholder="Every shop drawing gets read twice and we still miss one."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--lg btn--block convc__submit">
+              Start the conversation
+            </button>
+            <p class="convc__after">A reply from me, then a time you choose. You stay the final word the whole way.</p>
+
+            <div class="convc__or" role="separator" aria-label="Or book directly">
+              <span class="convc__or-word">or</span>
+            </div>
+            <a href="#main" class="convc__grab">
+              Grab a time directly
+              <span class="arr" aria-hidden="true">&rarr;</span>
+            </a>
+          </form>
+
+          <!-- confirmation state (hidden until submit) -->
+          <div class="convc__done" aria-live="polite">
+            <span class="convc__check" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                   stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.5l4.2 4.2L19 7" />
+              </svg>
+            </span>
+            <h3 class="convc__done-title">Sent. The conversation is open.</h3>
+            <p class="convc__done-body">
+              I read it myself and reply within one business day with a time or two.
+              We spend <strong>45 minutes</strong> on the one workflow worth building first.
+            </p>
+          </div>
+        </div>
+
+        <p class="convc__alt">
+          Prefer to think on it first? Get <a href="#main">the AI opportunity plan</a> instead.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <script>
+    /* Minimal: swap the card to its confirmation state on submit. No network. */
+    (function () {
+      var form = document.getElementById('convc-form');
+      var card = document.getElementById('convc-card');
+      if (!form || !card) return;
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = document.getElementById('convc-name');
+        var email = document.getElementById('convc-email');
+        if (!name.value.trim()) { name.focus(); return; }
+        if (!email.value.trim()) { email.focus(); return; }
+        card.classList.add('is-sent');
+      });
+    })();
+  </script>
+
+</body>
+</html>

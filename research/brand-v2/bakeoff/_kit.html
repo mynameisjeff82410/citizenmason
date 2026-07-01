@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason V2 Kit — Living Style Sheet</title>
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* Page-local scaffolding only. Not part of the kit. */
+    .demo { padding-block: var(--space-8); border-bottom: 1px dashed var(--line); }
+    .demo__label {
+      font-family: var(--font-mono); font-size: var(--fs-eyebrow);
+      text-transform: uppercase; letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint); margin: 0 0 var(--space-5);
+    }
+    .swatch-row { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .swatch { width: 96px; }
+    .swatch__chip { height: 56px; border-radius: var(--radius-md); border: 1px solid var(--line); }
+    .swatch__name { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); margin-top: var(--space-2); display: block; }
+    .type-row { display: flex; align-items: baseline; gap: var(--space-4); flex-wrap: wrap; }
+    .type-row .tag { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); width: 64px; flex: none; }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ ◈ ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <main id="main" class="u-container">
+
+    <!-- ===================== HERO SHELL ===================== -->
+    <header class="hero" style="padding-inline:0">
+      <div class="hero__inner" style="padding-inline:0; max-width:none">
+        <p class="eyebrow">Fractional AI-Ops partner</p>
+        <h1 class="hero__headline">Turn the work that slows you down into software that runs itself.</h1>
+        <p class="hero__subhead">Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. You stay in control of every call that matters.</p>
+        <div class="hero__actions">
+          <a href="#" class="btn btn--primary btn--lg">Book a discovery call</a>
+          <a href="#" class="btn btn--ghost">Get your AI opportunity plan</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===================== COLOR TOKENS ===================== -->
+    <section class="demo">
+      <p class="demo__label">Color tokens — neutral palette + one placeholder accent</p>
+      <div class="swatch-row">
+        <div class="swatch"><div class="swatch__chip" style="background:var(--paper)"></div><span class="swatch__name">--paper</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--surface-1)"></div><span class="swatch__name">--surface-1</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--surface-2)"></div><span class="swatch__name">--surface-2</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--surface-3)"></div><span class="swatch__name">--surface-3</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--ink)"></div><span class="swatch__name">--ink</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--ink-soft)"></div><span class="swatch__name">--ink-soft</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--ink-faint)"></div><span class="swatch__name">--ink-faint</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--line)"></div><span class="swatch__name">--line</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--line-strong)"></div><span class="swatch__name">--line-strong</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--accent)"></div><span class="swatch__name">--accent</span></div>
+        <div class="swatch"><div class="swatch__chip" style="background:var(--accent-tint)"></div><span class="swatch__name">--accent-tint</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== TYPE SCALE ===================== -->
+    <section class="demo">
+      <p class="demo__label">Type scale — Geist Sans + Geist Mono</p>
+      <div class="u-stack">
+        <div class="type-row"><span class="tag">eyebrow</span><span class="eyebrow" style="margin:0">Fractional AI-Ops partner</span></div>
+        <div class="type-row"><span class="tag">h1</span><span class="h1">Software that runs itself</span></div>
+        <div class="type-row"><span class="tag">h2</span><span class="h2">How it works</span></div>
+        <div class="type-row"><span class="tag">h3</span><span class="h3">You stay the final word</span></div>
+        <div class="type-row"><span class="tag">h4</span><span class="h4">Morning Brief</span></div>
+        <div class="type-row"><span class="tag">lead</span><span class="lead" style="max-width:48ch">A second pair of senior eyes that prepares the work. You keep the final call.</span></div>
+        <div class="type-row"><span class="tag">body</span><span class="body" style="max-width:48ch">Incoming documents sort and file themselves into the existing structure.</span></div>
+        <div class="type-row"><span class="tag">caption</span><span class="caption">A 45-minute call. Understanding before scope.</span></div>
+        <div class="type-row"><span class="tag">mono</span><span class="u-mono" style="font-size:var(--fs-sm)">01 / read &nbsp; 02 / compare &nbsp; 03 / capture</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== BUTTONS ===================== -->
+    <section class="demo">
+      <p class="demo__label">Buttons by role — primary / secondary / ghost (+ sizes)</p>
+      <div class="u-stack-lg">
+        <div class="u-row">
+          <a href="#" class="btn btn--primary">Book a discovery call</a>
+          <a href="#" class="btn btn--secondary">Get your AI opportunity plan</a>
+          <a href="#" class="btn btn--ghost">Learn more</a>
+        </div>
+        <div class="u-row">
+          <a href="#" class="btn btn--primary btn--sm">Book a call</a>
+          <a href="#" class="btn btn--primary">Book a call</a>
+          <a href="#" class="btn btn--primary btn--lg">Book a call</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CARDS ===================== -->
+    <section class="demo">
+      <p class="demo__label">Card — three workflow patterns (with index, hover lift)</p>
+      <div class="u-grid-3">
+        <article class="card card--hover">
+          <span class="card__index">01</span>
+          <h3 class="card__title">Morning Brief</h3>
+          <p class="card__body">Reads the inbox overnight, returns room-tagged items to scan in minutes.</p>
+        </article>
+        <article class="card card--hover">
+          <span class="card__index">02</span>
+          <h3 class="card__title">Shop Drawing Compare</h3>
+          <p class="card__body">Pairs an instruction with the contractor response, flags what was not addressed. One missed detail can cost tens of thousands.</p>
+        </article>
+        <article class="card card--hover">
+          <span class="card__index">03</span>
+          <h3 class="card__title">Autofiler</h3>
+          <p class="card__body">Incoming documents sort and file themselves into the existing structure.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== TRUST LADDER ===================== -->
+    <section class="demo">
+      <p class="demo__label">Trust-ladder row — plain agency, three steps</p>
+      <div class="ladder">
+        <div class="ladder__step"><span class="ladder__num"></span><span class="ladder__label">You read it.</span></div>
+        <div class="ladder__step"><span class="ladder__num"></span><span class="ladder__label">You approve the draft.</span></div>
+        <div class="ladder__step"><span class="ladder__num"></span><span class="ladder__label">You hit Send.</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== PILLS + LOGO-PILL ROW ===================== -->
+    <section class="demo">
+      <p class="demo__label">Pills + logo-pill row (styled text, no images)</p>
+      <div class="u-stack-lg">
+        <div class="pill-row">
+          <span class="pill">Room-tagged</span>
+          <span class="pill pill--mono">15-year record</span>
+          <span class="pill pill--ghost">Runs on your tools</span>
+        </div>
+        <div>
+          <p class="proof__group-label">Career record</p>
+          <div class="pill-row">
+            <span class="logo-pill">Deloitte</span>
+            <span class="logo-pill">NFL Digital Media</span>
+            <span class="logo-pill">Miami HEAT</span>
+            <span class="logo-pill">Kraken</span>
+            <span class="logo-pill">Scopely</span>
+            <span class="logo-pill">Maestro</span>
+          </div>
+        </div>
+        <div>
+          <p class="proof__group-label">Live products</p>
+          <div class="pill-row">
+            <span class="logo-pill">Crafted</span>
+            <span class="logo-pill">Phase</span>
+            <span class="logo-pill">Netrunner</span>
+            <span class="logo-pill">Magic Eden</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== PROOF STRIP (full-bleed) ===================== -->
+  <section class="proof">
+    <div class="proof__inner">
+      <p class="proof__lead"><strong>Built by an operator who ships, not an agency.</strong> A 15-year product record.</p>
+      <div>
+        <p class="proof__group-label">Career record</p>
+        <div class="pill-row">
+          <span class="logo-pill">Deloitte</span>
+          <span class="logo-pill">NFL Digital Media</span>
+          <span class="logo-pill">Miami HEAT</span>
+          <span class="logo-pill">Kraken</span>
+          <span class="logo-pill">Scopely</span>
+          <span class="logo-pill">Maestro</span>
+        </div>
+      </div>
+      <div>
+        <p class="proof__group-label">Live products</p>
+        <div class="pill-row">
+          <span class="logo-pill">Crafted</span>
+          <span class="logo-pill">Phase</span>
+          <span class="logo-pill">Netrunner</span>
+          <span class="logo-pill">Magic Eden</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="u-container">
+
+    <!-- ===================== SCHEDULER + FORM ===================== -->
+    <section class="demo">
+      <p class="demo__label">Booking / scheduler card mock + form fields</p>
+      <div class="u-grid-2">
+        <div class="scheduler">
+          <div class="scheduler__head">
+            <span class="scheduler__title">Book a discovery call</span>
+            <span class="scheduler__meta">45 min</span>
+          </div>
+          <div class="scheduler__body">
+            <div class="scheduler__days" role="group" aria-label="Choose a day">
+              <button class="scheduler__day is-active" aria-pressed="true"><span class="scheduler__day-dow">Tue</span><span class="scheduler__day-num">24</span></button>
+              <button class="scheduler__day" aria-pressed="false"><span class="scheduler__day-dow">Wed</span><span class="scheduler__day-num">25</span></button>
+              <button class="scheduler__day" aria-pressed="false"><span class="scheduler__day-dow">Thu</span><span class="scheduler__day-num">26</span></button>
+            </div>
+            <div class="scheduler__slots" role="group" aria-label="Choose a time">
+              <button class="slot-chip" aria-pressed="false">9:00 AM</button>
+              <button class="slot-chip is-active" aria-pressed="true">10:30 AM</button>
+              <button class="slot-chip" aria-pressed="false">1:00 PM</button>
+              <button class="slot-chip" aria-pressed="false">2:30 PM</button>
+              <button class="slot-chip" aria-pressed="false">4:00 PM</button>
+              <button class="slot-chip" aria-pressed="false">4:45 PM</button>
+            </div>
+          </div>
+          <div class="scheduler__foot">
+            <a href="#" class="btn btn--primary btn--block">Confirm Tuesday, 10:30 AM</a>
+          </div>
+        </div>
+
+        <form class="u-stack" onsubmit="return false">
+          <div class="field">
+            <label class="field__label" for="f-name">Name</label>
+            <input class="input" id="f-name" type="text" placeholder="Your name" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="f-email">Email</label>
+            <input class="input" id="f-email" type="email" placeholder="you@studio.com" />
+          </div>
+          <div class="field">
+            <label class="field__label" for="f-note">What slows you down most?</label>
+            <textarea class="textarea" id="f-note" placeholder="One workflow worth building first."></textarea>
+          </div>
+          <button class="btn btn--secondary" type="submit">Get your AI opportunity plan</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================== UTILITIES NOTE ===================== -->
+    <section class="demo">
+      <p class="demo__label">Frame-of-reference line</p>
+      <p class="lead u-narrow">A 45-minute call. We find the one workflow worth building first. Understanding before scope.</p>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div>
+        <p class="footer__wordmark">Citizen Mason</p>
+        <p class="footer__tagline">A second pair of senior eyes that prepares the work. You keep the final call.</p>
+      </div>
+      <ul class="footer__links">
+        <li><a class="footer__link" href="#">Who it is for</a></li>
+        <li><a class="footer__link" href="#">How it works</a></li>
+        <li><a class="footer__link" href="#">Proof</a></li>
+        <li><a class="footer__link" href="#">Book a call</a></li>
+      </ul>
+      <p class="footer__legal">Neutral shared kit for the V2 bake-off. Identity-agnostic substrate. Color and mark are placeholders.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Minimal JS — tab/hover only. Day + slot selection in the scheduler mock.
+    function bindToggle(selector) {
+      document.querySelectorAll(selector).forEach(group => {
+        group.addEventListener('click', e => {
+          const btn = e.target.closest('button');
+          if (!btn || !group.contains(btn)) return;
+          group.querySelectorAll('button').forEach(b => {
+            b.classList.remove('is-active');
+            b.setAttribute('aria-pressed', 'false');
+          });
+          btn.classList.add('is-active');
+          btn.setAttribute('aria-pressed', 'true');
+        });
+      });
+    }
+    bindToggle('.scheduler__days');
+    bindToggle('.scheduler__slots');
+  </script>
+</body>
+</html>

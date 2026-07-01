@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason, fractional AI-Ops partner</title>
+<meta name="description" content="The AI systems your business is missing, run on the tools you already use. You decide every call that matters." />
+
+<!-- ============================================================================
+     CITIZEN MASON V2 - HERO VARIANT: "SEGMENT SELECTOR / SCHEMATIC"
+     Identity: locked "Craftsperson's Ledger" (identity-3). Bone/paper canvas,
+     one oxblood accent used sparingly, Fraunces display + Geist Sans body +
+     Geist Mono labels, ruled ledger motif, chiseled keystone (Quoin) mark.
+
+     KEPT VERBATIM from hero-tx-flow: nav (outline "Book a call"), the entire
+     LEFT hero column (mono eyebrow, weight-choreographed headline + self-drawing
+     underscore, subhead, oxblood primary CTA, ruled secondary link, operator-
+     credibility line) and the credibility strip.
+
+     THE MECHANIC (new): a small clean SEGMENT SELECTOR sits above the schematic
+     (three choices: Founders, Agencies, Exploring AI). The pipeline INPUT
+     (scattered operational work) and the ENGINE (the Quoin keystone, the
+     embedded AI-Ops partner) stay constant. ONLY the right-side OUTPUT scene
+     changes to show the selected segment's outcome, each rendered as a DRAWN
+     line-art scene in the Ledger style with at most a 2-3 word caption:
+        FOUNDERS     -> a small company tile scales up into a larger calm
+                        structure, a founder figure steps back/up, one rising
+                        tick. Caption: "Grows itself."
+        AGENCIES     -> the agency tile emits a NEW SERVICE to a fan of three
+                        client tiles, one quiet incoming money signal.
+                        Caption: "A new service."
+        EXPLORING AI -> a scattered uncertain cluster resolves into a clean
+                        numbered roadmap (3-4 steps) led by the Quoin mark.
+                        Caption: "A clear plan."
+     Minimal JS swaps the active scene + active selector state. Default = first
+     segment on load. Reduced-motion: instant swap, the default scene is a valid
+     static end-state. Uniform SVG viewBox per scene so anchors do not drift.
+     Self-contained: own <style>, Google Fonts, reduced-motion aware.
+     ========================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ----------------------------------------------------------------------------
+   1. TOKENS - locked from identity-3 "Craftsperson's Ledger"
+   -------------------------------------------------------------------------- */
+:root {
+  --bone:        #f3ede1;
+  --paper:       #f7f2e8;
+  --paper-2:     #fbf8f1;
+  --paper-3:     #fdfcf8;
+
+  --ink:         #211d18;
+  --ink-soft:    #544d42;
+  --ink-faint:   #8a8073;
+
+  --rule:        #ddd2bf;
+  --rule-strong: #c8bba2;
+  --rule-ink:    #211d18;
+
+  --oxblood:        #7c2218;
+  --oxblood-deep:   #5f180f;
+  --oxblood-bright: #9a2c1d;
+  --on-oxblood:     #f7f2e8;
+  --oxblood-wash:   #f0e2d6;
+
+  --ochre:        #b07d2b;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --maxw: 1180px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   2. RESET / BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(120% 80% at 88% -10%, rgba(176,125,43,0.06), transparent 60%),
+    radial-gradient(100% 70% at -10% 110%, rgba(124,34,24,0.04), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+::selection { background: var(--oxblood); color: var(--on-oxblood); }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* mono label: the ledger column header / engraved caption */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.label--ox { color: var(--oxblood); }
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 12px; top: 12px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 16px; font-family: var(--font-mono); font-size: 0.8rem; }
+
+/* ----------------------------------------------------------------------------
+   3. KEYSTONE (QUOIN) MARK - chiseled, engraved
+   -------------------------------------------------------------------------- */
+.mark { display: block; }
+.mark .face { fill: var(--ink); transition: fill var(--dur) var(--ease); }
+.mark .chisel { fill: var(--paper-3); }
+.mark .seam { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.85; }
+a:hover .mark .face { fill: var(--oxblood); }
+
+/* ----------------------------------------------------------------------------
+   4. NAV - full width (KEPT VERBATIM)
+   -------------------------------------------------------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand__word {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.18rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.nav__links { display: flex; align-items: center; gap: 34px; }
+.nav__link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  position: relative;
+  padding-bottom: 3px;
+  transition: color var(--dur) var(--ease);
+}
+.nav__link::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px;
+  background: var(--oxblood); transition: right var(--dur) var(--ease);
+}
+.nav__link:hover { color: var(--ink); }
+.nav__link:hover::after { right: 0; }
+@media (max-width: 860px) { .nav__links .nav__link { display: none; } }
+
+/* ----------------------------------------------------------------------------
+   5. BUTTONS - one oxblood CTA only; nav CTA is an outline (KEPT VERBATIM)
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; border: 1px solid transparent;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+              color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.btn:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+
+/* the ONE dominant ask, hero primary only */
+.btn--primary {
+  background: var(--oxblood); color: var(--on-oxblood);
+  padding: 13px 22px;
+  box-shadow: 0 1px 0 var(--oxblood-deep), 0 10px 24px -14px rgba(124,34,24,0.7);
+}
+.btn--primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+.btn--primary .arr { transition: transform var(--dur) var(--ease); }
+.btn--primary:hover .arr { transform: translateX(3px); }
+.btn--lg { padding: 16px 28px; font-size: 0.8rem; }
+
+/* nav CTA: OUTLINE, keeps oxblood reserved for the hero primary */
+.btn--outline {
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  padding: 9px 16px;
+}
+.btn--outline:hover { border-color: var(--ink); transform: translateY(-1px); }
+
+/* secondary hero action: ruled text link, no accent */
+.btn--ghost {
+  background: transparent; color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 13px 2px;
+}
+.btn--ghost:hover { border-bottom-color: var(--ink); }
+.btn--ghost .arr { color: var(--ink-faint); transition: transform var(--dur) var(--ease); }
+.btn--ghost:hover .arr { transform: translateX(3px); }
+
+/* ----------------------------------------------------------------------------
+   6. HERO - split, asymmetric; the schematic plate is its own plane on the right
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding-top: clamp(54px, 7.5vw, 96px);
+  padding-bottom: clamp(40px, 6vw, 76px);
+  overflow: clip;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 58%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--rule-strong) 12%, var(--rule-strong) 88%, transparent);
+  pointer-events: none;
+}
+@media (max-width: 960px) { .hero::before { display: none; } }
+
+.hero__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.92fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+@media (max-width: 960px) { .hero__grid { grid-template-columns: 1fr; gap: 44px; } }
+
+/* --- LEFT: the statement (KEPT VERBATIM) --- */
+.hero__copy { max-width: 38ch; padding-top: 4px; }
+
+.hero__eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+.hero__eyebrow .tick { width: 26px; height: 1px; background: var(--oxblood); flex: none; }
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  letter-spacing: -0.018em;
+  line-height: 1.06;
+}
+.hero h1 .ln { display: block; }
+.hero h1 .ln--lead   { font-weight: 500; color: var(--ink); }
+.hero h1 .ln--soft   { font-weight: 400; font-style: italic; color: var(--ink-soft); }
+.hero h1 .ln--accent { font-weight: 600; color: var(--oxblood); }
+
+.hero h1 .draw {
+  position: relative;
+  white-space: nowrap;
+  padding-bottom: 0.06em;
+}
+.hero h1 .draw::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0.02em;
+  height: 2px;
+  background: var(--oxblood);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: draw-underscore 700ms var(--ease) 620ms forwards;
+}
+@keyframes draw-underscore { to { transform: scaleX(1); } }
+
+.hero__sub {
+  margin-top: 26px; max-width: 40ch;
+  font-size: 1.15rem; line-height: 1.62; color: var(--ink-soft);
+}
+.hero__cta { margin-top: 34px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+.hero__operator {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 30px; padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  max-width: 42ch;
+}
+.hero__operator-seal {
+  flex: none; width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: 1px solid var(--rule-strong); border-radius: 50%;
+  background: var(--paper-2);
+  font-family: var(--font-display); font-style: italic; font-size: 1.1rem;
+  color: var(--oxblood);
+}
+.hero__operator-text { font-size: 0.92rem; line-height: 1.45; color: var(--ink-soft); }
+.hero__operator-text strong { display: block; color: var(--ink); font-weight: 600; font-family: var(--font-sans); }
+
+/* ----------------------------------------------------------------------------
+   7. RIGHT: THE SCHEMATIC PLATE
+   Constant input (scattered work) -> constant ENGINE (the Quoin) -> a swappable
+   OUTPUT scene chosen by the segment selector. The selector sits above the plate.
+   -------------------------------------------------------------------------- */
+.schem {
+  position: relative;
+  margin-top: clamp(22px, 4vw, 46px);
+  margin-right: calc(var(--gutter) * -0.62);
+}
+@media (max-width: 960px) {
+  .schem { margin-top: 0; margin-right: 0; max-width: 560px; }
+}
+
+.schem__tag {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding-inline: 4px; margin-bottom: 12px;
+}
+.schem__tag .ran {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.schem__pulse {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--oxblood);
+  animation: pulse 2.4s var(--ease) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50%      { opacity: 1;    transform: scale(1); }
+}
+
+/* ---- the SEGMENT SELECTOR: three ruled choices, accent only on the active ---- */
+.seg {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  background: var(--paper-2);
+  margin-bottom: 14px;
+}
+.seg__btn {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px;
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-soft);
+  background: transparent; border: 0; cursor: pointer;
+  padding: 11px 8px;
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.seg__btn + .seg__btn { border-left: 1px solid var(--rule); }
+.seg__btn .dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--rule-strong); flex: none;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.seg__btn:hover { color: var(--ink); background: var(--paper-3); }
+.seg__btn:focus-visible { outline: 2px solid var(--oxblood); outline-offset: -2px; }
+.seg__btn[aria-selected="true"] {
+  color: var(--oxblood); background: var(--paper-3);
+}
+.seg__btn[aria-selected="true"] .dot { background: var(--oxblood); transform: scale(1.15); }
+/* the active marker: a single oxblood underscore on the chosen tab */
+.seg__btn::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+  background: var(--oxblood);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform var(--dur) var(--ease);
+}
+.seg__btn[aria-selected="true"]::after { transform: scaleX(1); }
+@media (max-width: 420px) {
+  .seg__btn { font-size: 0.6rem; letter-spacing: 0.06em; padding: 10px 4px; }
+}
+
+/* the plate: ruled ledger page, bound spine, full-ink top edge */
+.plate {
+  position: relative;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  box-shadow: 0 34px 66px -42px rgba(33,29,24,0.5);
+  padding: 26px 24px 22px;
+  overflow: hidden;
+}
+.plate::before {
+  content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 1px;
+  background: var(--oxblood-wash);
+}
+/* faint ledger ruling behind the diagram, printed not drawn (kept quiet) */
+.plate::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom, transparent, transparent 43px, var(--rule) 43px, var(--rule) 44px);
+  opacity: 0.28; pointer-events: none;
+}
+
+/* the three lane labels across the top of the diagram */
+.plate__lanes {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 10px; align-items: baseline;
+  padding-left: 6px;
+  margin-bottom: 18px;
+}
+.plate__lane {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.13em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.plate__lane--in   { text-align: left; }
+.plate__lane--sys  { text-align: center; color: var(--ink-soft); }
+.plate__lane--out  { text-align: right; color: var(--oxblood); }
+
+/* ---- the diagram stage: connector track beneath, nodes on top ---- */
+.stage {
+  position: relative; z-index: 2;
+  padding-left: 6px;
+}
+.flow-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 1; pointer-events: none; overflow: visible;
+}
+.flow-svg .track {
+  fill: none; stroke: var(--rule-strong); stroke-width: 1.4;
+}
+.flow-svg .live {
+  fill: none; stroke: var(--oxblood); stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-dasharray: 16 360;
+  stroke-dashoffset: 376;
+  animation: flow-run 4.6s linear infinite;
+}
+@keyframes flow-run { to { stroke-dashoffset: 0; } }
+
+/* the moving token that rides the connector into the engine */
+.flow-svg .token {
+  fill: var(--oxblood);
+  offset-path: path("M 40 150 C 150 150, 196 150, 262 150");
+  offset-distance: 0%;
+  animation: token-run 4.6s linear infinite;
+}
+@keyframes token-run { to { offset-distance: 100%; } }
+
+.flow-grid {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: clamp(8px, 2vw, 18px);
+  align-items: center;
+}
+
+/* INPUTS: a few scattered task chips, deliberately offset (CONSTANT) */
+.inputs { display: grid; gap: 9px; justify-items: start; }
+.chip {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  background: var(--paper-2);
+  border: 1px solid var(--rule-strong);
+  padding: 7px 12px;
+  white-space: nowrap;
+  box-shadow: 0 6px 14px -12px rgba(33,29,24,0.6);
+}
+.chip i { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-faint); flex: none; }
+/* the slight scatter that says "messy, unsorted, manual" */
+.inputs .chip:nth-child(1) { transform: translateX(2px)  rotate(-0.6deg); }
+.inputs .chip:nth-child(2) { transform: translateX(20px) rotate(0.5deg); }
+.inputs .chip:nth-child(3) { transform: translateX(8px)  rotate(-0.4deg); }
+.inputs .chip:nth-child(4) { transform: translateX(26px) rotate(0.7deg); }
+
+/* SYSTEM node: the Quoin keystone, the embedded AI-Ops partner (CONSTANT) */
+.system { display: grid; justify-items: center; gap: 10px; }
+.system__node {
+  position: relative;
+  width: 92px; height: 92px;
+  display: grid; place-items: center;
+  background: var(--ink);
+  border-radius: 3px;
+  box-shadow:
+    0 0 0 1px var(--ink),
+    0 0 0 6px var(--paper-3),
+    0 0 0 7px var(--rule-strong),
+    0 22px 40px -22px rgba(33,29,24,0.7);
+}
+/* slow engraved rotation ring, the system "running" */
+.system__node::before {
+  content: ""; position: absolute; inset: -14px;
+  border-radius: 50%;
+  border: 1px dashed var(--rule-strong);
+  opacity: 0.7;
+  animation: ring-turn 22s linear infinite;
+}
+.system__node .mark .face { fill: var(--paper-3); }
+.system__node .mark .chisel { fill: var(--ink); }
+.system__node .mark .seam { stroke: var(--ochre); opacity: 0.95; }
+@keyframes ring-turn { to { transform: rotate(360deg); } }
+.system__label {
+  font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink); text-align: center;
+}
+
+/* ----------------------------------------------------------------------------
+   8. OUTPUT SCENES - one drawn line-art scene per segment, swapped by JS.
+   Uniform 0 0 220 230 viewBox on every scene SVG so anchors never drift.
+   Line-art in ink/rule; oxblood used once per scene as the quiet signal.
+   -------------------------------------------------------------------------- */
+.outputs {
+  position: relative;
+  display: grid; justify-items: center;
+  width: 100%;
+}
+.scene {
+  grid-area: 1 / 1;            /* stack all scenes; only the active is shown */
+  display: grid; justify-items: center; gap: 9px;
+  width: 100%;
+}
+.scene[hidden] { display: none; }
+
+.scene__art {
+  width: 100%; max-width: 168px; height: auto; display: block;
+}
+/* shared line-art stroke vocabulary */
+.scene__art .ln    { fill: none; stroke: var(--ink-soft); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.scene__art .ln-f  { fill: none; stroke: var(--rule-strong); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.scene__art .fillp { fill: var(--paper-2); }
+.scene__art .fillr { fill: var(--paper-3); }
+.scene__art .ox    { fill: none; stroke: var(--oxblood); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.scene__art .ox-f  { fill: var(--oxblood); }
+.scene__art .num   { font-family: var(--font-mono); font-size: 9px; fill: var(--ink-soft); }
+.scene__art .num-ox{ font-family: var(--font-mono); font-size: 9px; fill: var(--oxblood); }
+.scene__art .mk-face   { fill: var(--ink); }
+.scene__art .mk-chisel { fill: var(--paper-3); }
+.scene__art .mk-seam   { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.9; fill: none; }
+
+.scene__cap {
+  font-family: var(--font-display); font-style: italic; font-weight: 500;
+  font-size: 1.18rem; color: var(--oxblood); text-align: center; line-height: 1.1;
+}
+
+/* per-element draw-in when a scene becomes active (data-anim toggled by JS) */
+.scene .anim {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 420ms var(--ease), transform 420ms var(--ease);
+}
+.scene[data-anim="on"] .anim { opacity: 1; transform: none; }
+.scene[data-anim="on"] .anim.d1 { transition-delay: 90ms; }
+.scene[data-anim="on"] .anim.d2 { transition-delay: 180ms; }
+.scene[data-anim="on"] .anim.d3 { transition-delay: 270ms; }
+.scene[data-anim="on"] .anim.d4 { transition-delay: 360ms; }
+/* a single dashed-line draw for the rising tick / roadmap path */
+.scene .draw-path {
+  stroke-dasharray: var(--len, 120);
+  stroke-dashoffset: var(--len, 120);
+  transition: stroke-dashoffset 700ms var(--ease) 200ms;
+}
+.scene[data-anim="on"] .draw-path { stroke-dashoffset: 0; }
+
+/* footer line of the plate: plain agency control posture (KEPT) */
+.plate__foot {
+  position: relative; z-index: 2;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 14px;
+  margin-top: 22px; padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+.plate__foot-note { font-size: 0.86rem; color: var(--ink); }
+.plate__foot-note b { font-weight: 600; }
+.plate__foot-by {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+}
+
+@media (max-width: 420px) {
+  .flow-grid { grid-template-columns: 1fr; gap: 16px; justify-items: center; }
+  .inputs { justify-items: center; }
+  .inputs .chip { transform: none !important; }
+  .outputs { justify-items: center; }
+  .flow-svg { display: none; }
+  .plate__lanes { grid-template-columns: 1fr; text-align: center; }
+  .plate__lane { text-align: center !important; }
+}
+
+/* ----------------------------------------------------------------------------
+   9. CREDIBILITY STRIP - slim, directly beneath the hero (KEPT VERBATIM)
+   -------------------------------------------------------------------------- */
+.cred {
+  background: var(--bone);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding-block: 26px;
+}
+.cred__inner {
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);
+  gap: clamp(22px, 4vw, 56px); align-items: center;
+}
+@media (max-width: 880px) { .cred__inner { grid-template-columns: 1fr; gap: 20px; } }
+
+.cred__claim {
+  font-family: var(--font-display); font-size: 1.02rem; line-height: 1.4;
+  color: var(--ink);
+}
+.cred__claim b { font-weight: 600; }
+.cred__claim span { display: block; margin-top: 4px; font-size: 0.92rem; color: var(--ink-soft); font-style: italic; }
+
+.cred__pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pill {
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+  color: var(--ink); background: var(--paper-3);
+  border: 1px solid var(--rule-strong);
+  padding: 6px 12px;
+  white-space: nowrap;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.pill:hover { transform: translateY(-2px); border-color: var(--ink); }
+.pill--live { border-color: var(--oxblood-wash); }
+.pill--live::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--oxblood); margin-right: 8px; vertical-align: middle;
+}
+.pill--live:hover { color: var(--oxblood); border-color: var(--oxblood); }
+.cred__sep {
+  width: 1px; height: 22px; background: var(--rule-strong); margin-inline: 4px;
+  flex: none;
+}
+@media (max-width: 520px) { .cred__sep { display: none; } }
+
+/* ----------------------------------------------------------------------------
+   10. ENTRANCE MOTION - restrained, reduced-motion aware
+   -------------------------------------------------------------------------- */
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.hero__copy > *,
+.schem > * { animation: rise 460ms var(--ease) both; }
+.hero__eyebrow  { animation-delay: 0ms; }
+.hero h1        { animation-delay: 70ms; }
+.hero__sub      { animation-delay: 150ms; }
+.hero__cta      { animation-delay: 220ms; }
+.hero__operator { animation-delay: 290ms; }
+.schem__tag     { animation-delay: 240ms; }
+.seg            { animation-delay: 300ms; }
+.plate          { animation-delay: 360ms; }
+
+/* the diagram fills in left to right: inputs, then system, then output */
+.inputs   { animation: rise 420ms var(--ease) 460ms both; }
+.system   { animation: rise 460ms var(--ease) 540ms both; }
+.outputs  { animation: rise 420ms var(--ease) 660ms both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__copy > *, .schem > *, .inputs, .system, .outputs {
+    animation: none; opacity: 1; transform: none;
+  }
+  /* preserve the scatter offsets when motion is off */
+  .inputs .chip:nth-child(1) { transform: translateX(2px)  rotate(-0.6deg); }
+  .inputs .chip:nth-child(2) { transform: translateX(20px) rotate(0.5deg); }
+  .inputs .chip:nth-child(3) { transform: translateX(8px)  rotate(-0.4deg); }
+  .inputs .chip:nth-child(4) { transform: translateX(26px) rotate(0.7deg); }
+  .hero h1 .draw::after { animation: none; transform: scaleX(1); }
+  .schem__pulse { animation: none; }
+  .flow-svg .live { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; opacity: 0.9; }
+  .flow-svg .token { animation: none; offset-distance: 100%; }
+  .system__node::before { animation: none; }
+  .seg__btn::after { transition: none; }
+  /* instant scene swap: every scene's art is a valid static end-state */
+  .scene .anim { opacity: 1; transform: none; transition: none; }
+  .scene .draw-path { stroke-dashoffset: 0; transition: none; }
+}
+</style>
+</head>
+
+<body>
+<a href="#hero" class="skip">Skip to content</a>
+
+<!-- ===================== NAV (KEPT VERBATIM) ===================== -->
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a href="#hero" class="brand" aria-label="Citizen Mason, home">
+      <!-- chiseled keystone (Quoin) mark: tapered trapezoid with engraved seam -->
+      <svg class="mark" width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+        <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+        <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+        <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+      </svg>
+      <span class="brand__word">Citizen Mason</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="#who">Who it is for</a>
+      <a class="nav__link" href="#how">How it works</a>
+      <a class="nav__link" href="#proof">Proof</a>
+      <a class="btn btn--outline" href="#book">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="wrap hero__grid">
+
+    <!-- LEFT: the statement (KEPT VERBATIM) -->
+    <div class="hero__copy">
+      <div class="hero__eyebrow">
+        <span class="tick" aria-hidden="true"></span>
+        <span class="label label--ox">Fractional AI-Ops partner</span>
+      </div>
+
+      <h1>
+        <span class="ln ln--lead">Turn the work</span>
+        <span class="ln ln--soft">that slows you down</span>
+        <span class="ln ln--accent">into software that <span class="draw">runs itself.</span></span>
+      </h1>
+
+      <p class="hero__sub">Citizen Mason builds the AI systems your business is missing, then runs them on the tools you already use. You stay in control of every call that matters.</p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--lg" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#plan">Get your AI opportunity plan <span class="arr" aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <!-- operator-credibility line near the primary CTA -->
+      <div class="hero__operator">
+        <span class="hero__operator-seal" aria-hidden="true">JN</span>
+        <p class="hero__operator-text">
+          <strong>Built by an operator who ships, not an agency.</strong>
+          A 15-year product record. You work with the person who builds it.
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT: the schematic. Constant input + ENGINE, swappable OUTPUT scene. -->
+    <aside class="schem" aria-label="Pick who you are; the same system shows the outcome it builds for you">
+      <div class="schem__tag">
+        <span class="label">What it builds for</span>
+        <span class="ran">
+          <span class="schem__pulse" aria-hidden="true"></span>
+          Running this week
+        </span>
+      </div>
+
+      <!-- SEGMENT SELECTOR: three choices. Default = first (Founders). -->
+      <div class="seg" role="tablist" aria-label="Choose your segment">
+        <button class="seg__btn" id="seg-founders" role="tab" aria-selected="true"  aria-controls="scene-founders" data-scene="founders" type="button">
+          <span class="dot" aria-hidden="true"></span>Founders
+        </button>
+        <button class="seg__btn" id="seg-agencies" role="tab" aria-selected="false" aria-controls="scene-agencies" data-scene="agencies" type="button" tabindex="-1">
+          <span class="dot" aria-hidden="true"></span>Agencies
+        </button>
+        <button class="seg__btn" id="seg-exploring" role="tab" aria-selected="false" aria-controls="scene-exploring" data-scene="exploring" type="button" tabindex="-1">
+          <span class="dot" aria-hidden="true"></span>Exploring AI
+        </button>
+      </div>
+
+      <div class="plate">
+        <div class="plate__lanes" aria-hidden="true">
+          <span class="plate__lane plate__lane--in">Your scattered work</span>
+          <span class="plate__lane plate__lane--sys">One system</span>
+          <span class="plate__lane plate__lane--out">Your outcome</span>
+        </div>
+
+        <div class="stage">
+          <!-- connector beneath the nodes: steady track + a live oxblood pass -->
+          <svg class="flow-svg" viewBox="0 0 290 300" preserveAspectRatio="none" aria-hidden="true">
+            <!-- four scattered inputs converge into the system -->
+            <path class="track" d="M 28 56  C 110 56, 150 150, 250 150" />
+            <path class="track" d="M 28 118 C 110 118, 156 150, 250 150" />
+            <path class="track" d="M 28 182 C 110 182, 156 150, 250 150" />
+            <path class="track" d="M 28 244 C 110 244, 150 150, 250 150" />
+            <!-- the system passes one result onward to the output scene -->
+            <path class="track" d="M 40 150 C 150 150, 196 150, 262 150" />
+            <!-- the live oxblood pass that carries the single token -->
+            <path class="live"  d="M 40 150 C 150 150, 196 150, 262 150" />
+            <circle class="token" r="3.4" cx="0" cy="0" />
+          </svg>
+
+          <div class="flow-grid">
+            <!-- INPUTS: scattered, manual, unsorted (CONSTANT) -->
+            <div class="inputs">
+              <span class="chip"><i aria-hidden="true"></i>Reporting</span>
+              <span class="chip"><i aria-hidden="true"></i>Follow-ups</span>
+              <span class="chip"><i aria-hidden="true"></i>Scheduling</span>
+              <span class="chip"><i aria-hidden="true"></i>Data entry</span>
+            </div>
+
+            <!-- SYSTEM: the Quoin keystone, the engine (CONSTANT) -->
+            <div class="system">
+              <div class="system__node">
+                <svg class="mark" width="34" height="40" viewBox="0 0 26 30" aria-hidden="true">
+                  <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+                  <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+                  <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+                  <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+                </svg>
+              </div>
+              <span class="system__label">Runs on its own</span>
+            </div>
+
+            <!-- OUTPUT: swappable per segment. Each scene is a DRAWN scene. -->
+            <div class="outputs">
+
+              <!-- ===== SCENE 1: FOUNDERS =====
+                   A small company tile scales UP into a larger calm structure;
+                   a small founder figure steps back/up (freed); one rising tick.
+                   Caption: "Grows itself." -->
+              <div class="scene" id="scene-founders" role="tabpanel" aria-labelledby="seg-founders" data-anim="on" aria-label="The business grows and runs without everything going through the founder">
+                <svg class="scene__art" viewBox="0 0 220 230" role="img" aria-hidden="true">
+                  <!-- ground rule the structures stand on -->
+                  <line class="ln-f" x1="18" y1="190" x2="202" y2="190" />
+
+                  <!-- small starting company tile (left, low) -->
+                  <g class="anim d1">
+                    <rect class="fillp" x="26" y="146" width="48" height="44" />
+                    <rect class="ln"    x="26" y="146" width="48" height="44" />
+                    <line class="ln-f"  x1="26" y1="160" x2="74" y2="160" />
+                    <rect class="fillr" x="35" y="168" width="11" height="11" /><rect class="ln-f" x="35" y="168" width="11" height="11" />
+                    <rect class="fillr" x="54" y="168" width="11" height="11" /><rect class="ln-f" x="54" y="168" width="11" height="11" />
+                  </g>
+
+                  <!-- the scale-up arrow: small tile steps UP to the larger calm structure -->
+                  <g class="anim d2">
+                    <path class="ln draw-path" style="--len:78" d="M 78 162 C 96 158, 100 132, 110 120" />
+                    <path class="ln" d="M 104 119 L 111 117 L 111 125" />
+                  </g>
+
+                  <!-- the scale-up: same building, larger and calm (right, tall) -->
+                  <g class="anim d2">
+                    <rect class="fillp" x="116" y="92" width="78" height="98" />
+                    <rect class="ln"    x="116" y="92" width="78" height="98" />
+                    <line class="ln-f"  x1="116" y1="110" x2="194" y2="110" />
+                    <!-- calm, ordered windows: three tidy rows -->
+                    <rect class="fillr" x="127" y="120" width="13" height="13" /><rect class="ln-f" x="127" y="120" width="13" height="13" />
+                    <rect class="fillr" x="148" y="120" width="13" height="13" /><rect class="ln-f" x="148" y="120" width="13" height="13" />
+                    <rect class="fillr" x="169" y="120" width="13" height="13" /><rect class="ln-f" x="169" y="120" width="13" height="13" />
+                    <rect class="fillr" x="127" y="142" width="13" height="13" /><rect class="ln-f" x="127" y="142" width="13" height="13" />
+                    <rect class="fillr" x="148" y="142" width="13" height="13" /><rect class="ln-f" x="148" y="142" width="13" height="13" />
+                    <rect class="fillr" x="169" y="142" width="13" height="13" /><rect class="ln-f" x="169" y="142" width="13" height="13" />
+                    <rect class="fillr" x="127" y="164" width="13" height="13" /><rect class="ln-f" x="127" y="164" width="13" height="13" />
+                    <rect class="fillr" x="148" y="164" width="13" height="13" /><rect class="ln-f" x="148" y="164" width="13" height="13" />
+                    <rect class="fillr" x="169" y="164" width="13" height="13" /><rect class="ln-f" x="169" y="164" width="13" height="13" />
+                  </g>
+
+                  <!-- founder figure steps BACK and UP, clear of the gears, freed -->
+                  <g class="anim d3">
+                    <line class="ln-f" x1="34" y1="126" x2="66" y2="126" />
+                    <circle class="ln fillr" cx="50" cy="106" r="7.5" />
+                    <path class="ln" d="M 50 113.5 L 50 124" />
+                    <path class="ln" d="M 50 116 L 41 110" />
+                    <path class="ln" d="M 50 116 L 59 110" />
+                    <path class="ln" d="M 50 124 L 44 134" />
+                    <path class="ln" d="M 50 124 L 56 134" />
+                  </g>
+
+                  <!-- one quiet rising tick: a short upward signal above the tall building -->
+                  <g class="anim d4">
+                    <path class="ox draw-path" style="--len:74" d="M 120 78 L 140 68 L 154 72 L 184 50" />
+                    <path class="ox" d="M 177 50 L 185 48 L 185 57" />
+                  </g>
+                </svg>
+                <p class="scene__cap">Grows itself.</p>
+              </div>
+
+              <!-- ===== SCENE 2: AGENCIES =====
+                   The agency tile emits a NEW SERVICE out to a fan of three
+                   client tiles (the agency serving ITS clients); one quiet
+                   incoming money signal. Caption: "A new service." -->
+              <div class="scene" id="scene-agencies" role="tabpanel" aria-labelledby="seg-agencies" data-anim="off" aria-label="A new service line the agency sells to its own clients, new revenue in" hidden>
+                <svg class="scene__art" viewBox="0 0 220 230" role="img" aria-hidden="true">
+                  <!-- THE AGENCY tile (left), the keystone inside: this agency runs the system -->
+                  <g class="anim d1">
+                    <rect class="fillp" x="20" y="84" width="60" height="62" />
+                    <rect class="ln"    x="20" y="84" width="60" height="62" />
+                    <line class="ln-f"  x1="20" y1="101" x2="80" y2="101" />
+                    <circle class="ln-f" cx="27" cy="92.5" r="1.6" />
+                    <g transform="translate(38,108) scale(0.95)">
+                      <path class="mk-face"   d="M3 6 L23 6 L20 27 L6 27 Z" />
+                      <path class="mk-chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+                      <line class="mk-seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+                      <line class="mk-seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+                    </g>
+                  </g>
+
+                  <!-- the NEW SERVICE node leaves the agency, mid-stage -->
+                  <g class="anim d2">
+                    <path class="ln draw-path" style="--len:34" d="M 80 115 L 104 115" />
+                    <circle class="fillp" cx="116" cy="115" r="11" />
+                    <circle class="ln"    cx="116" cy="115" r="11" />
+                    <path class="ln" d="M 116 109 L 116 121 M 110 115 L 122 115" />
+                  </g>
+
+                  <!-- the new service fans out to a row of THREE client tiles -->
+                  <g class="anim d3">
+                    <path class="ln-f draw-path" style="--len:60" d="M 127 110 C 146 96, 158 78, 168 66" />
+                    <path class="ln-f draw-path" style="--len:42" d="M 128 115 L 162 115" />
+                    <path class="ln-f draw-path" style="--len:60" d="M 127 120 C 146 134, 158 152, 168 164" />
+                    <!-- client tiles, brought inward off the plate edge -->
+                    <rect class="fillr" x="166" y="52"  width="30" height="28" /><rect class="ln-f" x="166" y="52"  width="30" height="28" />
+                    <line class="ln-f" x1="171" y1="66" x2="191" y2="66" /><line class="ln-f" x1="171" y1="72" x2="186" y2="72" />
+                    <rect class="fillr" x="166" y="101" width="30" height="28" /><rect class="ln-f" x="166" y="101" width="30" height="28" />
+                    <line class="ln-f" x1="171" y1="115" x2="191" y2="115" /><line class="ln-f" x1="171" y1="121" x2="186" y2="121" />
+                    <rect class="fillr" x="166" y="150" width="30" height="28" /><rect class="ln-f" x="166" y="150" width="30" height="28" />
+                    <line class="ln-f" x1="171" y1="164" x2="191" y2="164" /><line class="ln-f" x1="171" y1="170" x2="186" y2="170" />
+                  </g>
+
+                  <!-- one quiet incoming money signal: a coin returns to the agency -->
+                  <g class="anim d4">
+                    <path class="ox draw-path" style="--len:96" d="M 180 188 C 130 200, 80 184, 56 158" />
+                    <path class="ox" d="M 60 165 L 55 156 L 64 154" />
+                    <circle class="ox-f" cx="48" cy="150" r="8.5" />
+                    <text class="num-ox" x="45" y="153.6" style="fill:var(--on-oxblood);">$</text>
+                  </g>
+                </svg>
+                <p class="scene__cap">A new service.</p>
+              </div>
+
+              <!-- ===== SCENE 3: EXPLORING AI =====
+                   A scattered uncertain cluster resolves into a clean NUMBERED
+                   ROADMAP (a marked path of four steps) with the Quoin mark at
+                   the start, leading the way. Caption: "A clear plan." -->
+              <div class="scene" id="scene-exploring" role="tabpanel" aria-labelledby="seg-exploring" data-anim="off" aria-label="A clear numbered plan and a partner who has done it before" hidden>
+                <svg class="scene__art" viewBox="0 0 220 230" role="img" aria-hidden="true">
+                  <!-- the tangled / scattered uncertain cluster (top, faint) with a question mark -->
+                  <g class="anim d1">
+                    <path class="ln-f" d="M 30 64 C 56 44, 48 86, 78 70 C 102 58, 74 96, 100 88" />
+                    <path class="ln-f" d="M 34 86 C 58 74, 52 104, 84 94" />
+                    <circle class="ln-f fillp" cx="32" cy="60" r="3.6" />
+                    <circle class="ln-f fillp" cx="82" cy="66" r="3.6" />
+                    <circle class="ln-f fillp" cx="100" cy="88" r="3.6" />
+                    <text class="num" x="55" y="112" style="font-size:13px;">?</text>
+                  </g>
+
+                  <!-- the resolve: the tangle gathers down into the keystone at the path start -->
+                  <g class="anim d2">
+                    <path class="ln draw-path" style="--len:56" d="M 92 96 C 80 120, 64 140, 50 156" />
+                    <path class="ln" d="M 46 149 L 49 157 L 41 158" />
+                  </g>
+
+                  <!-- the Quoin mark LEADS the roadmap, sitting at its start, step 1 just ahead -->
+                  <g class="anim d2" transform="translate(28,158) scale(0.96)">
+                    <path class="mk-face"   d="M3 6 L23 6 L20 27 L6 27 Z" />
+                    <path class="mk-chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+                    <line class="mk-seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+                    <line class="mk-seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+                  </g>
+
+                  <!-- the numbered roadmap: a clean rising marked path of 4 steps, after the mark -->
+                  <g class="anim d3">
+                    <path class="ln draw-path" style="--len:160" d="M 56 174 L 84 174 L 112 154 L 144 154 L 188 122" />
+                  </g>
+
+                  <!-- step markers 1..4; the final step is the oxblood goal flag -->
+                  <g class="anim d4">
+                    <circle class="fillp" cx="78"  cy="174" r="10.5" /><circle class="ln" cx="78"  cy="174" r="10.5" /><text class="num" x="74.8" y="177.5">1</text>
+                    <circle class="fillp" cx="112" cy="154" r="10.5" /><circle class="ln" cx="112" cy="154" r="10.5" /><text class="num" x="108.8" y="157.5">2</text>
+                    <circle class="fillp" cx="154" cy="154" r="10.5" /><circle class="ln" cx="154" cy="154" r="10.5" /><text class="num" x="150.8" y="157.5">3</text>
+                    <circle class="ox-f" cx="188" cy="122" r="11.5" /><text class="num-ox" x="184.4" y="125.6" style="fill:var(--on-oxblood);">4</text>
+                    <!-- a small goal flag on the final step -->
+                    <path class="ox" d="M 188 110.5 L 188 98 M 188 99 L 199 102 L 188 106" />
+                  </g>
+                </svg>
+                <p class="scene__cap">A clear plan.</p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="plate__foot">
+          <span class="plate__foot-note"><b>You keep the final call.</b> Nothing leaves without your yes.</span>
+          <span class="plate__foot-by">Citizen Mason</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<!-- ===================== CREDIBILITY STRIP (KEPT VERBATIM) ===================== -->
+<section class="cred" aria-label="Track record">
+  <div class="wrap cred__inner">
+    <p class="cred__claim">
+      <b>Built by an operator who ships, not an agency.</b>
+      <span>A 15-year product record.</span>
+    </p>
+    <div class="cred__pills">
+      <span class="pill">Deloitte</span>
+      <span class="pill">NFL Digital Media</span>
+      <span class="pill">Miami HEAT</span>
+      <span class="pill">Kraken</span>
+      <span class="pill">Scopely</span>
+      <span class="pill">Maestro</span>
+      <span class="cred__sep" aria-hidden="true"></span>
+      <span class="pill pill--live">Crafted</span>
+      <span class="pill pill--live">Phase</span>
+      <span class="pill pill--live">Netrunner</span>
+      <span class="pill pill--live">Magic Eden</span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================================
+     SEGMENT SELECTOR LOGIC - minimal. Click (or arrow-key) swaps the active
+     output scene and the active selector state. Default scene is shown on load
+     and is a valid static end-state, so no-JS / reduced-motion users see it.
+     ========================================================================== -->
+<script>
+(function () {
+  var seg = document.querySelector('.seg');
+  if (!seg) return;
+  var tabs = Array.prototype.slice.call(seg.querySelectorAll('.seg__btn'));
+  var scenes = {
+    founders:  document.getElementById('scene-founders'),
+    agencies:  document.getElementById('scene-agencies'),
+    exploring: document.getElementById('scene-exploring')
+  };
+
+  function select(tab, focus) {
+    var key = tab.getAttribute('data-scene');
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    Object.keys(scenes).forEach(function (k) {
+      var s = scenes[k];
+      if (!s) return;
+      var show = k === key;
+      s.hidden = !show;
+      // restart the per-scene draw-in by toggling the anim flag off then on
+      s.setAttribute('data-anim', 'off');
+      if (show) {
+        // force reflow so the transition replays on re-show
+        void s.offsetWidth;
+        requestAnimationFrame(function () { s.setAttribute('data-anim', 'on'); });
+      }
+    });
+    if (focus) tab.focus();
+  }
+
+  seg.addEventListener('click', function (e) {
+    var tab = e.target.closest('.seg__btn');
+    if (tab) select(tab, false);
+  });
+
+  // arrow-key roving for the tablist
+  seg.addEventListener('keydown', function (e) {
+    var i = tabs.indexOf(document.activeElement);
+    if (i === -1) return;
+    var next = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = tabs[(i + 1) % tabs.length];
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') next = tabs[(i - 1 + tabs.length) % tabs.length];
+    else if (e.key === 'Home') next = tabs[0];
+    else if (e.key === 'End') next = tabs[tabs.length - 1];
+    if (next) { e.preventDefault(); select(next, true); }
+  });
+})();
+</script>
+</body>
+</html>

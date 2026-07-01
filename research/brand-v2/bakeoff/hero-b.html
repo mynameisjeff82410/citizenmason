@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason. Hero B: Centered Kinetic Type</title>
+  <meta name="description" content="A second pair of senior eyes that prepares the work. You keep the final call." />
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* ========================================================================
+       HERO B. "CENTERED KINETIC TYPE"
+       Page-local LAYOUT only. No bespoke palette. Every color is a kit token.
+       The headline is the composition: weight, size, and color variation across
+       the line, with one phrase ("runs itself") carrying the accent moment.
+       Centered axis, single CTA nudged off the exact center (the one asymmetry).
+       ====================================================================== */
+
+    /* --- Hero stage: centered, generous vertical air, minimal chrome --- */
+    .heroB {
+      position: relative;
+      padding-block: var(--space-12) var(--space-11);
+      overflow: hidden;
+    }
+    .heroB__inner {
+      width: 100%;
+      max-width: 940px;            /* tighter than container: the type fills it */
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+      text-align: center;
+    }
+
+    /* One quiet structural cue behind the type: a single vertical center guide.
+       Not a dot-grid, not a network field. One hairline that anchors the axis
+       the composition is built on, and fades at both ends. */
+    .heroB__axis {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 1px;
+      transform: translateX(-0.5px);
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--line) 18%,
+        var(--line) 82%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .heroB__content { position: relative; z-index: 1; }
+
+    /* --- Eyebrow: mono, centered, restrained --- */
+    .heroB__eyebrow {
+      margin-bottom: var(--space-6);
+    }
+
+    /* --- The headline as type-as-art --------------------------------------
+       Each line is its own typographic register. Line weights and sizes step
+       so the eye reads a built object, not a uniform block. "runs itself" is
+       the emphasized phrase and the only place ink gives way to the accent. */
+    .heroB__headline {
+      margin: 0 auto;
+      max-width: 17ch;
+      font-weight: var(--fw-semibold);
+      letter-spacing: var(--tracking-tight);
+      line-height: 0.98;
+      color: var(--ink);
+      text-wrap: balance;
+    }
+    .heroB__line { display: block; }
+
+    /* Line 1. setup, lighter and a touch smaller: "Turn the work" */
+    .line--setup {
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      font-weight: var(--fw-book);
+      color: var(--ink-soft);
+      letter-spacing: -0.01em;
+    }
+    /* Line 2. the tension, mid-weight: "that slows you down" */
+    .line--tension {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: var(--fw-medium);
+      color: var(--ink);
+    }
+    /* Line 3. the turn, full display weight: "into software" */
+    .line--turn {
+      font-size: clamp(2.9rem, 7.6vw, var(--fs-5xl));
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+    }
+    /* Line 4. the payoff, display weight, accent phrase + mono caret */
+    .line--payoff {
+      font-size: clamp(2.9rem, 7.6vw, var(--fs-5xl));
+      font-weight: var(--fw-bold);
+      color: var(--ink);
+    }
+
+    /* The emphasized phrase: the single accent moment in the whole hero type.
+       Optical italic-free emphasis via color + a hairline underscore that
+       draws itself on load, not a highlighter block. */
+    .emph {
+      position: relative;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+    .emph::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0.06em;
+      height: 3px;
+      border-radius: var(--radius-full);
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 420ms var(--ease) 720ms;
+    }
+    .heroB.is-in .emph::after { transform: scaleX(1); }
+
+    /* A mono caret tucked after the payoff: the "runs itself" cue. It blinks
+       slowly, the one living detail. Tiny, deliberate, Linear-grade restraint. */
+    .caret {
+      display: inline-block;
+      width: 0.5ch;
+      margin-left: 0.12ch;
+      color: var(--accent);
+      font-weight: var(--fw-regular);
+      transform: translateY(-0.02em);
+      animation: caretBlink 1.15s steps(1, end) infinite;
+    }
+    @keyframes caretBlink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+
+    /* --- Subhead: narrow, centered, low weight, gives the type room --- */
+    .heroB__subhead {
+      margin: var(--space-7) auto 0;
+      max-width: 52ch;
+      font-size: var(--fs-lg);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+    }
+    .heroB__subhead strong { color: var(--ink); font-weight: var(--fw-medium); }
+
+    /* --- Actions: centered axis, but the cluster is nudged off-center ------
+       The ONE deliberate asymmetry. The primary amber CTA sits left of the
+       exact center line; the secondary trails to its right at lower weight.
+       On the center axis the eye still reads "centered," but the balance is
+       intentional, not symmetrical. */
+    .heroB__actions {
+      margin-top: var(--space-8);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+      justify-content: center;
+      /* pull the whole cluster a hair left of dead-center */
+      transform: translateX(-22px);
+    }
+    .heroB__cta-primary {
+      box-shadow: var(--shadow-md);
+    }
+    .heroB__cta-primary:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-1px);
+    }
+    /* secondary kept clearly lower-weight: a quiet text link, not a button */
+    .heroB__cta-secondary {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      transition: color var(--dur-fast) var(--ease);
+    }
+    .heroB__cta-secondary:hover { color: var(--ink); }
+    .heroB__cta-secondary .arr {
+      font-family: var(--font-mono);
+      transition: transform var(--dur-fast) var(--ease);
+    }
+    .heroB__cta-secondary:hover .arr { transform: translateX(3px); }
+
+    /* --- Frame-of-reference + trust ladder: one quiet line of chrome ------
+       The single supporting detail under the ask. Mono, faint, centered.
+       Plain agency, the three rungs read as one breath. */
+    .heroB__frame {
+      margin-top: var(--space-7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .heroB__refline {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      letter-spacing: var(--tracking-wide);
+    }
+    .heroB__ladder {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-size: var(--fs-sm);
+      color: var(--ink-soft);
+    }
+    .heroB__rung { font-weight: var(--fw-medium); color: var(--ink); white-space: nowrap; }
+    .heroB__sep {
+      color: var(--ink-faint);
+      font-family: var(--font-mono);
+      transform: translateY(-1px);
+    }
+
+    /* --- Kinetic entrance: per-line reveal. Fast, staggered, earned. ------- */
+    .kin {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    .heroB.is-in .kin {
+      opacity: 1;
+      transform: none;
+      transition: opacity 520ms var(--ease), transform 520ms var(--ease);
+    }
+    .heroB.is-in .kin-1 { transition-delay: 60ms; }
+    .heroB.is-in .kin-2 { transition-delay: 160ms; }
+    .heroB.is-in .kin-3 { transition-delay: 260ms; }
+    .heroB.is-in .kin-4 { transition-delay: 360ms; }
+    .heroB.is-in .kin-5 { transition-delay: 520ms; }   /* subhead */
+    .heroB.is-in .kin-6 { transition-delay: 640ms; }   /* actions */
+    .heroB.is-in .kin-7 { transition-delay: 760ms; }   /* frame */
+
+    /* --- Responsive: hold the composition on mobile --- */
+    @media (max-width: 760px) {
+      .heroB { padding-block: var(--space-10) var(--space-9); }
+      .heroB__headline { max-width: 14ch; line-height: 1.02; }
+      .heroB__actions {
+        flex-direction: column;
+        gap: var(--space-4);
+        transform: none;          /* center cleanly on small screens */
+        width: 100%;
+      }
+      .heroB__cta-primary { width: 100%; max-width: 320px; }
+      .heroB__ladder { flex-wrap: wrap; justify-content: center; row-gap: var(--space-2); }
+    }
+
+    /* --- Reduced motion: show everything, kill the kinetics --- */
+    @media (prefers-reduced-motion: reduce) {
+      .kin { opacity: 1; transform: none; }
+      .emph::after { transform: scaleX(1); transition: none; }
+      .caret { animation: none; opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV (minimal chrome) ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ &#9672; ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#book" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- ===================== HERO B. CENTERED KINETIC TYPE ===================== -->
+    <header class="heroB" id="hero">
+      <div class="heroB__axis" aria-hidden="true"></div>
+
+      <div class="heroB__inner">
+        <div class="heroB__content">
+
+          <p class="eyebrow heroB__eyebrow kin kin-1">Fractional AI-Ops partner</p>
+
+          <!-- The headline IS the hero. Read as one sentence by screen readers;
+               composed as four typographic registers for the eye. -->
+          <h1 class="heroB__headline" aria-label="Turn the work that slows you down into software that runs itself.">
+            <span class="heroB__line line--setup   kin kin-1" aria-hidden="true">Turn the work</span>
+            <span class="heroB__line line--tension kin kin-2" aria-hidden="true">that slows you down</span>
+            <span class="heroB__line line--turn    kin kin-3" aria-hidden="true">into software</span>
+            <span class="heroB__line line--payoff  kin kin-4" aria-hidden="true">that <span class="emph">runs itself</span><span class="caret" aria-hidden="true">_</span></span>
+          </h1>
+
+          <p class="heroB__subhead kin kin-5">
+            Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. <strong>You stay in control of every call that matters.</strong>
+          </p>
+
+          <!-- Single dominant ask. Primary amber CTA carries the accent; the
+               cluster is nudged left of center (the one deliberate asymmetry).
+               Secondary is a quiet text link at clearly lower weight. -->
+          <div class="heroB__actions kin kin-6">
+            <a href="#book" class="btn btn--primary btn--lg heroB__cta-primary">Book a discovery call</a>
+            <a href="#plan" class="heroB__cta-secondary">
+              Get your AI opportunity plan
+              <span class="arr" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+
+          <!-- One quiet line of chrome: frame-of-reference + the trust ladder. -->
+          <div class="heroB__frame kin kin-7">
+            <p class="heroB__refline">A 45-minute call. We find the one workflow worth building first.</p>
+            <p class="heroB__ladder">
+              <span class="heroB__rung">You read it.</span>
+              <span class="heroB__sep" aria-hidden="true">/</span>
+              <span class="heroB__rung">You approve the draft.</span>
+              <span class="heroB__sep" aria-hidden="true">/</span>
+              <span class="heroB__rung">You hit Send.</span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+  </main>
+
+  <script>
+    /* Minimal JS: fire the kinetic entrance once on load (rAF, not scroll).
+       Reduced-motion users get the static composition via CSS above. */
+    (function () {
+      var hero = document.getElementById('hero');
+      if (!hero) return;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { hero.classList.add('is-in'); });
+      });
+    })();
+  </script>
+</body>
+</html>

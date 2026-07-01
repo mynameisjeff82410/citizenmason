@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason - Hero A: Asymmetric statement</title>
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* ========================================================================
+       HERO A: "ASYMMETRIC STATEMENT"  (module layout, neutral kit)
+       ------------------------------------------------------------------------
+       Layout only. Color comes entirely from _kit.css tokens. No bespoke
+       palette. The asymmetry is the design: a wide left-ranged statement
+       column, and an OFFSET trust/proof block hung from a lower-right
+       baseline (Vercel-style broken symmetry). The accent lives once, on the
+       primary CTA. The secondary action is a quiet text link.
+       ===================================================================== */
+
+    .heroa {
+      position: relative;
+      padding-block: var(--space-11) var(--space-9);
+      overflow: clip; /* lets the right block bleed toward the edge without scrollbars */
+    }
+
+    /* A faint structural ruling, not a dot-grid. One vertical hairline marks
+       the asymmetric column seam so the offset reads as intentional. */
+    .heroa__seam {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(50% + 2.5rem); /* pushed right of center: the column split is NOT 50/50 */
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0,
+        var(--line) 12%,
+        var(--line) 78%,
+        transparent 100%);
+      pointer-events: none;
+    }
+
+    .heroa__inner {
+      position: relative;
+      width: 100%;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+      display: grid;
+      /* Deliberately unequal: statement column dominates, offset rail is narrower. */
+      grid-template-columns: minmax(0, 1.32fr) minmax(0, 0.78fr);
+      column-gap: var(--space-9);
+      align-items: start;
+    }
+
+    /* --- LEFT: the statement, left-ranged --- */
+    .heroa__statement {
+      max-width: 32ch;
+    }
+    .heroa__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: 0 0 var(--space-5);
+    }
+    /* the keystone tick is available equity, kept tiny and quiet (not a logo claim) */
+    .heroa__tick {
+      width: 7px;
+      height: 9px;
+      flex: none;
+      background: var(--ink);
+      /* a small quoin/keystone trapezoid: wider at top */
+      clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+      opacity: 0.78;
+    }
+    .heroa__headline {
+      font-size: clamp(2.6rem, 5.2vw, var(--fs-5xl));
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-tight);
+      letter-spacing: var(--tracking-tight);
+      color: var(--ink);
+      margin: 0;
+      text-wrap: balance;
+    }
+    /* one phrase of the headline carries quieter weight to build type composition */
+    .heroa__headline em {
+      font-style: normal;
+      color: var(--ink-soft);
+      font-weight: var(--fw-regular);
+    }
+    .heroa__subhead {
+      font-size: var(--fs-lg);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+      max-width: 46ch;
+      margin: var(--space-6) 0 0;
+    }
+    .heroa__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+      margin-top: var(--space-8);
+    }
+    /* the secondary action is a quiet text link, not a second button */
+    .heroa__textlink {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding-block: var(--space-2);
+      border-bottom: 1px solid transparent;
+      transition: color var(--dur-fast) var(--ease),
+                  border-color var(--dur-fast) var(--ease),
+                  gap var(--dur-fast) var(--ease);
+    }
+    .heroa__textlink:hover {
+      color: var(--ink);
+      border-color: var(--line-strong);
+      gap: var(--space-3);
+    }
+    .heroa__textlink .arr {
+      font-family: var(--font-mono);
+      transition: transform var(--dur-fast) var(--ease);
+    }
+    .heroa__textlink:hover .arr { transform: translateX(2px); }
+
+    /* frame-of-reference line under the actions, low weight */
+    .heroa__forl {
+      margin: var(--space-6) 0 0;
+      font-size: var(--fs-sm);
+      color: var(--ink-faint);
+      max-width: 40ch;
+      line-height: var(--lh-normal);
+    }
+    .heroa__forl .u-mono { color: var(--ink-soft); }
+
+    /* --- RIGHT: the OFFSET block. The broken-symmetry move. --- */
+    .heroa__rail {
+      align-self: start;
+      /* the deliberate vertical drop: the block hangs below the headline baseline */
+      margin-top: var(--space-10);
+      /* and bleeds a little past the column toward the right edge */
+      margin-right: calc(var(--space-7) * -1);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+
+    /* card that carries the trust ladder, stacked vertical (not the 3-up kit row) */
+    .heroa__panel {
+      background: var(--surface-1);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-6) var(--space-6) var(--space-5);
+    }
+    .heroa__panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-5);
+    }
+    .heroa__panel-title {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-semibold);
+      color: var(--ink);
+    }
+    .heroa__panel-meta {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+    }
+
+    /* vertical trust ladder: three rungs, the third is the released one */
+    .heroa__ladder {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: rung;
+    }
+    .heroa__rung {
+      counter-increment: rung;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      padding-block: var(--space-3);
+    }
+    /* connecting spine between rungs */
+    .heroa__rung + .heroa__rung::before {
+      content: "";
+      position: absolute;
+      left: 12px;            /* center of the 26px dot */
+      top: calc(var(--space-3) * -1);
+      height: var(--space-3);
+      width: 1px;
+      background: var(--line-strong);
+    }
+    .heroa__dot {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      color: var(--ink-soft);
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semibold);
+    }
+    .heroa__dot::before { content: counter(rung); }
+    .heroa__rung-label {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink);
+    }
+    /* the final rung (the moment the principal acts) gets the single accent
+       moment allowed off the CTA, to tie "You hit Send" to the booking CTA */
+    .heroa__rung--final .heroa__dot {
+      background: var(--accent);
+      color: var(--on-accent);
+    }
+    .heroa__rung--final .heroa__rung-label { color: var(--ink); }
+
+    /* proof line hung under the panel, offset further right and lower */
+    .heroa__proofline {
+      align-self: flex-end;
+      max-width: 30ch;
+      margin-right: var(--space-6);
+      font-size: var(--fs-xs);
+      line-height: var(--lh-normal);
+      color: var(--ink-faint);
+    }
+    .heroa__proofline strong {
+      display: block;
+      color: var(--ink-soft);
+      font-weight: var(--fw-semibold);
+      margin-bottom: 2px;
+    }
+
+    /* mono caption tag floating above the panel, small kinetic-type touch */
+    .heroa__railtag {
+      align-self: flex-start;
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      padding-left: var(--space-1);
+    }
+
+    /* ----- entrance motion: fast, earned, reduced-motion aware ----- */
+    @keyframes heroa-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .heroa__statement > *,
+    .heroa__rail > * {
+      animation: heroa-rise var(--dur) var(--ease) both;
+    }
+    .heroa__eyebrow   { animation-delay: 0ms; }
+    .heroa__headline  { animation-delay: 60ms; }
+    .heroa__subhead   { animation-delay: 120ms; }
+    .heroa__actions   { animation-delay: 180ms; }
+    .heroa__forl      { animation-delay: 220ms; }
+    .heroa__railtag   { animation-delay: 200ms; }
+    .heroa__panel     { animation-delay: 260ms; }
+    .heroa__proofline { animation-delay: 320ms; }
+
+    /* ----- responsive: collapse the asymmetry to a clean stack ----- */
+    @media (max-width: 960px) {
+      .heroa__seam { display: none; }
+      .heroa__inner {
+        grid-template-columns: 1fr;
+        row-gap: var(--space-8);
+      }
+      .heroa__statement { max-width: 36ch; }
+      .heroa__rail {
+        margin-top: 0;
+        margin-right: 0;
+        max-width: 460px;
+      }
+      .heroa__proofline { align-self: flex-start; margin-right: 0; }
+    }
+    @media (max-width: 760px) {
+      .heroa { padding-block: var(--space-9) var(--space-8); }
+      .heroa__statement { max-width: none; }
+      .heroa__actions { gap: var(--space-4); }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ &#9672; ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#main" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO A: ASYMMETRIC STATEMENT ===================== -->
+  <header class="heroa" id="main">
+    <span class="heroa__seam" aria-hidden="true"></span>
+    <div class="heroa__inner">
+
+      <!-- LEFT: statement, left-ranged -->
+      <div class="heroa__statement">
+        <p class="eyebrow heroa__eyebrow">
+          <span class="heroa__tick" aria-hidden="true"></span>
+          Fractional AI-Ops partner
+        </p>
+        <h1 class="heroa__headline">
+          Turn the work that slows you down <em>into software that runs itself.</em>
+        </h1>
+        <p class="heroa__subhead">
+          Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. You stay in control of every call that matters.
+        </p>
+        <div class="heroa__actions">
+          <a href="#main" class="btn btn--primary btn--lg">Book a discovery call</a>
+          <a href="#main" class="heroa__textlink">
+            Get your AI opportunity plan
+            <span class="arr" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+        <p class="heroa__forl">
+          <span class="u-mono">A 45-minute call.</span> We find the one workflow worth building first. Understanding before scope.
+        </p>
+      </div>
+
+      <!-- RIGHT: the OFFSET block (broken symmetry) -->
+      <aside class="heroa__rail" aria-label="How control stays with you">
+        <span class="heroa__railtag">The order never changes</span>
+
+        <div class="heroa__panel">
+          <div class="heroa__panel-head">
+            <span class="heroa__panel-title">You stay the final word</span>
+            <span class="heroa__panel-meta">3 steps</span>
+          </div>
+          <ol class="heroa__ladder">
+            <li class="heroa__rung">
+              <span class="heroa__dot" aria-hidden="true"></span>
+              <span class="heroa__rung-label">You read it.</span>
+            </li>
+            <li class="heroa__rung">
+              <span class="heroa__dot" aria-hidden="true"></span>
+              <span class="heroa__rung-label">You approve the draft.</span>
+            </li>
+            <li class="heroa__rung heroa__rung--final">
+              <span class="heroa__dot" aria-hidden="true"></span>
+              <span class="heroa__rung-label">You hit Send.</span>
+            </li>
+          </ol>
+        </div>
+
+        <p class="heroa__proofline">
+          <strong>Built by an operator who ships, not an agency.</strong>
+          A 15-year product record across Deloitte, Kraken, and Magic Eden.
+        </p>
+      </aside>
+
+    </div>
+  </header>
+
+</body>
+</html>

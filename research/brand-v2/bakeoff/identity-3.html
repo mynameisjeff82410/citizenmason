@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason, fractional AI-Ops partner</title>
+<meta name="description" content="A second pair of senior eyes that prepares the work. You keep the final call." />
+
+<!-- ============================================================================
+     CITIZEN MASON V2 - IDENTITY DIRECTION 3: "CRAFTSPERSON'S LEDGER"
+     Light, editorial, anti-dark-mode. Bone/paper canvas, ink, oxblood accent.
+     Fraunces (transitional serif display) + Geist Sans (body) + Geist Mono (labels).
+     Chiseled keystone mark, ruled ledger lines, column motif, engraving whitespace.
+     Emotion: I trust a craftsperson. Self-contained, no build step, no _kit.css.
+     ========================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ----------------------------------------------------------------------------
+   1. TOKENS - owned light/editorial palette
+   -------------------------------------------------------------------------- */
+:root {
+  /* Surfaces: bone -> paper -> raised. Warm, printed, never gray-SaaS. */
+  --bone:        #f3ede1;   /* deepest warm canvas (page edges, footer) */
+  --paper:       #f7f2e8;   /* main canvas, like a ledger page */
+  --paper-2:     #fbf8f1;   /* raised panels */
+  --paper-3:     #fdfcf8;   /* brightest, cards on warm ground */
+
+  /* Ink: warm near-black, two softer tiers. */
+  --ink:         #211d18;   /* primary text, almost black with warmth */
+  --ink-soft:    #544d42;   /* secondary text */
+  --ink-faint:   #8a8073;   /* captions, ruled-line labels */
+
+  /* Rules: hand-ruled ledger lines, warm not gray. */
+  --rule:        #ddd2bf;   /* hairline ledger rule */
+  --rule-strong: #c8bba2;   /* heavier rule, column dividers */
+  --rule-ink:    #211d18;   /* full-ink rule for emphasis */
+
+  /* Accent: oxblood. Deep, bookbinding red. The ONE color. */
+  --oxblood:        #7c2218;
+  --oxblood-deep:   #5f180f;
+  --oxblood-bright: #9a2c1d;
+  --on-oxblood:     #f7f2e8;
+  --oxblood-wash:   #f0e2d6;  /* faint single-moment wash */
+
+  /* Ochre: used only inside the mark engraving + one hairline, never a 2nd CTA. */
+  --ochre:        #b07d2b;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --maxw: 1140px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   2. RESET / BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  /* Faint printed-paper grain + a single warm vignette, no blobs, no glass. */
+  background-image:
+    radial-gradient(120% 80% at 88% -10%, rgba(176,125,43,0.06), transparent 60%),
+    radial-gradient(100% 70% at -10% 110%, rgba(124,34,24,0.04), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--oxblood); color: var(--on-oxblood); }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* mono label: the ledger column header / engraved caption */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.label--ox { color: var(--oxblood); }
+
+/* The ruled-line: a hairline that draws in on reveal (signature motion). */
+.rule-line {
+  height: 1px;
+  background: var(--rule-strong);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 600ms var(--ease);
+}
+.in .rule-line { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .rule-line { transform: scaleX(1); transition: none; }
+}
+
+/* Section reveal: content settles up under its rule. */
+.reveal { opacity: 0; transform: translateY(14px); transition: opacity 500ms var(--ease), transform 500ms var(--ease); }
+.in .reveal { opacity: 1; transform: none; }
+.in .reveal.d1 { transition-delay: 80ms; }
+.in .reveal.d2 { transition-delay: 160ms; }
+.in .reveal.d3 { transition-delay: 240ms; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   3. KEYSTONE MARK - chiseled, engraved, with a hand-ruled column base
+   -------------------------------------------------------------------------- */
+.mark { display: block; }
+.mark .face { fill: var(--ink); transition: fill var(--dur) var(--ease); }
+.mark .chisel { fill: var(--paper-3); }
+.mark .seam { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.85; }
+a:hover .mark .face { fill: var(--oxblood); }
+
+/* ----------------------------------------------------------------------------
+   4. NAV
+   -------------------------------------------------------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand__word {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.18rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.brand__word .amp { font-style: italic; color: var(--oxblood); }
+.nav__links { display: flex; align-items: center; gap: 34px; }
+.nav__link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  position: relative;
+  padding-bottom: 3px;
+  transition: color var(--dur) var(--ease);
+}
+.nav__link::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px;
+  background: var(--oxblood); transition: right var(--dur) var(--ease);
+}
+.nav__link:hover { color: var(--ink); }
+.nav__link:hover::after { right: 0; }
+@media (max-width: 860px) { .nav__links .nav__link { display: none; } }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; border: 1px solid transparent;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+              color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.btn:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+.btn--primary {
+  background: var(--oxblood); color: var(--on-oxblood);
+  padding: 13px 22px;
+  box-shadow: 0 1px 0 var(--oxblood-deep), 0 10px 24px -14px rgba(124,34,24,0.7);
+}
+.btn--primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+.btn--primary .arr { transition: transform var(--dur) var(--ease); }
+.btn--primary:hover .arr { transform: translateX(3px); }
+.btn--nav { padding: 9px 16px; }
+.btn--lg { padding: 16px 28px; font-size: 0.8rem; }
+
+/* Secondary: ruled text link, never a filled button (keeps one CTA dominant) */
+.btn--ghost {
+  background: transparent; color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 13px 2px;
+}
+.btn--ghost:hover { border-bottom-color: var(--ink); }
+.btn--ghost .arr { color: var(--ink-faint); transition: transform var(--dur) var(--ease); }
+.btn--ghost:hover .arr { transform: translateX(3px); }
+
+/* ----------------------------------------------------------------------------
+   5. HERO - editorial, asymmetric. Display serif left-heavy, ruled column right.
+   -------------------------------------------------------------------------- */
+.hero { padding-top: clamp(56px, 8vw, 104px); padding-bottom: clamp(48px, 7vw, 88px); }
+.hero__grid {
+  display: grid; grid-template-columns: 1.45fr 1fr; gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+}
+@media (max-width: 920px) { .hero__grid { grid-template-columns: 1fr; gap: 40px; } }
+
+.hero__eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+.hero__eyebrow .tick { width: 26px; height: 1px; background: var(--oxblood); }
+
+.hero h1 {
+  font-size: clamp(2.7rem, 6.4vw, 4.6rem);
+  font-weight: 500;
+  letter-spacing: -0.018em;
+}
+.hero h1 .it { font-style: italic; font-weight: 400; }
+.hero h1 .ox { color: var(--oxblood); }
+.hero__sub {
+  margin-top: 28px; max-width: 36ch;
+  font-size: 1.15rem; line-height: 1.62; color: var(--ink-soft);
+}
+.hero__cta { margin-top: 38px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+/* Right column: a ruled "ledger" card stating the trust posture. */
+.ledger {
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  padding: 26px 26px 22px;
+  box-shadow: 0 30px 60px -40px rgba(33,29,24,0.45);
+  position: relative;
+  margin-top: 8px;
+}
+.ledger::before {
+  /* the bound spine of a ledger page */
+  content: ""; position: absolute; left: 14px; top: 0; bottom: 0; width: 1px;
+  background: var(--oxblood-wash);
+}
+.ledger__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px solid var(--rule);
+}
+.ledger__title { font-family: var(--font-display); font-size: 1.05rem; font-weight: 500; }
+.ledger__row {
+  display: grid; grid-template-columns: 22px 1fr; gap: 14px; align-items: baseline;
+  padding: 11px 0; border-bottom: 1px solid var(--rule);
+}
+.ledger__row:last-of-type { border-bottom: 0; }
+.ledger__no { font-family: var(--font-mono); font-size: 0.78rem; color: var(--oxblood); }
+.ledger__step { font-size: 0.98rem; color: var(--ink); }
+.ledger__step b { font-family: var(--font-display); font-weight: 500; }
+.ledger__foot { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule);
+  font-size: 0.86rem; color: var(--ink-faint); font-style: italic; font-family: var(--font-display); }
+
+/* ----------------------------------------------------------------------------
+   6. SECTION SCAFFOLD - every section opens with a ruled header
+   -------------------------------------------------------------------------- */
+.section { padding-block: clamp(56px, 8vw, 100px); }
+.section--bone { background: var(--bone); border-block: 1px solid var(--rule); }
+.sec-head { margin-bottom: 40px; }
+.sec-head__rule { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+.sec-head__rule .rule-line { flex: 1; }
+.sec-head h2 { font-size: clamp(1.9rem, 3.6vw, 2.7rem); font-weight: 500; max-width: 18ch; }
+.sec-head h2 .it { font-style: italic; font-weight: 400; }
+.sec-head__lead { margin-top: 16px; max-width: 52ch; color: var(--ink-soft); font-size: 1.08rem; }
+
+/* ----------------------------------------------------------------------------
+   7. WHO IT IS FOR / TRUST LADDER ROW - three ruled columns
+   -------------------------------------------------------------------------- */
+.cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+@media (max-width: 820px) { .cols { grid-template-columns: 1fr; } }
+.col {
+  padding: 30px 30px 30px 0;
+  border-top: 2px solid var(--ink);
+}
+.col + .col { border-left: 1px solid var(--rule-strong); padding-left: 30px; }
+@media (max-width: 820px) {
+  .col + .col { border-left: 0; padding-left: 0; }
+}
+.col__no { font-family: var(--font-mono); font-size: 0.74rem; color: var(--oxblood); letter-spacing: 0.1em; }
+.col__title { font-family: var(--font-display); font-size: 1.45rem; font-weight: 500; margin-top: 14px; }
+.col__title .it { font-style: italic; font-weight: 400; }
+.col__body { margin-top: 12px; color: var(--ink-soft); font-size: 1rem; }
+
+/* ----------------------------------------------------------------------------
+   8. PROOF
+   -------------------------------------------------------------------------- */
+.founder {
+  display: grid; grid-template-columns: auto 1fr; gap: 26px; align-items: center;
+  padding: 26px; background: var(--paper-3); border: 1px solid var(--rule);
+  border-left: 3px solid var(--oxblood);
+}
+@media (max-width: 640px) { .founder { grid-template-columns: 1fr; } }
+.founder__seal {
+  width: 76px; height: 76px; flex: none;
+  display: grid; place-items: center;
+  border: 1px solid var(--rule-strong); border-radius: 50%;
+  background: var(--paper-2);
+  font-family: var(--font-display); font-style: italic; font-size: 1.5rem; color: var(--oxblood);
+}
+.founder__line { font-family: var(--font-display); font-size: 1.32rem; font-weight: 500; line-height: 1.3; }
+.founder__sub { margin-top: 8px; color: var(--ink-soft); font-size: 1rem; }
+
+.pillsets { margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+@media (max-width: 720px) { .pillsets { grid-template-columns: 1fr; } }
+.pillset__label { margin-bottom: 14px; }
+.pills { display: flex; flex-wrap: wrap; gap: 9px; }
+.pill {
+  font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.04em;
+  color: var(--ink); background: var(--paper-3);
+  border: 1px solid var(--rule-strong);
+  padding: 7px 13px;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.pill:hover { transform: translateY(-2px); border-color: var(--ink); }
+.pill--live { border-color: var(--oxblood-wash); }
+.pill--live::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--oxblood); margin-right: 8px; vertical-align: middle;
+}
+.pill--live:hover { color: var(--oxblood); border-color: var(--oxblood); }
+
+/* Workflow patterns: three ruled ledger rows, asymmetric numbering */
+.patterns { margin-top: 48px; }
+.pattern {
+  display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; align-items: baseline;
+  padding: 26px 0;
+  border-top: 1px solid var(--rule-strong);
+  transition: background var(--dur) var(--ease);
+}
+.pattern:last-child { border-bottom: 1px solid var(--rule-strong); }
+.pattern:hover { background: var(--paper-2); }
+.pattern__no { font-family: var(--font-mono); font-size: 0.9rem; color: var(--oxblood); }
+.pattern__name { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; }
+.pattern__name .it { font-style: italic; font-weight: 400; }
+.pattern__desc { margin-top: 8px; color: var(--ink-soft); font-size: 1rem; max-width: 60ch; }
+.pattern__tag {
+  font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-faint); white-space: nowrap; align-self: center;
+}
+@media (max-width: 700px) {
+  .pattern { grid-template-columns: 40px 1fr; }
+  .pattern__tag { grid-column: 2; margin-top: 8px; align-self: start; }
+}
+
+/* ----------------------------------------------------------------------------
+   9. CONVERSION
+   -------------------------------------------------------------------------- */
+.convert__grid {
+  display: grid; grid-template-columns: 1fr 0.9fr; gap: clamp(32px, 6vw, 80px);
+  align-items: center;
+}
+@media (max-width: 880px) { .convert__grid { grid-template-columns: 1fr; gap: 40px; } }
+.convert h2 { font-size: clamp(2rem, 4.4vw, 3.1rem); font-weight: 500; }
+.convert h2 .it { font-style: italic; font-weight: 400; color: var(--oxblood); }
+.convert__frame {
+  margin-top: 22px; font-size: 1.12rem; color: var(--ink-soft); max-width: 44ch;
+  font-family: var(--font-display); font-style: italic;
+}
+.convert__actions { margin-top: 34px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+/* the booking card: a ruled appointment slip */
+.slip {
+  background: var(--paper-3); border: 1px solid var(--rule);
+  border-top: 2px solid var(--oxblood);
+  padding: 26px; box-shadow: 0 30px 60px -42px rgba(33,29,24,0.5);
+}
+.slip__head { display: flex; justify-content: space-between; align-items: baseline;
+  padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+.slip__head h3 { font-size: 1.15rem; font-weight: 500; }
+.slip__meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.08em; }
+.slip__row { display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px dotted var(--rule-strong);
+  font-size: 0.96rem; }
+.slip__row span:first-child { color: var(--ink-faint); font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.slip__row span:last-child { color: var(--ink); }
+.slip .btn--primary { width: 100%; justify-content: center; margin-top: 20px; }
+
+/* ----------------------------------------------------------------------------
+   10. FOOTER
+   -------------------------------------------------------------------------- */
+.footer { background: var(--bone); border-top: 1px solid var(--rule-strong); padding-block: 52px; }
+.footer__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 30px; flex-wrap: wrap; }
+.footer__word { font-family: var(--font-display); font-size: 1.4rem; font-weight: 500; }
+.footer__word .amp { font-style: italic; color: var(--oxblood); }
+.footer__tag { margin-top: 8px; color: var(--ink-soft); font-style: italic; font-family: var(--font-display); }
+.footer__links { display: flex; gap: 26px; flex-wrap: wrap; }
+.footer__links a { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); transition: color var(--dur) var(--ease); }
+.footer__links a:hover { color: var(--oxblood); }
+.footer__base { margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--ink-faint); }
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 12px; top: 12px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 16px; font-family: var(--font-mono); font-size: 0.8rem; }
+</style>
+</head>
+
+<body>
+<a href="#hero" class="skip">Skip to content</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a href="#hero" class="brand" aria-label="Citizen Mason, home">
+      <!-- chiseled keystone: tapered trapezoid, wider at top, with an engraved seam -->
+      <svg class="mark" width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+        <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+        <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+        <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+      </svg>
+      <span class="brand__word">Citizen<span class="amp"> </span>Mason</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="#who">Who it is for</a>
+      <a class="nav__link" href="#how">How it works</a>
+      <a class="nav__link" href="#proof">Proof</a>
+      <a class="btn btn--primary btn--nav" href="#book">Book a call <span class="arr" aria-hidden="true">&rarr;</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <div class="hero__eyebrow">
+        <span class="tick" aria-hidden="true"></span>
+        <span class="label label--ox">Fractional AI-Ops partner</span>
+      </div>
+      <h1>Turn the work that slows you down into <span class="it ox">software that runs itself.</span></h1>
+      <p class="hero__sub">Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. You stay in control of every call that matters.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--lg" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#book">Get your AI opportunity plan <span class="arr" aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+
+    <aside class="ledger" aria-label="How access is earned">
+      <div class="ledger__head">
+        <span class="ledger__title">The trust ledger</span>
+        <span class="label">Read &middot; Draft &middot; Send</span>
+      </div>
+      <div class="ledger__row"><span class="ledger__no">01</span><span class="ledger__step"><b>You read it.</b> The work arrives prepared, never sent.</span></div>
+      <div class="ledger__row"><span class="ledger__no">02</span><span class="ledger__step"><b>You approve the draft.</b> Nothing leaves without your yes.</span></div>
+      <div class="ledger__row"><span class="ledger__no">03</span><span class="ledger__step"><b>You hit Send.</b> Every client-facing call stays yours.</span></div>
+      <p class="ledger__foot">A second pair of senior eyes that prepares the work. You keep the final call.</p>
+    </aside>
+  </div>
+</section>
+
+<!-- ===================== WHO IT IS FOR ===================== -->
+<section class="section section--bone reveal-sec" id="who">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__rule">
+        <span class="label">Who it is for</span>
+        <span class="rule-line"></span>
+      </div>
+      <h2>For the principal who is still the <span class="it">final word.</span></h2>
+      <p class="sec-head__lead">A boutique luxury studio absorbs five-figure errors. One missed detail can cost tens of thousands. The work that protects the craft is the work that never reaches the right desk in time.</p>
+    </div>
+    <div class="cols">
+      <div class="col reveal">
+        <span class="col__no">A.</span>
+        <h3 class="col__title">The senior <span class="it">bottleneck</span></h3>
+        <p class="col__body">The most expensive person reviews the most routine work, late at night, because no one else can be trusted with the detail.</p>
+      </div>
+      <div class="col reveal d1">
+        <span class="col__no">B.</span>
+        <h3 class="col__title">On your <span class="it">own tools</span></h3>
+        <p class="col__body">The systems run inside the email, drive, and files you already use. No migration, no new login your team must learn.</p>
+      </div>
+      <div class="col reveal d2">
+        <span class="col__no">C.</span>
+        <h3 class="col__title">You stay <span class="it">in control</span></h3>
+        <p class="col__body">Access is earned one rung at a time. You read it, you approve the draft, you hit Send. The authority never moves.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW IT WORKS / PROOF ===================== -->
+<section class="section reveal-sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__rule">
+        <span class="label">How it works</span>
+        <span class="rule-line"></span>
+      </div>
+      <h2>Three systems, drawn from <span class="it">real desks.</span></h2>
+      <p class="sec-head__lead">Each one starts read-only and prepares the work. You decide what happens next.</p>
+    </div>
+
+    <div class="patterns">
+      <article class="pattern reveal">
+        <span class="pattern__no">01</span>
+        <div>
+          <h3 class="pattern__name">Morning <span class="it">Brief</span></h3>
+          <p class="pattern__desc">Reads the inbox overnight and returns room-tagged items, grouped by thread, that you scan in minutes over coffee.</p>
+        </div>
+        <span class="pattern__tag">Read</span>
+      </article>
+      <article class="pattern reveal d1">
+        <span class="pattern__no">02</span>
+        <div>
+          <h3 class="pattern__name">Shop Drawing <span class="it">Compare</span></h3>
+          <p class="pattern__desc">Pairs an instruction with the contractor response and flags what was not addressed. One missed detail can cost tens of thousands.</p>
+        </div>
+        <span class="pattern__tag">Compare</span>
+      </article>
+      <article class="pattern reveal d2">
+        <span class="pattern__no">03</span>
+        <div>
+          <h3 class="pattern__name"><span class="it">Auto</span>filer</h3>
+          <p class="pattern__desc">Incoming documents sort and file themselves into the structure your studio already keeps, named the way you name them.</p>
+        </div>
+        <span class="pattern__tag">Capture</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROOF ===================== -->
+<section class="section section--bone reveal-sec" id="proof">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__rule">
+        <span class="label">Proof</span>
+        <span class="rule-line"></span>
+      </div>
+      <h2>Built by an operator who <span class="it">ships.</span></h2>
+    </div>
+
+    <div class="founder reveal">
+      <div class="founder__seal" aria-hidden="true">JN</div>
+      <div>
+        <p class="founder__line">Built by an operator who ships, not an agency. A 15-year product record.</p>
+        <p class="founder__sub">The founder is the second pair of eyes, not a hidden consultant. The record below shipped to market and is live today.</p>
+      </div>
+    </div>
+
+    <div class="pillsets">
+      <div class="pillset reveal d1">
+        <div class="pillset__label label">Led to market</div>
+        <div class="pills">
+          <span class="pill">Deloitte</span>
+          <span class="pill">NFL Digital Media</span>
+          <span class="pill">Miami HEAT</span>
+          <span class="pill">Kraken</span>
+          <span class="pill">Scopely</span>
+          <span class="pill">Maestro</span>
+        </div>
+      </div>
+      <div class="pillset reveal d2">
+        <div class="pillset__label label label--ox">Live products</div>
+        <div class="pills">
+          <span class="pill pill--live">Crafted</span>
+          <span class="pill pill--live">Phase</span>
+          <span class="pill pill--live">Netrunner</span>
+          <span class="pill pill--live">Magic Eden</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONVERSION ===================== -->
+<section class="section convert reveal-sec" id="book">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-head__rule">
+        <span class="label label--ox">Book a discovery call</span>
+        <span class="rule-line"></span>
+      </div>
+    </div>
+    <div class="convert__grid">
+      <div class="reveal">
+        <h2>Find the one workflow <span class="it">worth building first.</span></h2>
+        <p class="convert__frame">A 45-minute call. We find the one workflow worth building first. Understanding before scope.</p>
+        <div class="convert__actions">
+          <a class="btn btn--primary btn--lg" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+          <a class="btn btn--ghost" href="#book">Get your AI opportunity plan <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </div>
+
+      <aside class="slip reveal d1" aria-label="Discovery call details">
+        <div class="slip__head">
+          <h3>Discovery call</h3>
+          <span class="slip__meta">No. 001</span>
+        </div>
+        <div class="slip__row"><span>Length</span><span>45 minutes</span></div>
+        <div class="slip__row"><span>Outcome</span><span>One workflow to build first</span></div>
+        <div class="slip__row"><span>Order</span><span>Understanding before scope</span></div>
+        <a class="btn btn--primary" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__top">
+      <div>
+        <div class="brand" style="gap:11px;">
+          <svg class="mark" width="22" height="26" viewBox="0 0 26 30" aria-hidden="true">
+            <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+            <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+            <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+            <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+          </svg>
+          <span class="footer__word">Citizen<span class="amp"> </span>Mason</span>
+        </div>
+        <p class="footer__tag">A second pair of senior eyes that prepares the work. You keep the final call.</p>
+      </div>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="#who">Who it is for</a>
+        <a href="#how">How it works</a>
+        <a href="#proof">Proof</a>
+        <a href="#book">Book a call</a>
+      </nav>
+    </div>
+    <div class="footer__base">
+      <span>Citizen Mason</span>
+      <span>Fractional AI-Ops partner</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Signature motion: ruled lines + section content draw in on scroll.
+   IntersectionObserver toggles .in; CSS does the rest. Reduced-motion safe. */
+(function () {
+  var secs = document.querySelectorAll('.reveal-sec, .hero');
+  if (!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    secs.forEach(function (s) { s.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
+  secs.forEach(function (s) { io.observe(s); });
+  /* hero is above the fold: reveal immediately */
+  var hero = document.getElementById('hero');
+  if (hero) hero.classList.add('in');
+})();
+</script>
+</body>
+</html>

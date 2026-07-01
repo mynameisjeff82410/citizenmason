@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason, fractional AI-Ops partner</title>
+<meta name="description" content="The AI systems your business is missing, run on the tools you already use. You decide every call that matters." />
+
+<!-- ============================================================================
+     CITIZEN MASON V2 - HERO VARIANT: "THE WORK BECOMES THE SYSTEM" (switch)
+     Identity: locked "Craftsperson's Ledger" (identity-3). Bone/paper canvas,
+     one oxblood accent used sparingly, Fraunces display + Geist Sans body +
+     Geist Mono labels, ruled ledger motif, chiseled keystone (Quoin) mark.
+     KEPT VERBATIM from hero-value-transform: nav (outline "Book a call"), the
+     entire LEFT column (mono eyebrow, weight-choreographed headline + self-
+     drawing underscore, subhead, oxblood primary CTA, ruled secondary link,
+     operator-credibility line) and the credibility strip.
+     REPLACED: the right-column artifact. New artifact enacts the headline as a
+     single visual move. A scattered cluster of manual-work chits (uneven, each
+     with a wind-up crank and a ticking cost meter) collapses and snaps into one
+     calm keystone tile that reads SOFTWARE, runs itself, with a steady status
+     light and a YOUR YES seal. The morph IS the message. Very low text.
+     Reduced-motion shows the resolved single tile, cluster faded behind as
+     provenance. Self-contained: own <style>, @import fonts.
+     ========================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ----------------------------------------------------------------------------
+   1. TOKENS - locked from identity-3 "Craftsperson's Ledger"
+   -------------------------------------------------------------------------- */
+:root {
+  --bone:        #f3ede1;
+  --paper:       #f7f2e8;
+  --paper-2:     #fbf8f1;
+  --paper-3:     #fdfcf8;
+
+  --ink:         #211d18;
+  --ink-soft:    #544d42;
+  --ink-faint:   #8a8073;
+
+  --rule:        #ddd2bf;
+  --rule-strong: #c8bba2;
+  --rule-ink:    #211d18;
+
+  --oxblood:        #7c2218;
+  --oxblood-deep:   #5f180f;
+  --oxblood-bright: #9a2c1d;
+  --on-oxblood:     #f7f2e8;
+  --oxblood-wash:   #f0e2d6;
+
+  --ochre:        #b07d2b;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --maxw: 1180px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   2. RESET / BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(120% 80% at 88% -10%, rgba(176,125,43,0.06), transparent 60%),
+    radial-gradient(100% 70% at -10% 110%, rgba(124,34,24,0.04), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+::selection { background: var(--oxblood); color: var(--on-oxblood); }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* mono label: the ledger column header / engraved caption */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.label--ox { color: var(--oxblood); }
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 12px; top: 12px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 16px; font-family: var(--font-mono); font-size: 0.8rem; }
+
+/* ----------------------------------------------------------------------------
+   3. KEYSTONE (QUOIN) MARK - chiseled, engraved
+   -------------------------------------------------------------------------- */
+.mark { display: block; }
+.mark .face { fill: var(--ink); transition: fill var(--dur) var(--ease); }
+.mark .chisel { fill: var(--paper-3); }
+.mark .seam { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.85; }
+a:hover .mark .face { fill: var(--oxblood); }
+
+/* ----------------------------------------------------------------------------
+   4. NAV - full width
+   -------------------------------------------------------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand__word {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.18rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.nav__links { display: flex; align-items: center; gap: 34px; }
+.nav__link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  position: relative;
+  padding-bottom: 3px;
+  transition: color var(--dur) var(--ease);
+}
+.nav__link::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px;
+  background: var(--oxblood); transition: right var(--dur) var(--ease);
+}
+.nav__link:hover { color: var(--ink); }
+.nav__link:hover::after { right: 0; }
+@media (max-width: 860px) { .nav__links .nav__link { display: none; } }
+
+/* ----------------------------------------------------------------------------
+   5. BUTTONS - one oxblood CTA only; nav CTA is an outline
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; border: 1px solid transparent;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+              color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.btn:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+
+/* the ONE dominant ask, hero primary only */
+.btn--primary {
+  background: var(--oxblood); color: var(--on-oxblood);
+  padding: 13px 22px;
+  box-shadow: 0 1px 0 var(--oxblood-deep), 0 10px 24px -14px rgba(124,34,24,0.7);
+}
+.btn--primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+.btn--primary .arr { transition: transform var(--dur) var(--ease); }
+.btn--primary:hover .arr { transform: translateX(3px); }
+.btn--lg { padding: 16px 28px; font-size: 0.8rem; }
+
+/* nav CTA: OUTLINE, keeps oxblood reserved for the hero primary */
+.btn--outline {
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  padding: 9px 16px;
+}
+.btn--outline:hover { border-color: var(--ink); transform: translateY(-1px); }
+
+/* secondary hero action: ruled text link, no accent */
+.btn--ghost {
+  background: transparent; color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 13px 2px;
+}
+.btn--ghost:hover { border-bottom-color: var(--ink); }
+.btn--ghost .arr { color: var(--ink-faint); transition: transform var(--dur) var(--ease); }
+.btn--ghost:hover .arr { transform: translateX(3px); }
+
+/* ----------------------------------------------------------------------------
+   6. HERO - split, asymmetric, with a right-of-center seam
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding-top: clamp(54px, 7.5vw, 96px);
+  padding-bottom: clamp(40px, 6vw, 76px);
+  overflow: clip;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 58%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--rule-strong) 12%, var(--rule-strong) 88%, transparent);
+  pointer-events: none;
+}
+@media (max-width: 960px) { .hero::before { display: none; } }
+
+.hero__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.92fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+@media (max-width: 960px) { .hero__grid { grid-template-columns: 1fr; gap: 44px; } }
+
+/* --- LEFT: the statement (KEPT VERBATIM) --- */
+.hero__copy { max-width: 38ch; padding-top: 4px; }
+
+.hero__eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+.hero__eyebrow .tick { width: 26px; height: 1px; background: var(--oxblood); flex: none; }
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.4rem);
+  letter-spacing: -0.018em;
+  line-height: 1.06;
+}
+.hero h1 .ln { display: block; }
+.hero h1 .ln--lead   { font-weight: 500; color: var(--ink); }
+.hero h1 .ln--soft   { font-weight: 400; font-style: italic; color: var(--ink-soft); }
+.hero h1 .ln--accent { font-weight: 600; color: var(--oxblood); }
+
+.hero h1 .draw {
+  position: relative;
+  white-space: nowrap;
+  padding-bottom: 0.06em;
+}
+.hero h1 .draw::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0.02em;
+  height: 2px;
+  background: var(--oxblood);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: draw-underscore 700ms var(--ease) 620ms forwards;
+}
+@keyframes draw-underscore { to { transform: scaleX(1); } }
+
+.hero__sub {
+  margin-top: 26px; max-width: 40ch;
+  font-size: 1.15rem; line-height: 1.62; color: var(--ink-soft);
+}
+.hero__cta { margin-top: 34px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+.hero__operator {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 30px; padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  max-width: 42ch;
+}
+.hero__operator-seal {
+  flex: none; width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: 1px solid var(--rule-strong); border-radius: 50%;
+  background: var(--paper-2);
+  font-family: var(--font-display); font-style: italic; font-size: 1.1rem;
+  color: var(--oxblood);
+}
+.hero__operator-text { font-size: 0.92rem; line-height: 1.45; color: var(--ink-soft); }
+.hero__operator-text strong { display: block; color: var(--ink); font-weight: 600; font-family: var(--font-sans); }
+
+/* ----------------------------------------------------------------------------
+   7. THE SWITCH - the right-side visual artifact (REPLACED)
+   The whole right column is one staged plane. A scattered cluster of manual
+   work chits resolves into a single calm keystone tile. The morph is the story.
+   -------------------------------------------------------------------------- */
+.switch {
+  position: relative;
+  margin-top: clamp(20px, 4vw, 40px);
+}
+@media (max-width: 960px) {
+  .switch { margin-top: 0; max-width: 540px; }
+}
+
+/* the engraved caption above the stage: BEFORE label transitions to AFTER */
+.switch__tag {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  padding-inline: 2px; margin-bottom: 14px;
+  min-height: 16px;
+}
+.switch__tag-state { position: relative; display: inline-grid; }
+.switch__tag-state > span { grid-area: 1 / 1; }
+.switch__tag-before { color: var(--ink-faint); }
+.switch__tag-after  { color: var(--oxblood); opacity: 0; }
+
+.switch__ran {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-soft);
+  opacity: 0;
+}
+.switch__pulse {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--oxblood);
+  animation: pulse 2.4s var(--ease) infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50%      { opacity: 1;    transform: scale(1); }
+}
+
+/* the stage holds both states stacked; height is fixed so nothing reflows */
+.stage {
+  position: relative;
+  height: 412px;
+}
+@media (max-width: 420px) { .stage { height: 380px; } }
+
+/* --- THE CLUSTER: the work that slows you down --- */
+.cluster {
+  position: absolute; inset: 0;
+}
+
+/* each chit: a small ledger card, manual work, with a hand crank + cost meter */
+.chit {
+  position: absolute;
+  width: 168px;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  box-shadow: 0 18px 34px -26px rgba(33,29,24,0.5);
+  padding: 11px 12px 12px;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.chit__top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: 9px;
+}
+.chit__label {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+/* the hand crank: a slowly turning wheel = manual, cranked by hand, never rests */
+.crank {
+  flex: none; width: 16px; height: 16px;
+  animation: crank-turn 3.6s linear infinite;
+}
+.crank .spoke { stroke: var(--ink-faint); stroke-width: 1.4; }
+.crank .hub   { fill: var(--ink-faint); }
+@keyframes crank-turn { to { transform: rotate(360deg); } }
+
+.chit__work {
+  font-family: var(--font-display); font-size: 0.94rem; font-weight: 500;
+  line-height: 1.18; color: var(--ink);
+}
+/* the cost meter: a ticking bar that fills = time and money draining */
+.chit__meter {
+  margin-top: 10px; height: 4px; border-radius: 2px;
+  background: var(--rule); overflow: hidden;
+}
+.chit__meter i {
+  display: block; height: 100%; width: 40%;
+  background: var(--ink-faint);
+  animation: meter-drain 2.8s var(--ease) infinite alternate;
+}
+@keyframes meter-drain { from { width: 22%; } to { width: 86%; } }
+.chit__cost {
+  margin-top: 6px;
+  font-family: var(--font-mono); font-size: 0.58rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+
+/* the five chits, scattered uneven on the stage, each at its own tilt.
+   they ring the center so the resolved tile lands in the gap they leave. */
+.chit--1 { top: 2px;   left: 6px;   transform: rotate(-3.5deg); }
+.chit--2 { top: 18px;  left: 214px; transform: rotate(2.6deg);  }
+.chit--3 { top: 150px; left: -8px;  transform: rotate(2.2deg);  }
+.chit--4 { top: 188px; left: 222px; transform: rotate(-2.4deg); }
+.chit--5 { top: 306px; left: 108px; transform: rotate(1.4deg);  }
+@media (max-width: 420px) {
+  .chit { width: 150px; }
+  .chit--2 { left: 184px; }
+  .chit--4 { left: 192px; }
+}
+
+/* --- THE SYSTEM: one calm keystone tile, software that runs itself --- */
+.system {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 318px;
+  transform: translate(-50%, -50%) scale(0.92);
+  opacity: 0;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--oxblood);
+  box-shadow: 0 44px 76px -38px rgba(33,29,24,0.58);
+  padding: 24px 26px 20px;
+  will-change: transform, opacity;
+}
+.system::before {
+  /* the bound spine of the ledger page */
+  content: ""; position: absolute; left: 14px; top: 0; bottom: 0; width: 1px;
+  background: var(--oxblood-wash);
+}
+.system__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-bottom: 14px; margin-bottom: 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.system__mark {
+  display: flex; align-items: center; gap: 10px;
+}
+.system__mark svg { display: block; }
+.system__mark .face { fill: var(--ink); }
+.system__mark .chisel { fill: var(--paper-3); }
+.system__mark .seam { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.85; }
+.system__kind {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+/* the steady status light: software is up, running, calm (no manual crank) */
+.system__status {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--oxblood);
+}
+.system__status .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--oxblood);
+  box-shadow: 0 0 0 0 rgba(124,34,24,0.45);
+  animation: status-glow 2.6s var(--ease) infinite;
+}
+@keyframes status-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(124,34,24,0.40); }
+  70%  { box-shadow: 0 0 0 7px rgba(124,34,24,0); }
+  100% { box-shadow: 0 0 0 0 rgba(124,34,24,0); }
+}
+
+.system__title {
+  font-family: var(--font-display); font-size: 1.72rem; font-weight: 500;
+  line-height: 1.1; letter-spacing: -0.015em; color: var(--ink);
+}
+.system__title .it { font-style: italic; font-weight: 400; color: var(--oxblood); }
+
+.system__line {
+  margin-top: 14px; height: 1px; background: var(--rule);
+}
+.system__foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-top: 14px;
+}
+.system__yes {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+/* the YOUR YES seal: a quoin-stamped circle = owner stays in control */
+.system__seal {
+  flex: none; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--oxblood); color: var(--oxblood);
+  background: var(--paper-2);
+}
+.system__seal svg { display: block; }
+.system__by {
+  font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+
+/* ----------------------------------------------------------------------------
+   8. THE MORPH - the single premium move (the switch)
+   Sequence: cluster reads as scattered manual work; then it collapses inward,
+   tilts to true, fades; the system tile rises and settles; tag flips to AFTER.
+   -------------------------------------------------------------------------- */
+
+/* each chit collapses to center and fades (the work is absorbed) */
+.chit {
+  animation: chit-collapse 900ms var(--ease) forwards;
+}
+@keyframes chit-collapse {
+  0%   { opacity: 1; }
+  /* hold the scattered manual state long enough to read it */
+  60%  { opacity: 1; }
+  100% {
+    opacity: 0;
+    /* pull every chit toward stage center and flatten its tilt */
+    transform: translate(var(--cx, 0), var(--cy, 0)) rotate(0deg) scale(0.6);
+  }
+}
+/* per-chit pull vectors toward the center of the stage */
+.chit--1 { --cx: 84px;  --cy: 168px; }
+.chit--2 { --cx: -78px; --cy: 150px; }
+.chit--3 { --cx: 96px;  --cy: 30px;  }
+.chit--4 { --cx: -96px; --cy: 4px;   }
+.chit--5 { --cx: 6px;   --cy: -130px;}
+
+/* the morph timing is driven by a master delay before the system resolves */
+.system {
+  animation: system-resolve 760ms var(--ease) 760ms forwards;
+}
+@keyframes system-resolve {
+  0%   { opacity: 0; transform: translate(-50%, -46%) scale(0.92); }
+  55%  { opacity: 1; }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* the tag flips from BEFORE to AFTER as the system lands */
+.switch__tag-before { animation: tag-out 360ms var(--ease) 820ms forwards; }
+.switch__tag-after  { animation: tag-in  420ms var(--ease) 900ms forwards; }
+.switch__ran        { animation: tag-in  420ms var(--ease) 980ms forwards; }
+@keyframes tag-out { to { opacity: 0; } }
+@keyframes tag-in  { to { opacity: 1; } }
+
+/* a single quiet flash on the seam at the instant of the switch */
+.stage::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background: radial-gradient(60% 50% at 50% 50%, rgba(124,34,24,0.10), transparent 70%);
+  opacity: 0;
+  animation: switch-flash 700ms var(--ease) 720ms forwards;
+}
+@keyframes switch-flash {
+  0%, 30% { opacity: 0; }
+  46%     { opacity: 1; }
+  100%    { opacity: 0; }
+}
+
+/* ----------------------------------------------------------------------------
+   9. REDUCED MOTION - resolved end-state, cluster as faded provenance
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .chit,
+  .system,
+  .switch__tag-before,
+  .switch__tag-after,
+  .switch__ran,
+  .stage::after { animation: none; }
+
+  /* show the resolved system, with the cluster ghosted behind as where it came from */
+  .chit { opacity: 0.16; }
+  .chit .crank, .chit__meter i { animation: none; }
+  .chit__meter i { width: 64%; }
+
+  .system { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .switch__tag-before { opacity: 0; }
+  .switch__tag-after  { opacity: 1; }
+  .switch__ran        { opacity: 1; }
+  .system__status .dot { animation: none; }
+  .hero h1 .draw::after { animation: none; transform: scaleX(1); }
+
+  .hero__copy > *, .switch > * { animation: none; opacity: 1; transform: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   10. CREDIBILITY STRIP - slim, beneath the hero (KEPT VERBATIM)
+   -------------------------------------------------------------------------- */
+.cred {
+  background: var(--bone);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding-block: 26px;
+}
+.cred__inner {
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);
+  gap: clamp(22px, 4vw, 56px); align-items: center;
+}
+@media (max-width: 880px) { .cred__inner { grid-template-columns: 1fr; gap: 20px; } }
+
+.cred__claim {
+  font-family: var(--font-display); font-size: 1.02rem; line-height: 1.4;
+  color: var(--ink);
+}
+.cred__claim b { font-weight: 600; }
+.cred__claim span { display: block; margin-top: 4px; font-size: 0.92rem; color: var(--ink-soft); font-style: italic; }
+
+.cred__pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pill {
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+  color: var(--ink); background: var(--paper-3);
+  border: 1px solid var(--rule-strong);
+  padding: 6px 12px;
+  white-space: nowrap;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.pill:hover { transform: translateY(-2px); border-color: var(--ink); }
+.pill--live { border-color: var(--oxblood-wash); }
+.pill--live::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--oxblood); margin-right: 8px; vertical-align: middle;
+}
+.pill--live:hover { color: var(--oxblood); border-color: var(--oxblood); }
+.cred__sep {
+  width: 1px; height: 22px; background: var(--rule-strong); margin-inline: 4px;
+  flex: none;
+}
+@media (max-width: 520px) { .cred__sep { display: none; } }
+
+/* ----------------------------------------------------------------------------
+   11. LEFT-COLUMN ENTRANCE - restrained, reduced-motion aware
+   -------------------------------------------------------------------------- */
+@keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.hero__copy > * { animation: rise 460ms var(--ease) both; }
+.hero__eyebrow  { animation-delay: 0ms; }
+.hero h1        { animation-delay: 70ms; }
+.hero__sub      { animation-delay: 150ms; }
+.hero__cta      { animation-delay: 220ms; }
+.hero__operator { animation-delay: 290ms; }
+.switch__tag    { animation: rise 460ms var(--ease) both; animation-delay: 240ms; }
+</style>
+</head>
+
+<body>
+<a href="#hero" class="skip">Skip to content</a>
+
+<!-- ===================== NAV (KEPT VERBATIM) ===================== -->
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a href="#hero" class="brand" aria-label="Citizen Mason, home">
+      <!-- chiseled keystone (Quoin) mark: tapered trapezoid with engraved seam -->
+      <svg class="mark" width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+        <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+        <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+        <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+      </svg>
+      <span class="brand__word">Citizen Mason</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="#who">Who it is for</a>
+      <a class="nav__link" href="#how">How it works</a>
+      <a class="nav__link" href="#proof">Proof</a>
+      <a class="btn btn--outline" href="#book">Book a call</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="wrap hero__grid">
+
+    <!-- LEFT: the statement (KEPT VERBATIM) -->
+    <div class="hero__copy">
+      <div class="hero__eyebrow">
+        <span class="tick" aria-hidden="true"></span>
+        <span class="label label--ox">Fractional AI-Ops partner</span>
+      </div>
+
+      <h1>
+        <span class="ln ln--lead">Turn the work</span>
+        <span class="ln ln--soft">that slows you down</span>
+        <span class="ln ln--accent">into software that <span class="draw">runs itself.</span></span>
+      </h1>
+
+      <p class="hero__sub">Citizen Mason builds the AI systems your business is missing, then runs them on the tools you already use. You stay in control of every call that matters.</p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--lg" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#plan">Get your AI opportunity plan <span class="arr" aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <!-- operator-credibility line near the primary CTA -->
+      <div class="hero__operator">
+        <span class="hero__operator-seal" aria-hidden="true">JN</span>
+        <p class="hero__operator-text">
+          <strong>Built by an operator who ships, not an agency.</strong>
+          A 15-year product record. You work with the person who builds it.
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT: THE SWITCH (REPLACED) -->
+    <!-- The headline, enacted. A scattered cluster of manual-work chits
+         (hand cranks, draining cost meters) collapses and snaps into one calm
+         keystone tile: SOFTWARE that runs itself, steady status light, YOUR YES
+         seal. The morph is the message. Reduced-motion shows the resolved tile. -->
+    <aside class="switch" aria-label="The manual work that slows you down becomes one system that runs itself, with your final yes">
+      <div class="switch__tag">
+        <span class="switch__tag-state">
+          <span class="label switch__tag-before">The work that slows you down</span>
+          <span class="label label--ox switch__tag-after">Now it runs itself</span>
+        </span>
+        <span class="switch__ran">
+          <span class="switch__pulse" aria-hidden="true"></span>
+          Running this week
+        </span>
+      </div>
+
+      <div class="stage">
+
+        <!-- BEFORE: the cluster of manual work -->
+        <div class="cluster" aria-hidden="true">
+          <article class="chit chit--1">
+            <div class="chit__top">
+              <span class="chit__label">Reporting</span>
+              <svg class="crank" viewBox="0 0 16 16"><circle class="hub" cx="8" cy="8" r="1.6"/><line class="spoke" x1="8" y1="1.5" x2="8" y2="14.5"/><line class="spoke" x1="1.5" y1="8" x2="14.5" y2="8"/><line class="spoke" x1="3.4" y1="3.4" x2="12.6" y2="12.6"/><line class="spoke" x1="12.6" y1="3.4" x2="3.4" y2="12.6"/></svg>
+            </div>
+            <p class="chit__work">The weekly report</p>
+            <div class="chit__meter"><i></i></div>
+            <p class="chit__cost">A whole day, by hand</p>
+          </article>
+
+          <article class="chit chit--2">
+            <div class="chit__top">
+              <span class="chit__label">Follow-ups</span>
+              <svg class="crank" viewBox="0 0 16 16"><circle class="hub" cx="8" cy="8" r="1.6"/><line class="spoke" x1="8" y1="1.5" x2="8" y2="14.5"/><line class="spoke" x1="1.5" y1="8" x2="14.5" y2="8"/><line class="spoke" x1="3.4" y1="3.4" x2="12.6" y2="12.6"/><line class="spoke" x1="12.6" y1="3.4" x2="3.4" y2="12.6"/></svg>
+            </div>
+            <p class="chit__work">Chasing every lead</p>
+            <div class="chit__meter"><i></i></div>
+            <p class="chit__cost">Goes cold when busy</p>
+          </article>
+
+          <article class="chit chit--3">
+            <div class="chit__top">
+              <span class="chit__label">Scheduling</span>
+              <svg class="crank" viewBox="0 0 16 16"><circle class="hub" cx="8" cy="8" r="1.6"/><line class="spoke" x1="8" y1="1.5" x2="8" y2="14.5"/><line class="spoke" x1="1.5" y1="8" x2="14.5" y2="8"/><line class="spoke" x1="3.4" y1="3.4" x2="12.6" y2="12.6"/><line class="spoke" x1="12.6" y1="3.4" x2="3.4" y2="12.6"/></svg>
+            </div>
+            <p class="chit__work">Booking the calendar</p>
+            <div class="chit__meter"><i></i></div>
+            <p class="chit__cost">Back and forth, all week</p>
+          </article>
+
+          <article class="chit chit--4">
+            <div class="chit__top">
+              <span class="chit__label">Data</span>
+              <svg class="crank" viewBox="0 0 16 16"><circle class="hub" cx="8" cy="8" r="1.6"/><line class="spoke" x1="8" y1="1.5" x2="8" y2="14.5"/><line class="spoke" x1="1.5" y1="8" x2="14.5" y2="8"/><line class="spoke" x1="3.4" y1="3.4" x2="12.6" y2="12.6"/><line class="spoke" x1="12.6" y1="3.4" x2="3.4" y2="12.6"/></svg>
+            </div>
+            <p class="chit__work">Re-keying numbers</p>
+            <div class="chit__meter"><i></i></div>
+            <p class="chit__cost">Copy, paste, repeat</p>
+          </article>
+
+          <article class="chit chit--5">
+            <div class="chit__top">
+              <span class="chit__label">Client work</span>
+              <svg class="crank" viewBox="0 0 16 16"><circle class="hub" cx="8" cy="8" r="1.6"/><line class="spoke" x1="8" y1="1.5" x2="8" y2="14.5"/><line class="spoke" x1="1.5" y1="8" x2="14.5" y2="8"/><line class="spoke" x1="3.4" y1="3.4" x2="12.6" y2="12.6"/><line class="spoke" x1="12.6" y1="3.4" x2="3.4" y2="12.6"/></svg>
+            </div>
+            <p class="chit__work">The senior review</p>
+            <div class="chit__meter"><i></i></div>
+            <p class="chit__cost">Only you can do it</p>
+          </article>
+        </div>
+
+        <!-- AFTER: the one system, calm and running -->
+        <article class="system" aria-hidden="true">
+          <div class="system__head">
+            <span class="system__mark">
+              <svg width="22" height="26" viewBox="0 0 26 30" aria-hidden="true">
+                <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+                <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+                <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+                <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+              </svg>
+              <span class="system__kind">One system</span>
+            </span>
+            <span class="system__status">
+              <span class="dot" aria-hidden="true"></span>
+              Running
+            </span>
+          </div>
+
+          <h2 class="system__title">Software that <span class="it">runs itself.</span></h2>
+
+          <div class="system__line" aria-hidden="true"></div>
+
+          <div class="system__foot">
+            <span class="system__yes">
+              <span class="system__seal" aria-hidden="true">
+                <svg width="13" height="11" viewBox="0 0 13 11"><path d="M1 5.6 L4.6 9.4 L12 1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              Your yes, every send
+            </span>
+            <span class="system__by">Citizen Mason</span>
+          </div>
+        </article>
+
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+<!-- ===================== CREDIBILITY STRIP (KEPT VERBATIM) ===================== -->
+<section class="cred" aria-label="Track record">
+  <div class="wrap cred__inner">
+    <p class="cred__claim">
+      <b>Built by an operator who ships, not an agency.</b>
+      <span>A 15-year product record.</span>
+    </p>
+    <div class="cred__pills">
+      <span class="pill">Deloitte</span>
+      <span class="pill">NFL Digital Media</span>
+      <span class="pill">Miami HEAT</span>
+      <span class="pill">Kraken</span>
+      <span class="pill">Scopely</span>
+      <span class="pill">Maestro</span>
+      <span class="cred__sep" aria-hidden="true"></span>
+      <span class="pill pill--live">Crafted</span>
+      <span class="pill pill--live">Phase</span>
+      <span class="pill pill--live">Netrunner</span>
+      <span class="pill pill--live">Magic Eden</span>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>

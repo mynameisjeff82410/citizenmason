@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason, fractional AI-Ops partner</title>
+<meta name="description" content="Citizen Mason builds the AI systems your business is missing, then runs them on the tools you already use. You stay in control of every call that matters." />
+
+<!-- ============================================================================
+     CITIZEN MASON V2 - HERO: "LEDGER, TRUST SHIFT"
+     Identity: "Craftsperson's Ledger" (identity-3) applied exactly.
+     Structure: split hero (statement left, artifact right) from hero-c, grafted:
+       - negative right-margin bleed + right-of-center seam so the artifact sits
+         on its own plane and the asymmetry reads even in a thumbnail.
+       - per-line headline weight choreography with one self-drawing underscore.
+       - no truncated text at any width 760-1280px.
+     Strategy: the right artifact is NOT a named tool. It is an abstract
+     "prepared for your review" surface in a DRAFT / Awaiting-approval state, with
+     the three-rung trust ladder rendered as the posted structure of the card.
+     The shift it sells: trusting the system to prepare and review the work, while
+     the principal still decides. Calm, posted, ruled, high-craft. Partner, not utility.
+     Self-contained, no build step, no _kit.css.
+     ========================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ----------------------------------------------------------------------------
+   1. TOKENS - copied verbatim from identity-3 ("Craftsperson's Ledger")
+   -------------------------------------------------------------------------- */
+:root {
+  --bone:        #f3ede1;
+  --paper:       #f7f2e8;
+  --paper-2:     #fbf8f1;
+  --paper-3:     #fdfcf8;
+
+  --ink:         #211d18;
+  --ink-soft:    #544d42;
+  --ink-faint:   #8a8073;
+
+  --rule:        #ddd2bf;
+  --rule-strong: #c8bba2;
+  --rule-ink:    #211d18;
+
+  --oxblood:        #7c2218;
+  --oxblood-deep:   #5f180f;
+  --oxblood-bright: #9a2c1d;
+  --on-oxblood:     #f7f2e8;
+  --oxblood-wash:   #f0e2d6;
+
+  --ochre:        #b07d2b;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --maxw: 1180px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ----------------------------------------------------------------------------
+   2. RESET / BASE - identity-3 base
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(120% 80% at 88% -10%, rgba(176,125,43,0.06), transparent 60%),
+    radial-gradient(100% 70% at -10% 110%, rgba(124,34,24,0.04), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.04; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--oxblood); color: var(--on-oxblood); }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.label--ox { color: var(--oxblood); }
+
+/* Signature motion: a hairline that draws in on reveal. */
+.rule-line {
+  height: 1px;
+  background: var(--rule-strong);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 600ms var(--ease);
+}
+.in .rule-line { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .rule-line { transform: scaleX(1); transition: none; }
+}
+
+/* ----------------------------------------------------------------------------
+   3. KEYSTONE MARK - copied verbatim from identity-3
+   -------------------------------------------------------------------------- */
+.mark { display: block; }
+.mark .face { fill: var(--ink); transition: fill var(--dur) var(--ease); }
+.mark .chisel { fill: var(--paper-3); }
+.mark .seam { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.85; }
+a:hover .mark .face { fill: var(--oxblood); }
+
+/* ----------------------------------------------------------------------------
+   4. NAV - identity-3
+   -------------------------------------------------------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav__bar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 70px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand__word {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.18rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.nav__links { display: flex; align-items: center; gap: 34px; }
+.nav__link {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  position: relative;
+  padding-bottom: 3px;
+  transition: color var(--dur) var(--ease);
+}
+.nav__link::after {
+  content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1px;
+  background: var(--oxblood); transition: right var(--dur) var(--ease);
+}
+.nav__link:hover { color: var(--ink); }
+.nav__link:hover::after { right: 0; }
+@media (max-width: 860px) { .nav__links .nav__link { display: none; } }
+
+/* Buttons - identity-3 system */
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; border: 1px solid transparent;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+              color var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+              border-color var(--dur) var(--ease);
+}
+.btn:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+.btn--primary {
+  background: var(--oxblood); color: var(--on-oxblood);
+  padding: 13px 22px;
+  box-shadow: 0 1px 0 var(--oxblood-deep), 0 10px 24px -14px rgba(124,34,24,0.7);
+}
+.btn--primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+.btn--primary .arr { transition: transform var(--dur) var(--ease); }
+.btn--primary:hover .arr { transform: translateX(3px); }
+.btn--lg { padding: 16px 28px; font-size: 0.8rem; }
+
+/* Nav CTA is an OUTLINE button: oxblood fill is reserved for the hero primary. */
+.btn--outline {
+  background: transparent; color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  padding: 9px 16px;
+}
+.btn--outline:hover { border-color: var(--ink); color: var(--ink); }
+.btn--outline .arr { color: var(--ink-faint); transition: transform var(--dur) var(--ease); }
+.btn--outline:hover .arr { transform: translateX(3px); color: var(--ink); }
+
+/* Secondary hero action: a quiet ruled text link, no accent. */
+.btn--ghost {
+  background: transparent; color: var(--ink);
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 13px 2px;
+}
+.btn--ghost:hover { border-bottom-color: var(--ink); }
+.btn--ghost .arr { color: var(--ink-faint); transition: transform var(--dur) var(--ease); }
+.btn--ghost:hover .arr { transform: translateX(3px); }
+
+/* ----------------------------------------------------------------------------
+   5. HERO - split. Statement left, "prepared for review" artifact right.
+      Graft: a right-of-center seam + negative-right bleed put the artifact on
+      its own plane, so the asymmetry reads even at thumbnail size.
+   -------------------------------------------------------------------------- */
+.hero {
+  position: relative;
+  padding-top: clamp(56px, 8vw, 104px);
+  padding-bottom: clamp(48px, 7vw, 88px);
+  overflow: clip; /* the artifact can bleed toward the edge cleanly */
+}
+
+/* The seam: a single full-bleed-feeling vertical rule sitting RIGHT of center,
+   the line the artifact's plane rests against. Hidden when the layout stacks. */
+.hero__seam {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 58%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--rule-strong) 14%, var(--rule-strong) 86%, transparent);
+  pointer-events: none;
+}
+.hero__seam::before {
+  /* a faint warm wash to the right of the seam: the artifact's own plane */
+  content: "";
+  position: absolute;
+  left: 1px; top: 0; bottom: 0;
+  width: 60vw;
+  background: linear-gradient(to right, rgba(176,125,43,0.05), transparent 70%);
+}
+@media (max-width: 920px) { .hero__seam { display: none; } }
+
+.hero__grid {
+  position: relative;
+  display: grid;
+  /* statement leads; artifact is the narrower proof plane */
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.92fr);
+  gap: clamp(28px, 5vw, 76px);
+  align-items: start;
+}
+@media (max-width: 920px) { .hero__grid { grid-template-columns: 1fr; gap: 44px; } }
+
+/* --- LEFT: the statement --- */
+.hero__copy { padding-top: 6px; max-width: 38ch; }
+@media (max-width: 920px) { .hero__copy { max-width: 46ch; } }
+
+.hero__eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; }
+.hero__eyebrow .tick { width: 26px; height: 1px; background: var(--oxblood); flex: none; }
+
+/* Per-line weight choreography: the headline is set as three posted lines.
+   Line 1 light, line 2 the emphasis (with a self-drawing underscore on ONE
+   phrase), line 3 settles to medium. One headline, read as composition. */
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: -0.018em;
+  line-height: 1.03;
+  text-wrap: balance;
+}
+.hero h1 .ln { display: block; }
+.hero h1 .ln--1 { font-weight: 400; color: var(--ink-soft); }
+.hero h1 .ln--2 { font-weight: 500; color: var(--ink); }
+.hero h1 .ln--3 { font-weight: 500; color: var(--ink); }
+.hero h1 .it { font-style: italic; font-weight: 400; }
+
+/* the self-drawing underscore under ONE phrase: "runs itself" */
+.uline {
+  position: relative;
+  white-space: nowrap;
+}
+.uline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  bottom: 0.04em;
+  height: 2px;
+  background: var(--oxblood);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 700ms var(--ease) 520ms;
+}
+.in .uline::after { transform: scaleX(1); }
+@media (prefers-reduced-motion: reduce) {
+  .uline::after { transform: scaleX(1); transition: none; }
+}
+
+.hero__sub {
+  margin-top: 28px; max-width: 40ch;
+  font-size: 1.15rem; line-height: 1.62; color: var(--ink-soft);
+}
+.hero__cta { margin-top: 38px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+
+/* operator-credibility line, directly under the CTA where the ask lands */
+.hero__operator {
+  display: flex; align-items: center; gap: 14px;
+  margin-top: 34px; padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  max-width: 44ch;
+}
+.hero__operator-seal {
+  flex: none; width: 40px; height: 40px;
+  display: grid; place-items: center;
+  border: 1px solid var(--rule-strong); border-radius: 50%;
+  background: var(--paper-2);
+  font-family: var(--font-display); font-style: italic; font-size: 1.05rem; color: var(--oxblood);
+}
+.hero__operator-text { font-size: 0.92rem; line-height: 1.45; color: var(--ink-soft); }
+.hero__operator-text strong { display: block; color: var(--ink); font-weight: 500; font-family: var(--font-display); font-size: 1rem; }
+
+/* --- RIGHT: the "prepared for your review" artifact, on its own plane --- */
+.hero__artifact {
+  position: relative;
+  margin-top: clamp(8px, 4vw, 48px);   /* drops below the headline baseline */
+  margin-right: calc(var(--gutter) * -1); /* bleed: lifts toward the page edge */
+}
+@media (max-width: 920px) {
+  .hero__artifact { margin-top: 0; margin-right: 0; max-width: 540px; }
+}
+
+/* mono caption above the card: names the STATE, not a tool */
+.artifact__tag {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 12px; padding-inline: 2px;
+}
+.artifact__state {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono); font-size: 0.68rem;
+  letter-spacing: 0.16em; text-transform: uppercase; color: var(--oxblood);
+}
+.artifact__dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--oxblood);
+  animation: cm-breathe 2.6s var(--ease) infinite;
+}
+@keyframes cm-breathe {
+  0%, 100% { opacity: 0.4; transform: scale(0.82); }
+  50%      { opacity: 1;   transform: scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .artifact__dot { animation: none; opacity: 1; }
+}
+
+/* The card: a posted, ruled ledger page. High-craft, calm, awaiting approval. */
+.draft {
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  box-shadow: 0 36px 70px -44px rgba(33,29,24,0.5);
+  position: relative;
+}
+.draft::before {
+  /* the bound spine of the page */
+  content: ""; position: absolute; left: 16px; top: 0; bottom: 0; width: 1px;
+  background: var(--oxblood-wash);
+}
+
+/* card header: a believable prepared document, anonymized */
+.draft__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px;
+  padding: 22px 26px 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.draft__doc { min-width: 0; }
+.draft__kicker { display: block; margin-bottom: 7px; }
+.draft__title {
+  font-family: var(--font-display); font-weight: 500; font-size: 1.12rem;
+  color: var(--ink); line-height: 1.2;
+}
+.draft__for { margin-top: 5px; font-size: 0.82rem; color: var(--ink-faint); }
+.draft__stamp {
+  flex: none; text-align: right;
+}
+.draft__stamp-badge {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--oxblood);
+  border: 1px solid var(--oxblood); border-radius: 2px;
+  padding: 4px 8px;
+  transform: rotate(-3deg);
+}
+.draft__stamp-meta {
+  display: block; margin-top: 9px;
+  font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.08em;
+  color: var(--ink-faint);
+}
+
+/* the prepared body: a short, calm excerpt of work the system drafted */
+.draft__body { padding: 18px 26px 6px; }
+.draft__excerpt {
+  font-size: 0.92rem; line-height: 1.58; color: var(--ink-soft);
+}
+.draft__excerpt + .draft__excerpt { margin-top: 10px; }
+.draft__excerpt .mark-ink { color: var(--ink); font-weight: 500; }
+
+/* the posted trust ladder: the actual structure of the card. Three rungs,
+   in this exact order and wording. The CURRENT rung is highlighted oxblood. */
+.ladder {
+  margin: 16px 0 4px;
+  border-top: 1px solid var(--rule);
+}
+.ladder__caption {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 26px 10px;
+}
+.rung {
+  display: grid; grid-template-columns: 26px 1fr auto; gap: 14px;
+  align-items: baseline;
+  padding: 13px 26px;
+  border-top: 1px solid var(--rule);
+  position: relative;
+}
+.rung__no { font-family: var(--font-mono); font-size: 0.74rem; color: var(--ink-faint); }
+.rung__step { font-size: 0.96rem; color: var(--ink-soft); line-height: 1.4; }
+.rung__step b { font-family: var(--font-display); font-weight: 500; color: var(--ink); }
+.rung__state {
+  font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+  align-self: center;
+}
+
+/* done rungs: a quiet checked feel */
+.rung--done .rung__no { color: var(--ink-soft); }
+.rung--done .rung__state { color: var(--ink-faint); }
+
+/* the current rung: oxblood, the draft is ready and waiting on approval */
+.rung--current {
+  background: var(--oxblood-wash);
+}
+.rung--current::before {
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--oxblood);
+}
+.rung--current .rung__no { color: var(--oxblood); font-weight: 500; }
+.rung--current .rung__step b { color: var(--oxblood-deep); }
+.rung--current .rung__step { color: var(--ink); }
+.rung--current .rung__state { color: var(--oxblood); }
+
+/* pending rung: lowest weight */
+.rung--pending .rung__no,
+.rung--pending .rung__step,
+.rung--pending .rung__step b,
+.rung--pending .rung__state { color: var(--ink-faint); }
+
+/* card footer: a single quiet posted line, the partner posture */
+.draft__foot {
+  display: flex; align-items: center; gap: 11px;
+  padding: 15px 26px;
+  border-top: 1px solid var(--rule);
+  background: var(--paper-2);
+}
+.draft__foot-tick { width: 18px; height: 1px; background: var(--rule-strong); flex: none; }
+.draft__foot-note {
+  font-family: var(--font-display); font-style: italic;
+  font-size: 0.9rem; color: var(--ink-faint); line-height: 1.4;
+}
+
+/* ----------------------------------------------------------------------------
+   6. CREDIBILITY STRIP - slim band directly beneath the hero
+   -------------------------------------------------------------------------- */
+.cred {
+  background: var(--bone);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding-block: 26px;
+}
+.cred__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr);
+  gap: clamp(20px, 4vw, 56px);
+  align-items: center;
+}
+@media (max-width: 880px) { .cred__inner { grid-template-columns: 1fr; gap: 22px; } }
+.cred__line {
+  font-family: var(--font-display); font-size: 1.06rem; line-height: 1.4; color: var(--ink);
+  max-width: 30ch;
+}
+.cred__line .soft { color: var(--ink-soft); font-style: italic; font-weight: 400; }
+
+.cred__sets { display: flex; flex-direction: column; gap: 14px; }
+.cred__set { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.cred__set-label { flex: none; }
+.pills { display: flex; flex-wrap: wrap; gap: 9px; }
+.pill {
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+  color: var(--ink); background: var(--paper-3);
+  border: 1px solid var(--rule-strong);
+  padding: 6px 12px;
+  white-space: nowrap;
+  transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.pill:hover { transform: translateY(-2px); border-color: var(--ink); }
+.pill--live { border-color: var(--oxblood-wash); }
+.pill--live::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--oxblood); margin-right: 8px; vertical-align: middle;
+}
+.pill--live:hover { color: var(--oxblood); border-color: var(--oxblood); }
+
+/* ----------------------------------------------------------------------------
+   7. ENTRANCE MOTION - restrained, reduced-motion aware
+   -------------------------------------------------------------------------- */
+.reveal { opacity: 0; transform: translateY(12px); transition: opacity 520ms var(--ease), transform 520ms var(--ease); }
+.in .reveal { opacity: 1; transform: none; }
+.in .reveal.d1 { transition-delay: 70ms; }
+.in .reveal.d2 { transition-delay: 140ms; }
+.in .reveal.d3 { transition-delay: 210ms; }
+.in .reveal.d4 { transition-delay: 280ms; }
+.in .reveal.d5 { transition-delay: 350ms; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 12px; top: 12px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 16px; font-family: var(--font-mono); font-size: 0.8rem; }
+</style>
+</head>
+
+<body>
+<a href="#hero" class="skip">Skip to content</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a href="#hero" class="brand" aria-label="Citizen Mason, home">
+      <!-- chiseled keystone mark, copied from identity-3 -->
+      <svg class="mark" width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+        <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+        <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+        <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+      </svg>
+      <span class="brand__word">Citizen Mason</span>
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="#who">Who it is for</a>
+      <a class="nav__link" href="#how">How it works</a>
+      <a class="nav__link" href="#proof">Proof</a>
+      <a class="btn btn--outline" href="#book">Book a call <span class="arr" aria-hidden="true">&rarr;</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <span class="hero__seam" aria-hidden="true"></span>
+  <div class="wrap hero__grid">
+
+    <!-- LEFT: the statement -->
+    <div class="hero__copy">
+      <div class="hero__eyebrow reveal">
+        <span class="tick" aria-hidden="true"></span>
+        <span class="label label--ox">Fractional AI-Ops partner</span>
+      </div>
+
+      <h1 class="reveal d1">
+        <span class="ln ln--1">Turn the work that</span>
+        <span class="ln ln--2"><span class="it">slows you down</span> into</span>
+        <span class="ln ln--3">software that <span class="uline">runs itself.</span></span>
+      </h1>
+
+      <p class="hero__sub reveal d2">Citizen Mason builds the AI systems your business is missing, then runs them on the tools you already use. You stay in control of every call that matters.</p>
+
+      <div class="hero__cta reveal d3">
+        <a class="btn btn--primary btn--lg" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--ghost" href="#plan">Get your AI opportunity plan <span class="arr" aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <!-- operator credibility, near the primary CTA -->
+      <div class="hero__operator reveal d4">
+        <span class="hero__operator-seal" aria-hidden="true">CM</span>
+        <p class="hero__operator-text">
+          <strong>Built by an operator who ships, not an agency.</strong>
+          A 15-year product record behind every system.
+        </p>
+      </div>
+    </div>
+
+    <!-- RIGHT: the "prepared for your review" artifact, on its own plane -->
+    <aside class="hero__artifact reveal d3" aria-label="A piece of work the system has prepared, awaiting your approval">
+      <div class="artifact__tag">
+        <span class="label">Prepared for your review</span>
+        <span class="artifact__state">
+          <span class="artifact__dot" aria-hidden="true"></span>
+          Awaiting your approval
+        </span>
+      </div>
+
+      <article class="draft">
+        <div class="draft__head">
+          <div class="draft__doc">
+            <span class="label draft__kicker">Draft &middot; not sent</span>
+            <p class="draft__title">Reply to a boutique luxury studio</p>
+            <p class="draft__for">Prepared overnight &middot; ready when you are</p>
+          </div>
+          <div class="draft__stamp">
+            <span class="draft__stamp-badge">Draft</span>
+            <span class="draft__stamp-meta">06:14</span>
+          </div>
+        </div>
+
+        <div class="draft__body">
+          <p class="draft__excerpt"><span class="mark-ink">Thank you for the note.</span> I have reviewed the revised drawings against the original scope and flagged the two items worth a second look before we reply to the workroom.</p>
+          <p class="draft__excerpt">The full draft is below, with sources attached. <span class="mark-ink">Nothing has been sent.</span></p>
+        </div>
+
+        <div class="ladder" aria-label="The three rungs of trust">
+          <div class="ladder__caption">
+            <span class="label">The trust ladder</span>
+            <span class="label">Read &middot; Approve &middot; Send</span>
+          </div>
+
+          <div class="rung rung--done">
+            <span class="rung__no">01</span>
+            <span class="rung__step"><b>You read it.</b> The work arrives prepared, never sent.</span>
+            <span class="rung__state">Done</span>
+          </div>
+
+          <div class="rung rung--current" aria-current="step">
+            <span class="rung__no">02</span>
+            <span class="rung__step"><b>You approve the draft.</b> Nothing leaves without your yes.</span>
+            <span class="rung__state">Now</span>
+          </div>
+
+          <div class="rung rung--pending">
+            <span class="rung__no">03</span>
+            <span class="rung__step"><b>You hit Send.</b> Every client-facing call stays yours.</span>
+            <span class="rung__state">Yours</span>
+          </div>
+        </div>
+
+        <div class="draft__foot">
+          <span class="draft__foot-tick" aria-hidden="true"></span>
+          <p class="draft__foot-note">A second pair of senior eyes that prepares the work. You keep the final call.</p>
+        </div>
+      </article>
+    </aside>
+
+  </div>
+</section>
+
+<!-- ===================== CREDIBILITY STRIP ===================== -->
+<section class="cred" id="proof" aria-label="Track record">
+  <div class="wrap cred__inner">
+    <p class="cred__line reveal">Built by an operator who ships, not an agency. <span class="soft">A 15-year product record.</span></p>
+
+    <div class="cred__sets">
+      <div class="cred__set reveal d1">
+        <span class="label cred__set-label">Track record</span>
+        <div class="pills">
+          <span class="pill">Deloitte</span>
+          <span class="pill">NFL Digital Media</span>
+          <span class="pill">Miami HEAT</span>
+          <span class="pill">Kraken</span>
+          <span class="pill">Scopely</span>
+          <span class="pill">Maestro</span>
+        </div>
+      </div>
+      <div class="cred__set reveal d2">
+        <span class="label cred__set-label">Live products</span>
+        <div class="pills">
+          <span class="pill pill--live">Crafted</span>
+          <span class="pill pill--live">Phase</span>
+          <span class="pill pill--live">Netrunner</span>
+          <span class="pill pill--live">Magic Eden</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* Add .in to each animated region as it enters, so the rule and underscore
+   draw themselves once. Reduced-motion users get the final state immediately
+   via CSS; this script only gates the entrance, never blocks content. */
+(function () {
+  var regions = document.querySelectorAll('.hero, .cred');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window)) {
+    regions.forEach(function (r) { r.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  regions.forEach(function (r) { io.observe(r); });
+})();
+</script>
+</body>
+</html>

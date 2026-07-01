@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason - Conversion B: Two-path, clear hierarchy</title>
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* ========================================================================
+       CONVERSION B: "TWO-PATH, CLEAR HIERARCHY"  (module layout, neutral kit)
+       ------------------------------------------------------------------------
+       Layout and hierarchy only. Color comes entirely from _kit.css tokens. No
+       bespoke palette. The judgement is structure, hierarchy, and conversion
+       mechanics.
+
+       The fix for the current two-equal-CTAs muddle: ONE dominant route and one
+       quieter route, separated by weight in five compounding ways, so the eye
+       picks the call before it reads a word.
+         1. SIZE     dominant column is ~1.7x the async column.
+         2. ELEVATION dominant card lifts (shadow-lg, raised surface, ring);
+                      async card sits flat in a recessed well.
+         3. ACCENT   the accent lives ONCE, on the dominant confirm button and
+                      its one selected slot. The async route is ink-and-line.
+         4. DETAIL   the dominant route shows a working booking surface (days +
+                      slots); the async route shows a two-line intake stub.
+         5. ORDER    a small mono index tags the dominant route "01 / primary".
+
+       Each route states what happens next as a numbered ladder, so the prospect
+       knows the step after the click. One frame-of-reference line per route.
+       The deliberate asymmetry: an off-center seam, the routes do NOT split 50/50.
+       ===================================================================== */
+
+    .conv {
+      position: relative;
+      padding-block: var(--space-11) var(--space-10);
+      overflow: clip;
+    }
+
+    /* one off-center hairline seam marks the unequal split as intentional */
+    .conv__seam {
+      position: absolute;
+      top: var(--space-9);
+      bottom: var(--space-9);
+      left: calc(50% + 4.5rem); /* pushed right: the dominant column owns more than half */
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0,
+        var(--line) 14%,
+        var(--line) 86%,
+        transparent 100%);
+      pointer-events: none;
+    }
+
+    .conv__inner {
+      position: relative;
+      width: 100%;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+    }
+
+    /* --- section header: left-ranged, not centered (anti-template) --- */
+    .conv__head { max-width: 40ch; margin-bottom: var(--space-9); }
+    .conv__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: 0 0 var(--space-4);
+    }
+    /* the keystone tick: available equity, kept quiet (not a logo claim) */
+    .conv__tick {
+      width: 7px;
+      height: 9px;
+      flex: none;
+      background: var(--ink);
+      clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+      opacity: 0.78;
+    }
+    .conv__title {
+      font-size: var(--fs-3xl);
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-snug);
+      letter-spacing: var(--tracking-tight);
+      color: var(--ink);
+      margin: 0;
+      text-wrap: balance;
+    }
+    .conv__title em { font-style: normal; color: var(--ink-soft); font-weight: var(--fw-regular); }
+    .conv__intro {
+      font-size: var(--fs-lg);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+      margin: var(--space-4) 0 0;
+      max-width: 48ch;
+    }
+
+    /* --- the two routes, deliberately unequal --- */
+    .conv__routes {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+      gap: var(--space-7);
+      align-items: start;
+    }
+
+    /* shared route shell */
+    .route {
+      position: relative;
+      border-radius: var(--radius-lg);
+      display: flex;
+      flex-direction: column;
+    }
+    .route__tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      margin: 0 0 var(--space-3);
+    }
+    .route__tag-dot {
+      width: 6px; height: 6px; border-radius: var(--radius-full); flex: none;
+    }
+    .route__title {
+      font-size: var(--fs-2xl);
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-snug);
+      letter-spacing: var(--tracking-tight);
+      color: var(--ink);
+      margin: 0;
+    }
+    .route__desc {
+      font-size: var(--fs-base);
+      line-height: var(--lh-normal);
+      color: var(--ink-soft);
+      margin: var(--space-3) 0 0;
+      max-width: 44ch;
+    }
+
+    /* ===== DOMINANT ROUTE: Book a discovery call ===== */
+    .route--primary {
+      background: var(--surface-1);
+      border: 1px solid var(--line-strong);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-7) var(--space-7) var(--space-6);
+      /* a hairline accent ring on top to mark the chosen path without shouting */
+    }
+    .route--primary::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      background: var(--accent);
+    }
+    .route--primary .route__tag { color: var(--accent); }
+    .route--primary .route__tag-dot { background: var(--accent); }
+
+    /* booking surface (kit scheduler, widened to fill the dominant column) */
+    .route__booking {
+      margin-top: var(--space-6);
+      background: var(--surface-3);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: var(--space-5);
+    }
+    .booking__head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+    .booking__title { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--ink); }
+    .booking__meta { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--ink-faint); }
+    .booking__grid {
+      display: grid;
+      grid-template-columns: 104px 1fr;
+      gap: var(--space-4);
+    }
+    .booking__days { display: flex; flex-direction: column; gap: var(--space-2); }
+    .booking__day {
+      text-align: left;
+      padding: var(--space-3);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: var(--surface-1);
+      cursor: pointer;
+      font: inherit;
+      transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+    }
+    .booking__day:hover { border-color: var(--line-strong); }
+    .booking__day[aria-pressed="true"] {
+      background: var(--surface-1);
+      border-color: var(--ink-faint);
+      box-shadow: inset 0 0 0 1px var(--ink-faint);
+    }
+    .booking__dow { display: block; font-family: var(--font-mono); font-size: var(--fs-eyebrow); text-transform: uppercase; letter-spacing: var(--tracking-wide); color: var(--ink-faint); }
+    .booking__date { display: block; font-size: var(--fs-lg); font-weight: var(--fw-semibold); color: var(--ink); margin-top: 2px; }
+    .booking__slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2);
+      align-content: start;
+    }
+    .booking__slot {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      color: var(--ink);
+      background: var(--surface-1);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-2);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color var(--dur-fast) var(--ease),
+                  background var(--dur-fast) var(--ease),
+                  color var(--dur-fast) var(--ease);
+    }
+    .booking__slot:hover { border-color: var(--ink-faint); background: var(--surface-2); }
+    /* the ONE accent moment off the CTA: the selected slot */
+    .booking__slot[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--on-accent);
+    }
+
+    /* ===== QUIETER ROUTE: Prefer to start async ===== */
+    .route--async {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      box-shadow: none;
+      padding: var(--space-6);
+      /* sits lower than the primary card so the eye lands on the call first */
+      margin-top: var(--space-8);
+    }
+    .route--async .route__tag { color: var(--ink-faint); }
+    .route--async .route__tag-dot { background: var(--ink-faint); }
+    .route--async .route__title { font-size: var(--fs-xl); }
+
+    /* intake stub: two quiet fields, clearly a lighter ask than the booking grid */
+    .route__intake {
+      margin-top: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    .intake__field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .intake__label { font-size: var(--fs-xs); font-weight: var(--fw-medium); color: var(--ink-soft); }
+    .intake__input {
+      font-family: var(--font-sans);
+      font-size: var(--fs-sm);
+      color: var(--ink);
+      background: var(--surface-1);
+      border: 1px solid var(--line-strong);
+      border-radius: var(--radius-md);
+      padding: var(--space-3) var(--space-4);
+      width: 100%;
+      transition: border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+    }
+    .intake__input::placeholder { color: var(--ink-faint); }
+    .intake__input:focus {
+      outline: none;
+      border-color: var(--ink-faint);
+      box-shadow: 0 0 0 3px var(--surface-3);
+    }
+
+    /* ===== "what happens next" ladder, shared by both routes ===== */
+    .next {
+      margin-top: var(--space-6);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--line);
+    }
+    .next__label {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      margin: 0 0 var(--space-4);
+    }
+    .next__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      counter-reset: step;
+      display: grid;
+      gap: var(--space-3);
+    }
+    .next__item {
+      counter-increment: step;
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+    }
+    /* connecting hairline between steps */
+    .next__item + .next__item::before {
+      content: "";
+      position: absolute;
+      left: 11px;
+      top: calc(var(--space-3) * -1);
+      height: var(--space-3);
+      width: 1px;
+      background: var(--line-strong);
+    }
+    .next__num {
+      flex: none;
+      width: 23px;
+      height: 23px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      color: var(--ink-soft);
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      font-weight: var(--fw-semibold);
+    }
+    .next__num::before { content: counter(step); }
+    .next__text { font-size: var(--fs-sm); line-height: var(--lh-normal); color: var(--ink-soft); padding-top: 2px; }
+    .next__text strong { color: var(--ink); font-weight: var(--fw-medium); }
+    /* on the async route the ladder background well is the page paper, so the
+       lighter recessed surface reads as a quieter card */
+    .route--async .next__num { background: var(--surface-1); }
+
+    /* ===== route actions ===== */
+    .route__action {
+      margin-top: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+    /* frame-of-reference line, low weight, sits under each button */
+    .route__forl {
+      font-size: var(--fs-xs);
+      line-height: var(--lh-normal);
+      color: var(--ink-faint);
+      margin: 0;
+    }
+    .route__forl .u-mono { color: var(--ink-soft); }
+
+    /* ----- entrance motion: fast, earned, reduced-motion aware ----- */
+    @keyframes conv-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .conv__head > *,
+    .route { animation: conv-rise var(--dur) var(--ease) both; }
+    .conv__eyebrow { animation-delay: 0ms; }
+    .conv__title   { animation-delay: 60ms; }
+    .conv__intro   { animation-delay: 120ms; }
+    .route--primary { animation-delay: 180ms; }
+    .route--async   { animation-delay: 260ms; }
+
+    /* ----- responsive: collapse to a clean stack, primary stays first ----- */
+    @media (max-width: 960px) {
+      .conv__seam { display: none; }
+      .conv__routes { grid-template-columns: 1fr; gap: var(--space-6); }
+      .route--async { margin-top: 0; max-width: 560px; }
+      .booking__slots { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .conv { padding-block: var(--space-9) var(--space-8); }
+      .booking__grid { grid-template-columns: 1fr; }
+      .booking__days { flex-direction: row; overflow-x: auto; }
+      .booking__day { flex: none; min-width: 92px; }
+      .booking__slots { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ &#9672; ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#main" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <!-- ===================== CONVERSION B: TWO-PATH, CLEAR HIERARCHY ===================== -->
+  <main id="main">
+  <section class="conv" aria-labelledby="conv-title">
+    <span class="conv__seam" aria-hidden="true"></span>
+    <div class="conv__inner">
+
+      <!-- section header: left-ranged -->
+      <div class="conv__head">
+        <p class="eyebrow conv__eyebrow">
+          <span class="conv__tick" aria-hidden="true"></span>
+          Start here
+        </p>
+        <h2 class="conv__title" id="conv-title">
+          Two ways in. <em>One worth building first.</em>
+        </h2>
+        <p class="conv__intro">
+          A 45-minute call finds the one workflow worth building first. Understanding before scope. Prefer to think it through on your own time, send a few notes and a plan comes back in one week.
+        </p>
+      </div>
+
+      <!-- the two routes, deliberately unequal -->
+      <div class="conv__routes">
+
+        <!-- ============ DOMINANT ROUTE: book the call ============ -->
+        <div class="route route--primary">
+          <p class="route__tag">
+            <span class="route__tag-dot" aria-hidden="true"></span>
+            01 &middot; The call
+          </p>
+          <h3 class="route__title">Book a discovery call</h3>
+          <p class="route__desc">
+            We spend 45 minutes together and find the one workflow worth building first. You leave with a clear read on what to fix and what it takes.
+          </p>
+
+          <!-- booking surface -->
+          <div class="route__booking" role="group" aria-label="Pick a day and time">
+            <div class="booking__head">
+              <span class="booking__title">Pick a time that works</span>
+              <span class="booking__meta">45 min &middot; video</span>
+            </div>
+            <div class="booking__grid">
+              <div class="booking__days" role="group" aria-label="Day">
+                <button type="button" class="booking__day" aria-pressed="false">
+                  <span class="booking__dow">Tue</span><span class="booking__date">24</span>
+                </button>
+                <button type="button" class="booking__day" aria-pressed="true">
+                  <span class="booking__dow">Wed</span><span class="booking__date">25</span>
+                </button>
+                <button type="button" class="booking__day" aria-pressed="false">
+                  <span class="booking__dow">Thu</span><span class="booking__date">26</span>
+                </button>
+              </div>
+              <div class="booking__slots" role="group" aria-label="Time, Pacific">
+                <button type="button" class="booking__slot" aria-pressed="false">9:00</button>
+                <button type="button" class="booking__slot" aria-pressed="false">10:30</button>
+                <button type="button" class="booking__slot" aria-pressed="true">1:00</button>
+                <button type="button" class="booking__slot" aria-pressed="false">2:30</button>
+                <button type="button" class="booking__slot" aria-pressed="false">3:30</button>
+                <button type="button" class="booking__slot" aria-pressed="false">4:30</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- what happens next -->
+          <div class="next">
+            <p class="next__label">What happens next</p>
+            <ol class="next__list">
+              <li class="next__item">
+                <span class="next__num" aria-hidden="true"></span>
+                <span class="next__text"><strong>Pick a time.</strong> A calendar invite lands in your inbox with a video link.</span>
+              </li>
+              <li class="next__item">
+                <span class="next__num" aria-hidden="true"></span>
+                <span class="next__text"><strong>We meet for 45 minutes.</strong> We walk your work and find the one workflow worth building first.</span>
+              </li>
+              <li class="next__item">
+                <span class="next__num" aria-hidden="true"></span>
+                <span class="next__text"><strong>You leave with a read.</strong> What to fix first, and what building it takes.</span>
+              </li>
+            </ol>
+          </div>
+
+          <div class="route__action">
+            <a href="#main" class="btn btn--primary btn--lg btn--block">Book a discovery call</a>
+            <p class="route__forl">
+              <span class="u-mono">No prep needed.</span> Understanding before scope.
+            </p>
+          </div>
+        </div>
+
+        <!-- ============ QUIETER ROUTE: start async ============ -->
+        <div class="route route--async">
+          <p class="route__tag">
+            <span class="route__tag-dot" aria-hidden="true"></span>
+            02 &middot; On your time
+          </p>
+          <h3 class="route__title">Prefer to start async</h3>
+          <p class="route__desc">
+            Send a few notes about where the work slows down. An AI opportunity plan comes back in one week.
+          </p>
+
+          <!-- intake stub: a lighter ask than the booking grid -->
+          <div class="route__intake">
+            <div class="intake__field">
+              <label class="intake__label" for="conv-email">Work email</label>
+              <input class="intake__input" id="conv-email" type="email" placeholder="you@studio.com" autocomplete="email" />
+            </div>
+            <div class="intake__field">
+              <label class="intake__label" for="conv-note">Where does the work slow down?</label>
+              <input class="intake__input" id="conv-note" type="text" placeholder="A sentence is plenty" />
+            </div>
+          </div>
+
+          <!-- what happens next -->
+          <div class="next">
+            <p class="next__label">What happens next</p>
+            <ol class="next__list">
+              <li class="next__item">
+                <span class="next__num" aria-hidden="true"></span>
+                <span class="next__text"><strong>Send your notes.</strong> Ten questions, a voice memo works too.</span>
+              </li>
+              <li class="next__item">
+                <span class="next__num" aria-hidden="true"></span>
+                <span class="next__text"><strong>A plan comes back in one week.</strong> The first workflow worth building, read and reviewed.</span>
+              </li>
+            </ol>
+          </div>
+
+          <div class="route__action">
+            <a href="#main" class="btn btn--secondary btn--block">Get your AI opportunity plan</a>
+            <p class="route__forl">
+              <span class="u-mono">A plan in one week.</span> No call required.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <!-- minimal JS: day + slot selection only (tab/hover/select per brief) -->
+  <script>
+    (function () {
+      function singleSelect(group) {
+        var items = group.querySelectorAll('[aria-pressed]');
+        items.forEach(function (el) {
+          el.addEventListener('click', function () {
+            items.forEach(function (other) { other.setAttribute('aria-pressed', 'false'); });
+            el.setAttribute('aria-pressed', 'true');
+          });
+        });
+      }
+      document.querySelectorAll('.booking__days, .booking__slots').forEach(singleSelect);
+    })();
+  </script>
+
+</body>
+</html>

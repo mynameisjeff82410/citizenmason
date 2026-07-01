@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason - Hero C: Split statement plus live artifact</title>
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* ========================================================================
+       HERO C: "SPLIT STATEMENT + LIVE ARTIFACT"  (module layout, neutral kit)
+       ------------------------------------------------------------------------
+       Layout and structure only. Every color is a _kit.css token; no bespoke
+       palette (identity is decided on the other axis).
+
+       The conversion idea: the visitor reads the claim on the left, then looks
+       right and SEES the product doing the work. The right column is a
+       believable Morning Brief surface, a real-feeling interface built from
+       the kit card and pill components, room-tagged and thread-grouped, the
+       way the principal would actually scan it. Proof without a demo.
+
+       Asymmetry: the statement column is wider and sits higher; the artifact
+       card is narrower, drops below the headline baseline, and lifts off the
+       page on a shadow so it reads as a separate plane (a window into the
+       product), not a content block. Vercel-style broken symmetry.
+
+       The accent lives exactly once in the hero: the primary CTA. The founder
+       credibility line sits directly under the actions, where it carries the
+       weight of the ask. The secondary action is a quiet text link.
+       ===================================================================== */
+
+    .heroc {
+      position: relative;
+      padding-block: var(--space-11) var(--space-10);
+      overflow: clip; /* the artifact card can lift toward the edge cleanly */
+    }
+
+    .heroc__inner {
+      position: relative;
+      width: 100%;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+      display: grid;
+      /* Unequal split: the statement leads, the artifact is the narrower proof. */
+      grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+      column-gap: var(--space-9);
+      align-items: start;
+    }
+
+    /* --- LEFT: the statement, left-ranged --- */
+    .heroc__statement {
+      max-width: 34ch;
+      padding-top: var(--space-2); /* nudges the claim above the artifact baseline */
+    }
+    .heroc__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: 0 0 var(--space-5);
+    }
+    /* keystone tick: available equity, kept tiny and quiet (not a logo claim) */
+    .heroc__tick {
+      width: 7px;
+      height: 9px;
+      flex: none;
+      background: var(--ink);
+      clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%); /* keystone trapezoid */
+      opacity: 0.78;
+    }
+    .heroc__headline {
+      font-size: clamp(2.5rem, 5vw, var(--fs-5xl));
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-tight);
+      letter-spacing: var(--tracking-tight);
+      color: var(--ink);
+      margin: 0;
+      text-wrap: balance;
+    }
+    /* second clause carries quieter weight: type-as-composition, one headline */
+    .heroc__headline em {
+      font-style: normal;
+      color: var(--ink-soft);
+      font-weight: var(--fw-regular);
+    }
+    .heroc__subhead {
+      font-size: var(--fs-lg);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+      max-width: 44ch;
+      margin: var(--space-6) 0 0;
+    }
+    .heroc__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      flex-wrap: wrap;
+      margin-top: var(--space-7);
+    }
+    /* secondary action: a quiet text link, lower weight than the booking button */
+    .heroc__textlink {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink-soft);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding-block: var(--space-2);
+      border-bottom: 1px solid transparent;
+      transition: color var(--dur-fast) var(--ease),
+                  border-color var(--dur-fast) var(--ease),
+                  gap var(--dur-fast) var(--ease);
+    }
+    .heroc__textlink:hover {
+      color: var(--ink);
+      border-color: var(--line-strong);
+      gap: var(--space-3);
+    }
+    .heroc__textlink .arr {
+      font-family: var(--font-mono);
+      transition: transform var(--dur-fast) var(--ease);
+    }
+    .heroc__textlink:hover .arr { transform: translateX(2px); }
+
+    /* founder credibility line, directly under the CTA where the ask lands */
+    .heroc__founder {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-7);
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--line);
+      max-width: 42ch;
+    }
+    /* monogram stands in for a founder portrait without an external image */
+    .heroc__founder-mark {
+      flex: none;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      border: 1px solid var(--line-strong);
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semibold);
+      color: var(--ink-soft);
+      letter-spacing: 0.02em;
+    }
+    .heroc__founder-text {
+      font-size: var(--fs-sm);
+      line-height: var(--lh-snug);
+      color: var(--ink-soft);
+    }
+    .heroc__founder-text strong {
+      display: block;
+      color: var(--ink);
+      font-weight: var(--fw-semibold);
+    }
+
+    /* frame-of-reference line, lowest weight, sits under the founder */
+    .heroc__forl {
+      margin: var(--space-5) 0 0;
+      font-size: var(--fs-sm);
+      color: var(--ink-faint);
+      max-width: 42ch;
+      line-height: var(--lh-normal);
+    }
+    .heroc__forl .u-mono { color: var(--ink-soft); }
+
+    /* --- RIGHT: the live artifact (a believable Morning Brief surface) --- */
+    .heroc__artifact {
+      position: relative;
+      margin-top: var(--space-9);         /* drops below the headline baseline */
+      margin-right: calc(var(--space-7) * -1); /* lifts toward the page edge */
+    }
+    /* mono caption above the card, kinetic-type touch that names the surface */
+    .heroc__artifact-tag {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      padding-inline: var(--space-2);
+      margin-bottom: var(--space-3);
+    }
+    .heroc__artifact-tag .live {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--ink-soft);
+      text-transform: none;
+      letter-spacing: normal;
+    }
+    /* a small breathing tick: signals the brief is a running process, not a still */
+    .heroc__pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: var(--accent);
+      animation: heroc-pulse 2.4s var(--ease) infinite;
+    }
+    @keyframes heroc-pulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.85); }
+      50%      { opacity: 1;    transform: scale(1); }
+    }
+
+    /* the brief card itself, built on the kit .card, lifted onto its own plane */
+    .brief {
+      background: var(--surface-1);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .brief__head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-5) var(--space-5) var(--space-4);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-1);
+    }
+    .brief__title-wrap { display: flex; align-items: baseline; gap: var(--space-3); min-width: 0; }
+    .brief__title { font-size: var(--fs-sm); font-weight: var(--fw-semibold); color: var(--ink); }
+    .brief__date {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      color: var(--ink-faint);
+      letter-spacing: var(--tracking-wide);
+      white-space: nowrap;
+    }
+    /* count chip: "12 items, 7 minutes to scan" carried in mono, the proof of speed */
+    .brief__count {
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-medium);
+      color: var(--ink-soft);
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-full);
+      padding: var(--space-1) var(--space-3);
+      white-space: nowrap;
+    }
+
+    .brief__list { list-style: none; margin: 0; padding: var(--space-2) var(--space-2) var(--space-3); }
+    .brief__item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: start;
+      column-gap: var(--space-3);
+      padding: var(--space-3) var(--space-3);
+      border-radius: var(--radius-md);
+      transition: background var(--dur-fast) var(--ease);
+    }
+    .brief__item:hover { background: var(--surface-2); }
+    /* a thin unread bar marks items the principal has not opened yet */
+    .brief__unread {
+      grid-row: 1 / span 2;
+      align-self: stretch;
+      width: 3px;
+      border-radius: var(--radius-full);
+      background: var(--line-strong);
+      margin-top: 2px;
+    }
+    .brief__item--unread .brief__unread { background: var(--accent); }
+    .brief__line {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .brief__subject {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink);
+      line-height: var(--lh-snug);
+    }
+    .brief__snippet {
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      line-height: var(--lh-snug);
+      /* clamp to a single believable preview line */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    /* thread-grouping note: "3 in this thread" in mono, low weight */
+    .brief__thread {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      color: var(--ink-faint);
+      letter-spacing: var(--tracking-wide);
+      margin-top: 2px;
+    }
+    /* right rail of each row: the room tag (pill) over a mono timestamp */
+    .brief__meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-2);
+      white-space: nowrap;
+    }
+    .brief__time {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      color: var(--ink-faint);
+      letter-spacing: var(--tracking-wide);
+    }
+    /* ROOM pill: reuses .pill, with a small leading dot. Rooms are a closed
+       cast-lookup vocabulary in the real product; here they tag where the
+       work belongs. Neutral fill only, no second hue (kit discipline). */
+    .room {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      letter-spacing: var(--tracking-wide);
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-full);
+      padding: 2px var(--space-3) 2px var(--space-2);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      line-height: 1.5;
+    }
+    .room__dot {
+      width: 5px; height: 5px; flex: none;
+      border-radius: var(--radius-full);
+      background: var(--ink-faint);
+    }
+
+    .brief__divider { height: 1px; background: var(--line); margin: var(--space-1) var(--space-3); border: 0; }
+
+    /* footer of the card: the trust frame in one quiet line */
+    .brief__foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-5);
+      border-top: 1px solid var(--line);
+      background: var(--surface-2);
+    }
+    .brief__foot-note {
+      font-size: var(--fs-xs);
+      color: var(--ink-soft);
+    }
+    .brief__foot-note strong { color: var(--ink); font-weight: var(--fw-semibold); }
+    .brief__foot-link {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      transition: color var(--dur-fast) var(--ease), gap var(--dur-fast) var(--ease);
+      white-space: nowrap;
+    }
+    .brief__foot-link:hover { color: var(--ink-soft); gap: var(--space-3); }
+
+    /* ----- entrance motion: fast, earned, reduced-motion aware ----- */
+    @keyframes heroc-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .heroc__statement > *,
+    .heroc__artifact > * {
+      animation: heroc-rise var(--dur) var(--ease) both;
+    }
+    .heroc__eyebrow      { animation-delay: 0ms; }
+    .heroc__headline     { animation-delay: 60ms; }
+    .heroc__subhead      { animation-delay: 120ms; }
+    .heroc__actions      { animation-delay: 180ms; }
+    .heroc__founder      { animation-delay: 240ms; }
+    .heroc__forl         { animation-delay: 280ms; }
+    .heroc__artifact-tag { animation-delay: 200ms; }
+    .brief               { animation-delay: 260ms; }
+    /* the rows tick in, one after another, so the brief reads as it builds */
+    .brief__item { animation: heroc-rise var(--dur) var(--ease) both; }
+    .brief__item:nth-child(1) { animation-delay: 320ms; }
+    .brief__item:nth-child(3) { animation-delay: 370ms; }
+    .brief__item:nth-child(4) { animation-delay: 410ms; }
+    .brief__item:nth-child(6) { animation-delay: 450ms; }
+
+    /* ----- responsive: collapse the asymmetry to a clean stack ----- */
+    @media (max-width: 960px) {
+      .heroc__inner {
+        grid-template-columns: 1fr;
+        row-gap: var(--space-8);
+      }
+      .heroc__statement { max-width: 42ch; padding-top: 0; }
+      .heroc__artifact {
+        margin-top: 0;
+        margin-right: 0;
+        max-width: 520px;
+      }
+    }
+    @media (max-width: 760px) {
+      .heroc { padding-block: var(--space-9) var(--space-8); }
+      .heroc__statement { max-width: none; }
+      .heroc__subhead { max-width: none; }
+      .brief__snippet { white-space: normal; }
+      .brief__foot { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ &#9672; ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#main" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <!-- ============ HERO C: SPLIT STATEMENT + LIVE ARTIFACT ============ -->
+  <header class="heroc" id="main">
+    <div class="heroc__inner">
+
+      <!-- LEFT: the statement -->
+      <div class="heroc__statement">
+        <p class="eyebrow heroc__eyebrow">
+          <span class="heroc__tick" aria-hidden="true"></span>
+          Fractional AI-Ops partner
+        </p>
+        <h1 class="heroc__headline">
+          Turn the work that slows you down <em>into software that runs itself.</em>
+        </h1>
+        <p class="heroc__subhead">
+          Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. You stay in control of every call that matters.
+        </p>
+
+        <div class="heroc__actions">
+          <a href="#main" class="btn btn--primary btn--lg">Book a discovery call</a>
+          <a href="#main" class="heroc__textlink">
+            Get your AI opportunity plan
+            <span class="arr" aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <!-- founder credibility, near the CTA -->
+        <div class="heroc__founder">
+          <span class="heroc__founder-mark" aria-hidden="true">JN</span>
+          <p class="heroc__founder-text">
+            <strong>Built by an operator who ships, not an agency.</strong>
+            Jeff Newman, a 15-year product record across Deloitte, Kraken, and Magic Eden.
+          </p>
+        </div>
+
+        <p class="heroc__forl">
+          <span class="u-mono">A 45-minute call.</span> We find the one workflow worth building first. Understanding before scope.
+        </p>
+      </div>
+
+      <!-- RIGHT: the live artifact (a believable Morning Brief surface) -->
+      <aside class="heroc__artifact" aria-label="Example: a Morning Brief for a boutique studio">
+        <div class="heroc__artifact-tag">
+          <span>The Morning Brief</span>
+          <span class="live">
+            <span class="heroc__pulse" aria-hidden="true"></span>
+            Ran overnight
+          </span>
+        </div>
+
+        <article class="brief">
+          <div class="brief__head">
+            <div class="brief__title-wrap">
+              <span class="brief__title">Today at the studio</span>
+              <span class="brief__date">TUE 06:14</span>
+            </div>
+            <span class="brief__count">12 items, 7 min to scan</span>
+          </div>
+
+          <ul class="brief__list">
+
+            <li class="brief__item brief__item--unread">
+              <span class="brief__unread" aria-hidden="true"></span>
+              <span class="brief__line">
+                <span class="brief__subject">Drapery workroom flags a railing height conflict</span>
+                <span class="brief__snippet">The motorized track clears the cornice by under an inch; they want a call before cutting.</span>
+                <span class="brief__thread">3 in this thread</span>
+              </span>
+              <span class="brief__meta">
+                <span class="room"><span class="room__dot" aria-hidden="true"></span>Primary Bed</span>
+                <span class="brief__time">06:02</span>
+              </span>
+            </li>
+
+            <hr class="brief__divider" aria-hidden="true" />
+
+            <li class="brief__item brief__item--unread">
+              <span class="brief__unread" aria-hidden="true"></span>
+              <span class="brief__line">
+                <span class="brief__subject">Stone yard confirms the slab, holds it 5 days</span>
+                <span class="brief__snippet">Vein direction matches the approved sample; they need the deposit to release it.</span>
+              </span>
+              <span class="brief__meta">
+                <span class="room"><span class="room__dot" aria-hidden="true"></span>Kitchen</span>
+                <span class="brief__time">23:41</span>
+              </span>
+            </li>
+
+            <li class="brief__item">
+              <span class="brief__unread" aria-hidden="true"></span>
+              <span class="brief__line">
+                <span class="brief__subject">Lighting rep asks to swap the foyer pendant finish</span>
+                <span class="brief__snippet">Aged brass is back-ordered ten weeks; they propose antique nickel as the closest match.</span>
+                <span class="brief__thread">2 in this thread</span>
+              </span>
+              <span class="brief__meta">
+                <span class="room"><span class="room__dot" aria-hidden="true"></span>Foyer</span>
+                <span class="brief__time">22:18</span>
+              </span>
+            </li>
+
+            <hr class="brief__divider" aria-hidden="true" />
+
+            <li class="brief__item">
+              <span class="brief__unread" aria-hidden="true"></span>
+              <span class="brief__line">
+                <span class="brief__subject">Client signs off on the dining millwork drawings</span>
+                <span class="brief__snippet">Approved as drawn, no changes; ready to release to the cabinet shop.</span>
+              </span>
+              <span class="brief__meta">
+                <span class="room"><span class="room__dot" aria-hidden="true"></span>Dining</span>
+                <span class="brief__time">19:55</span>
+              </span>
+            </li>
+
+          </ul>
+
+          <div class="brief__foot">
+            <p class="brief__foot-note">
+              <strong>Nothing is sent for you.</strong> You read it. You approve the draft. You hit Send.
+            </p>
+            <a href="#main" class="brief__foot-link">
+              Open the full brief
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </article>
+      </aside>
+
+    </div>
+  </header>
+
+</body>
+</html>

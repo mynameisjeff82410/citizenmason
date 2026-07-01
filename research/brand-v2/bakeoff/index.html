@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason V2 Brand Bake-Off, Review and Decide</title>
+<meta name="description" content="Review the V2 brand directions and lock the selection. One file, review and decision." />
+
+<!-- ============================================================================
+     CITIZEN MASON V2 BRAND BAKE-OFF, REVIEW + DECIDE GALLERY (index.html)
+     Self-contained. Styled in the judge-recommended direction (Craftsperson's
+     Ledger: warm bone canvas, oxblood accent, Fraunces + Geist + Geist Mono).
+     Review sections at top, persistent decision panel docked right, structured
+     handoff with copy + download. All recommendations pre-selected so the
+     default Copy output already equals the recommended set.
+     ========================================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@400;450;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+:root {
+  --bone:        #f3ede1;
+  --paper:       #f7f2e8;
+  --paper-2:     #fbf8f1;
+  --paper-3:     #fdfcf8;
+  --ink:         #211d18;
+  --ink-soft:    #544d42;
+  --ink-faint:   #8a8073;
+  --rule:        #ddd2bf;
+  --rule-strong: #c8bba2;
+  --oxblood:        #7c2218;
+  --oxblood-deep:   #5f180f;
+  --oxblood-bright: #9a2c1d;
+  --on-oxblood:     #f7f2e8;
+  --oxblood-wash:   #f0e2d6;
+  --ochre:        #b07d2b;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --maxw: 1180px;
+  --gutter: clamp(20px, 4vw, 56px);
+  --panel-w: 384px;
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+
+  --shadow-sm: 0 1px 2px rgba(33,29,24,0.05), 0 1px 1px rgba(33,29,24,0.04);
+  --shadow-md: 0 6px 18px rgba(33,29,24,0.08), 0 2px 5px rgba(33,29,24,0.05);
+  --shadow-lg: 0 18px 44px rgba(33,29,24,0.14), 0 6px 14px rgba(33,29,24,0.07);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; } }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(120% 80% at 90% -10%, rgba(176,125,43,0.06), transparent 60%),
+    radial-gradient(100% 70% at -10% 110%, rgba(124,34,24,0.04), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; line-height: 1.06; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--oxblood); color: var(--on-oxblood); }
+
+:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 2px; border-radius: 2px; }
+
+/* ---- Layout shell: content column + docked decision panel ---- */
+.shell { display: flex; align-items: flex-start; }
+.main { flex: 1 1 auto; min-width: 0; }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* ---- Skip link ---- */
+.skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: 10px 16px; z-index: 100; border-radius: 0 0 6px 0; }
+.skip:focus { left: 0; }
+
+/* ---- Mono eyebrow ---- */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+
+/* ---- Masthead ---- */
+.masthead {
+  border-bottom: 1px solid var(--rule-strong);
+  background: var(--paper);
+  padding: clamp(40px, 6vw, 76px) 0 clamp(28px, 4vw, 44px);
+  position: relative;
+}
+.masthead::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: var(--rule-strong);
+}
+.mast-top { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.mast-wordmark { display: flex; align-items: center; gap: 12px; }
+.mast-mark { width: 26px; height: 30px; flex: none; }
+.mast-name {
+  font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem;
+  letter-spacing: 0.02em; text-transform: uppercase;
+}
+.mast-slip {
+  font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--ink-faint); white-space: nowrap;
+}
+.mast-h1 {
+  font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 500; line-height: 1.02;
+  letter-spacing: -0.02em; margin-top: clamp(24px, 3vw, 36px); max-width: 17ch;
+}
+.mast-h1 em { font-style: italic; color: var(--oxblood); }
+.mast-sub { margin-top: 18px; max-width: 60ch; color: var(--ink-soft); font-size: 1.0625rem; line-height: 1.55; }
+
+/* ---- Section frame ---- */
+.section { padding: clamp(44px, 6vw, 72px) 0; border-bottom: 1px solid var(--rule); }
+.section:last-of-type { border-bottom: 0; }
+.section-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+.section-no {
+  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em;
+  color: var(--oxblood); font-weight: 600; padding-top: 6px;
+}
+.section-title { font-size: clamp(1.5rem, 3vw, 2.125rem); font-weight: 500; }
+.section-lede { color: var(--ink-soft); max-width: 64ch; margin-top: 6px; font-size: 1.0625rem; }
+
+/* ---- Pains row ---- */
+.pains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; margin-top: 8px; }
+.pain { background: var(--paper-2); padding: 22px 22px 24px; }
+.pain-no { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.14em; color: var(--ink-faint); }
+.pain-name { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 600; margin-top: 8px; }
+.pain-detail { font-size: 0.9rem; color: var(--ink-soft); margin-top: 6px; line-height: 1.5; }
+.pain-score { font-family: var(--font-mono); font-size: 0.75rem; color: var(--oxblood); margin-top: 12px; font-weight: 500; }
+
+/* ---- Legend ---- */
+.legend { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 28px; padding-top: 22px; border-top: 1px solid var(--rule); }
+.legend-item { display: flex; align-items: center; gap: 9px; font-size: 0.875rem; color: var(--ink-soft); }
+.legend-swatch { width: 16px; height: 16px; border-radius: 4px; flex: none; border: 1px solid rgba(33,29,24,0.12); }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono); font-size: 0.625rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  background: var(--oxblood); color: var(--on-oxblood);
+  padding: 4px 9px; border-radius: 999px; white-space: nowrap;
+}
+.badge--ghost { background: transparent; color: var(--oxblood); border: 1px solid var(--oxblood); }
+.badge--winner::before { content: "\2605"; font-size: 0.7rem; }
+
+/* ---- Identity card grid ---- */
+.card-grid { display: grid; gap: 18px; }
+.grid-5 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+.card {
+  position: relative; display: flex; flex-direction: column;
+  background: var(--paper-3); border: 1px solid var(--rule);
+  border-radius: 12px; padding: 22px 22px 20px; text-decoration: none; color: inherit;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--rule-strong); }
+.card--rec { border-color: var(--oxblood); box-shadow: 0 0 0 1px var(--oxblood) inset, var(--shadow-sm); }
+.card--rec:hover { box-shadow: 0 0 0 1px var(--oxblood) inset, var(--shadow-md); }
+.card-topline { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.card-id { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.12em; color: var(--ink-faint); text-transform: uppercase; }
+.card-score { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 600; color: var(--oxblood); }
+.card-title { font-family: var(--font-display); font-size: 1.3125rem; font-weight: 600; line-height: 1.12; }
+.card-concept { color: var(--ink-soft); font-size: 0.95rem; margin-top: 8px; line-height: 1.5; }
+.card-move { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 0.875rem; line-height: 1.5; }
+.card-move b { font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); display: block; margin-bottom: 5px; font-weight: 600; }
+.card-open {
+  margin-top: 16px; display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.05em;
+  color: var(--oxblood); font-weight: 500;
+}
+.card-open::after { content: "\2197"; transition: transform var(--dur) var(--ease); }
+.card:hover .card-open::after { transform: translate(2px, -2px); }
+
+/* mini palette swatches on identity cards */
+.swatches { display: flex; gap: 5px; margin-top: 14px; }
+.sw { width: 22px; height: 22px; border-radius: 5px; border: 1px solid rgba(33,29,24,0.10); }
+
+/* ---- Module groups ---- */
+.module-group { margin-top: 8px; }
+.module-group + .module-group { margin-top: 32px; }
+.module-label { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+.module-label h3 { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; }
+.module-label span { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint); }
+
+/* ---- Foundations row ---- */
+.foundations { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+.found {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: var(--paper-2); border: 1px dashed var(--rule-strong);
+  border-radius: 10px; padding: 20px 22px; color: inherit;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.found:hover { border-color: var(--oxblood); background: var(--paper-3); }
+.found-name { font-family: var(--font-display); font-weight: 600; font-size: 1.0625rem; }
+.found-sub { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--ink-faint); margin-top: 4px; }
+.found-open { font-family: var(--font-mono); font-size: 0.75rem; color: var(--oxblood); white-space: nowrap; }
+
+/* ---- DECISION PANEL (docked) ---- */
+.panel {
+  flex: none; width: var(--panel-w);
+  position: sticky; top: 0; align-self: flex-start;
+  height: 100vh; overflow-y: auto;
+  background: var(--bone);
+  border-left: 1px solid var(--rule-strong);
+  padding: 0;
+}
+.panel-inner { padding: 28px 26px 40px; }
+.panel-head { padding-bottom: 18px; border-bottom: 1px solid var(--rule-strong); margin-bottom: 22px; }
+.panel-kicker { font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--oxblood); font-weight: 600; }
+.panel-title { font-family: var(--font-display); font-size: 1.375rem; font-weight: 600; margin-top: 8px; }
+.panel-note { font-size: 0.8125rem; color: var(--ink-soft); margin-top: 8px; line-height: 1.5; }
+.panel-status { font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.06em; color: var(--ink-faint); margin-top: 10px; }
+.panel-status b { color: var(--oxblood); }
+
+.decision { padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.decision:last-of-type { border-bottom: 0; }
+.decision-no { font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.12em; color: var(--ink-faint); }
+.decision-name { font-family: var(--font-display); font-size: 1.0625rem; font-weight: 600; margin: 3px 0 12px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px; font-weight: 600; }
+select, textarea {
+  width: 100%; font-family: var(--font-sans); font-size: 0.875rem; color: var(--ink);
+  background: var(--paper-3); border: 1px solid var(--rule-strong);
+  border-radius: 7px; padding: 9px 11px; line-height: 1.4;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+select:focus, textarea:focus { outline: none; border-color: var(--oxblood); box-shadow: 0 0 0 3px var(--oxblood-wash); }
+.field--primary select { border-color: var(--oxblood); font-weight: 500; }
+textarea { resize: vertical; min-height: 58px; }
+
+/* ---- Handoff block ---- */
+.handoff { margin-top: 24px; padding-top: 22px; border-top: 1px solid var(--rule-strong); }
+.handoff-label { font-family: var(--font-mono); font-size: 0.625rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); font-weight: 600; }
+.field--overall { margin: 12px 0 16px; }
+.btn-row { display: flex; gap: 10px; }
+.btn {
+  flex: 1; cursor: pointer; font-family: var(--font-mono); font-size: 0.75rem;
+  letter-spacing: 0.04em; font-weight: 600; padding: 11px 12px; border-radius: 8px;
+  border: 1px solid var(--oxblood); transition: background var(--dur) var(--ease), color var(--dur) var(--ease), transform 120ms var(--ease);
+}
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--oxblood); color: var(--on-oxblood); }
+.btn--primary:hover { background: var(--oxblood-deep); }
+.btn--ghost { background: transparent; color: var(--oxblood); }
+.btn--ghost:hover { background: var(--oxblood-wash); }
+.copied { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--oxblood); margin-top: 10px; min-height: 1em; opacity: 0; transition: opacity var(--dur) var(--ease); }
+.copied.show { opacity: 1; }
+
+.summary-pre {
+  margin-top: 16px; background: var(--paper-3); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 14px; font-family: var(--font-mono);
+  font-size: 0.6875rem; line-height: 1.55; color: var(--ink-soft);
+  white-space: pre-wrap; word-break: break-word; max-height: 220px; overflow-y: auto;
+}
+
+/* ---- Footer ---- */
+.foot { padding: 40px 0 64px; }
+.foot p { font-family: var(--font-mono); font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--ink-faint); }
+
+/* ---- Responsive ---- */
+@media (max-width: 1080px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 980px) {
+  .shell { flex-direction: column; }
+  .panel {
+    width: 100%; position: static; height: auto; border-left: 0;
+    border-top: 1px solid var(--rule-strong); order: 2;
+  }
+  .panel-inner { max-width: var(--maxw); margin: 0 auto; padding-left: var(--gutter); padding-right: var(--gutter); }
+}
+@media (max-width: 720px) {
+  .grid-5, .grid-3, .pains, .foundations { grid-template-columns: 1fr; }
+  .pains { border-radius: 10px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#decisions">Skip to decision panel</a>
+
+<div class="shell">
+  <main class="main" id="review">
+
+    <!-- ============================ MASTHEAD ============================ -->
+    <header class="masthead">
+      <div class="wrap">
+        <div class="mast-top">
+          <div class="mast-wordmark">
+            <svg class="mast-mark" viewBox="0 0 26 30" aria-hidden="true">
+              <!-- keystone equity, faceted wedge -->
+              <path d="M2 28 L7 6 L19 6 L24 28 Z" fill="none" stroke="#7c2218" stroke-width="1.6"/>
+              <path d="M9 6 L11 28 M17 6 L15 28" stroke="#7c2218" stroke-width="0.9" opacity="0.5"/>
+            </svg>
+            <span class="mast-name">Citizen Mason</span>
+          </div>
+          <span class="mast-slip">No. 001 &nbsp;/&nbsp; Brand V2 Bake-Off</span>
+        </div>
+        <h1 class="mast-h1">Review the directions, then <em>lock the build</em>.</h1>
+        <p class="mast-sub">Five identity directions, the wordmark sheet, and the module layouts, judged and laid out for one decision. Open any artifact in a new tab, then set the selection in the panel. Your picks save as you go and copy out as a clean handoff.</p>
+      </div>
+    </header>
+
+    <!-- ============================ ORIENTATION ============================ -->
+    <section class="section" aria-labelledby="orient-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-no">00</span>
+          <div>
+            <h2 class="section-title" id="orient-h">What this is</h2>
+            <p class="section-lede">A bake-off for the Citizen Mason V2 landing page. The current live site scores 2 of 5 on distinctiveness and 2 of 5 on memorability. That is the floor to escape. Every direction below aims at owned, recognizable-on-sight design with operator-built warmth, calm authority over hype, and one dominant ask.</p>
+          </div>
+        </div>
+
+        <div class="pains">
+          <div class="pain">
+            <div class="pain-no">PAIN 01</div>
+            <div class="pain-name">Forgettable identity</div>
+            <div class="pain-detail">No symbol strength, no signature color, nothing that survives a thumbnail. Text-only recognition.</div>
+            <div class="pain-score">Live site: 2 / 5 memorability</div>
+          </div>
+          <div class="pain">
+            <div class="pain-no">PAIN 02</div>
+            <div class="pain-name">Feels generic</div>
+            <div class="pain-detail">Charcoal, amber, Geist, default layout. Interchangeable with any premium B2B SaaS template.</div>
+            <div class="pain-score">Live site: 2 / 5 distinctiveness</div>
+          </div>
+          <div class="pain">
+            <div class="pain-no">PAIN 03</div>
+            <div class="pain-name">Weak conversion</div>
+            <div class="pain-detail">Mailto-only path, no scheduler, no form, no next-step clarity. The ask has no real mechanism.</div>
+            <div class="pain-score">Live site: 2 / 5 conversion clarity</div>
+          </div>
+        </div>
+
+        <div class="legend" aria-label="Legend">
+          <div class="legend-item"><span class="badge badge--winner">Recommended</span> Judge pick for that axis</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#7c2218"></span> Oxblood, the one accent</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#f7f2e8"></span> Bone paper canvas</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#211d18"></span> Warm near-black ink</div>
+          <div class="legend-item">Score = judge score out of 100 (identities) or 10 (modules)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ IDENTITY DIRECTIONS ============================ -->
+    <section class="section" aria-labelledby="identity-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-no">01</span>
+          <div>
+            <h2 class="section-title" id="identity-h">Identity directions</h2>
+            <p class="section-lede">Five full visual systems, each its own page with its own type, color, and motion. The name evokes masonry, building, and civic trust. Each direction reads that differently.</p>
+          </div>
+        </div>
+
+        <div class="card-grid grid-3">
+
+          <!-- Identity 3, RECOMMENDED -->
+          <a class="card card--rec" href="identity-3.html" target="_blank" rel="noopener">
+            <div class="card-topline">
+              <span class="card-id">Identity 3</span>
+              <span class="badge badge--winner">Recommended</span>
+            </div>
+            <div class="card-title">Craftsperson's Ledger</div>
+            <div class="card-concept">Light editorial canvas, oxblood accent, serif display. Reads like a printed ledger, the opposite of dark-mode AI.</div>
+            <div class="swatches" aria-hidden="true">
+              <span class="sw" style="background:#f7f2e8"></span>
+              <span class="sw" style="background:#211d18"></span>
+              <span class="sw" style="background:#7c2218"></span>
+              <span class="sw" style="background:#b07d2b"></span>
+            </div>
+            <div class="card-move">
+              <b>Distinctiveness move</b>
+              The ledger motif as recurring structure, not a sticker: hero trust-ledger card, ruled section rules, workflow rows, a numbered No. 001 slip. Fraunces serif plus Geist plus mono as real composition.
+            </div>
+            <span class="card-open">Open identity-3.html</span>
+          </a>
+
+          <!-- Identity 4 -->
+          <a class="card" href="identity-4.html" target="_blank" rel="noopener">
+            <div class="card-topline">
+              <span class="card-id">Identity 4</span>
+              <span class="card-score">Score 80</span>
+            </div>
+            <div class="card-title">Blueprint</div>
+            <div class="card-concept">Blueprint blue, redline, a drawn keystone detail plate. Tied to the CAD and architecture beachhead.</div>
+            <div class="swatches" aria-hidden="true">
+              <span class="sw" style="background:#0e2a3f"></span>
+              <span class="sw" style="background:#a9c2d2"></span>
+              <span class="sw" style="background:#ff5c4d"></span>
+              <span class="sw" style="background:#e8eef2"></span>
+            </div>
+            <div class="card-move">
+              <b>Distinctiveness move</b>
+              Self-drawing dimension line counting 0 to 4'-2" on a real drawing-sheet grid. The most owned thumbnail in the set. Caution: redline reads as an alert color on the trust CTA.
+            </div>
+            <span class="card-open">Open identity-4.html</span>
+          </a>
+
+          <!-- Identity 2 -->
+          <a class="card" href="identity-2.html" target="_blank" rel="noopener">
+            <div class="card-topline">
+              <span class="card-id">Identity 2</span>
+              <span class="card-score">Score 76</span>
+            </div>
+            <div class="card-title">Operator's Authority</div>
+            <div class="card-concept">Ink-black, copper restraint, mono spec rail. The founder-who-ships thesis made literal.</div>
+            <div class="swatches" aria-hidden="true">
+              <span class="sw" style="background:#141414"></span>
+              <span class="sw" style="background:#c87f3e"></span>
+              <span class="sw" style="background:#e8e6e1"></span>
+              <span class="sw" style="background:#7a7770"></span>
+            </div>
+            <div class="card-move">
+              <b>Distinctiveness move</b>
+              The mono spec rail (Built by, One operator / Product record, 15 years / Final word, Always yours) is the strongest operator-built device. Caution: sits one step from the dark-mode floor it must escape.
+            </div>
+            <span class="card-open">Open identity-2.html</span>
+          </a>
+
+          <!-- Identity 1 -->
+          <a class="card" href="identity-1.html" target="_blank" rel="noopener">
+            <div class="card-topline">
+              <span class="card-id">Identity 1</span>
+              <span class="card-score">Score 68</span>
+            </div>
+            <div class="card-title">The Mason's Course</div>
+            <div class="card-concept">Warm cream paper, brown-black ink, one earthy ochre. Evolves the current site rather than departing.</div>
+            <div class="swatches" aria-hidden="true">
+              <span class="sw" style="background:#f5f1ea"></span>
+              <span class="sw" style="background:#2a2118"></span>
+              <span class="sw" style="background:#b07f3a"></span>
+              <span class="sw" style="background:#9a9488"></span>
+            </div>
+            <div class="card-move">
+              <b>Distinctiveness move</b>
+              Mono promoted to visible composition over warmer cream. The lowest-risk pick. Caution: elevation, not escape, the silhouette stays close to the current 2/5 site.
+            </div>
+            <span class="card-open">Open identity-1.html</span>
+          </a>
+
+          <!-- Identity 5 -->
+          <a class="card" href="identity-5.html" target="_blank" rel="noopener">
+            <div class="card-topline">
+              <span class="card-id">Identity 5</span>
+              <span class="card-score">Score 64</span>
+            </div>
+            <div class="card-title">Quarry-Stonework</div>
+            <div class="card-concept">Limestone, oxblood, a carved keystone, a running-bond masonry wall as the hero. The most literal read of the name.</div>
+            <div class="swatches" aria-hidden="true">
+              <span class="sw" style="background:#e6ddcd"></span>
+              <span class="sw" style="background:#2c2620"></span>
+              <span class="sw" style="background:#7c2a1e"></span>
+              <span class="sw" style="background:#b5a890"></span>
+            </div>
+            <div class="card-move">
+              <b>Distinctiveness move</b>
+              Heavy Archivo Expanded caps and a brick-course hero survive any thumbnail. Caution: reads building-trade and contractor before high-craft AI, the wrong feeling for luxury services.
+            </div>
+            <span class="card-open">Open identity-5.html</span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ WORDMARK + MARK ============================ -->
+    <section class="section" aria-labelledby="wordmark-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-no">02</span>
+          <div>
+            <h2 class="section-title" id="wordmark-h">Wordmark and mark</h2>
+            <p class="section-lede">Six owned marks on one sheet, each tested at lockup size and at a true 32px favicon. The mark must survive a thumbnail and sell the name without a caption.</p>
+          </div>
+        </div>
+
+        <a class="card card--rec" href="wordmark-sheet.html" target="_blank" rel="noopener" style="max-width:none">
+          <div class="card-topline">
+            <span class="card-id">Wordmark sheet, six marks</span>
+            <span class="badge badge--winner">Recommended: The Quoin</span>
+          </div>
+          <div class="card-title">The Quoin, dressed corner masonry</div>
+          <div class="card-concept">A stacked-stone corner. The favicon sheds the faint infill and renders the bold L of three stones, instantly recognizable at 32px. Solid fills, so it inverts trivially on dark and in one-color print.</div>
+          <div class="card-move">
+            <b>Why it wins</b>
+            Top-tier on every axis at once. Architectural and ownable where a rounded-square CM monogram (Maker's Stamp, the score-84 runner-up) is the default app-icon pattern. A quoin is dressed corner masonry, so the mark sells the name with no caption. Runner-up to keep in the final two: Maker's Stamp CM, the safe-legibility hedge.
+          </div>
+          <span class="card-open">Open wordmark-sheet.html</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================ MODULE LAYOUTS ============================ -->
+    <section class="section" aria-labelledby="modules-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-no">03</span>
+          <div>
+            <h2 class="section-title" id="modules-h">Module layouts</h2>
+            <p class="section-lede">Layout options on the neutral kit, judged for structure not color. The winner per module is badged. Identity color drops onto whichever layout wins.</p>
+          </div>
+        </div>
+
+        <!-- HERO group -->
+        <div class="module-group">
+          <div class="module-label">
+            <h3>Hero</h3>
+            <span>3 options</span>
+          </div>
+          <div class="card-grid grid-3">
+
+            <a class="card card--rec" href="hero-c.html" target="_blank" rel="noopener">
+              <div class="card-topline">
+                <span class="card-id">Hero C</span>
+                <span class="badge badge--winner">Winner</span>
+              </div>
+              <div class="card-title">Split statement plus live artifact</div>
+              <div class="card-concept">A believable Morning Brief surface beside the headline. Shows the product working instead of asserting it. Score 9.</div>
+              <div class="card-move">
+                <b>Why it wins</b>
+                The only hero that produces the brief's felt outcome: an AI can prepare and review the work while you decide. Trust ladder rides inside the card footer. Real asymmetry, founder proof under the CTA.
+              </div>
+              <span class="card-open">Open hero-c.html</span>
+            </a>
+
+            <a class="card" href="hero-a.html" target="_blank" rel="noopener">
+              <div class="card-topline">
+                <span class="card-id">Hero A</span>
+                <span class="card-score">Score 8</span>
+              </div>
+              <div class="card-title">Asymmetric statement</div>
+              <div class="card-concept">The cleanest pure-layout asymmetry and the strongest CTA hierarchy. Trust-ladder panel hung below the headline baseline.</div>
+              <div class="card-move">
+                <b>Strength</b>
+                Broken symmetry carries meaning (you stay the final word). On the neutral kit it reads as statement plus panel, less memorable through a thumbnail than the live-artifact approach.
+              </div>
+              <span class="card-open">Open hero-a.html</span>
+            </a>
+
+            <a class="card" href="hero-b.html" target="_blank" rel="noopener">
+              <div class="card-topline">
+                <span class="card-id">Hero B</span>
+                <span class="card-score">Score 7</span>
+              </div>
+              <div class="card-title">Centered kinetic type</div>
+              <div class="card-concept">The locked headline split into four registers that climb and resolve on one accent phrase with a self-drawing underscore.</div>
+              <div class="card-move">
+                <b>Strength</b>
+                The most refined typography and exemplary accessibility. Caution: centered type is a known premium-SaaS pattern and the asymmetry is desktop-only.
+              </div>
+              <span class="card-open">Open hero-b.html</span>
+            </a>
+
+          </div>
+        </div>
+
+        <!-- CONVERSION group -->
+        <div class="module-group">
+          <div class="module-label">
+            <h3>Conversion</h3>
+            <span>3 options</span>
+          </div>
+          <div class="card-grid grid-3">
+
+            <a class="card card--rec" href="conversion-a.html" target="_blank" rel="noopener">
+              <div class="card-topline">
+                <span class="card-id">Conversion A</span>
+                <span class="badge badge--winner">Winner</span>
+              </div>
+              <div class="card-title">Embedded scheduler card</div>
+              <div class="card-concept">A disabled primary CTA gated behind a live confirm line that names the exact booking in mono. The AI-plan intake demoted to one quiet row. Score 9.</div>
+              <div class="card-move">
+                <b>Why it wins</b>
+                The highest-fidelity fix for the mailto problem, the load-bearing axis. One unmistakable ask, accent only on the selected slot and the confirm button, what-happens-next answered before the click.
+              </div>
+              <span class="card-open">Open conversion-a.html</span>
+            </a>
+
+            <a class="card" href="conversion-b.html" target="_blank" rel="noopener">
+              <div class="card-topline">
+                <span class="card-id">Conversion B</span>
+                <span class="card-score">Score 7</span>
+              </div>
+              <div class="card-title">Two-path, clear hierarchy</div>
+              <div class="card-concept">Hierarchy through five compounding signals so the dominant route wins at a glance. Each route carries its own numbered next-step ladder.</div>
+              <div class="card-move">
+                <b>Strength</b>
+                The cleanest hierarchy-by-weight. Caution: reintroduces a competing second intent and the booking surface is select-only with no CTA gating, a weaker mechanic than A.
+              </div>
+              <span class="card-open">Open conversion-b.html</span>
+            </a>
+
+            <a class="card" href="conversion-c.html" target="_blank" rel="noopener">
+              <div class="card-topline">
+                <span class="card-id">Conversion C</span>
+                <span class="card-score">Score 7</span>
+              </div>
+              <div class="card-title">Conversational single-field</div>
+              <div class="card-concept">Booking reframed as completing a sentence: mono-indexed fields with spoken-agency labels, an in-place post-submit confirmation.</div>
+              <div class="card-move">
+                <b>Strength</b>
+                The most on-voice and warmest. Caution: three fields upfront is more friction than picking a slot, and the structured booking surface is demoted to a quiet link.
+              </div>
+              <span class="card-open">Open conversion-c.html</span>
+            </a>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ FOUNDATIONS ============================ -->
+    <section class="section" aria-labelledby="found-h">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-no">04</span>
+          <div>
+            <h2 class="section-title" id="found-h">Foundations</h2>
+            <p class="section-lede">The shared neutral kit the module layouts link, and the grounding doc behind every choice.</p>
+          </div>
+        </div>
+
+        <div class="foundations">
+          <a class="found" href="_kit.html" target="_blank" rel="noopener">
+            <div>
+              <div class="found-name">Shared kit</div>
+              <div class="found-sub">_kit.html, tokens and components</div>
+            </div>
+            <span class="found-open">Open &#8599;</span>
+          </a>
+          <a class="found" href="../GROUNDING.md" target="_blank" rel="noopener">
+            <div>
+              <div class="found-name">Grounding doc</div>
+              <div class="found-sub">GROUNDING.md, brief, teardown, constraints</div>
+            </div>
+            <span class="found-open">Open &#8599;</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <div class="wrap">
+        <p>Citizen Mason V2 brand bake-off. Review and decide in one file. Selections persist locally under cm-brand-bakeoff.</p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ============================ DECISION PANEL ============================ -->
+  <aside class="panel" id="decisions" aria-label="Decision panel">
+    <div class="panel-inner">
+      <div class="panel-head">
+        <div class="panel-kicker">Decide</div>
+        <div class="panel-title">Lock the selection</div>
+        <p class="panel-note">Every decision is pre-set to the judge recommendation. Change any pick, add a secondary, edit the notes. Then copy or download the handoff.</p>
+        <div class="panel-status">Status: <b id="saveStatus">recommended set loaded</b></div>
+      </div>
+
+      <form id="decisionForm" autocomplete="off">
+
+        <!-- Decision 1: Identity -->
+        <div class="decision" data-key="identity">
+          <div class="decision-no">DECISION 01</div>
+          <div class="decision-name">Identity direction</div>
+          <div class="field field--primary">
+            <label for="identity-primary">Primary</label>
+            <select id="identity-primary" data-field="primary">
+              <option value="3">Identity 3, Craftsperson's Ledger (89)</option>
+              <option value="4">Identity 4, Blueprint (80)</option>
+              <option value="2">Identity 2, Operator's Authority (76)</option>
+              <option value="1">Identity 1, The Mason's Course (68)</option>
+              <option value="5">Identity 5, Quarry-Stonework (64)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="identity-secondary">Secondary (optional)</label>
+            <select id="identity-secondary" data-field="secondary">
+              <option value="">None</option>
+              <option value="3">Identity 3, Craftsperson's Ledger</option>
+              <option value="4">Identity 4, Blueprint</option>
+              <option value="2">Identity 2, Operator's Authority</option>
+              <option value="1">Identity 1, The Mason's Course</option>
+              <option value="5">Identity 5, Quarry-Stonework</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="identity-notes">Notes / graft</label>
+            <textarea id="identity-notes" data-field="notes"></textarea>
+          </div>
+        </div>
+
+        <!-- Decision 2: Wordmark -->
+        <div class="decision" data-key="wordmark">
+          <div class="decision-no">DECISION 02</div>
+          <div class="decision-name">Wordmark and mark</div>
+          <div class="field field--primary">
+            <label for="wordmark-primary">Primary</label>
+            <select id="wordmark-primary" data-field="primary">
+              <option value="04 The Quoin">04 The Quoin (87)</option>
+              <option value="03 Maker's Stamp CM">03 Maker's Stamp CM (84)</option>
+              <option value="02 The Setting Line">02 The Setting Line (76)</option>
+              <option value="01 Keystone Rebuilt">01 Keystone Rebuilt (71)</option>
+              <option value="06 Course & Bond">06 Course &amp; Bond (64)</option>
+              <option value="05 Keystone Arch">05 Keystone Arch (58)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="wordmark-secondary">Secondary (optional)</label>
+            <select id="wordmark-secondary" data-field="secondary">
+              <option value="">None</option>
+              <option value="04 The Quoin">04 The Quoin</option>
+              <option value="03 Maker's Stamp CM">03 Maker's Stamp CM</option>
+              <option value="02 The Setting Line">02 The Setting Line</option>
+              <option value="01 Keystone Rebuilt">01 Keystone Rebuilt</option>
+              <option value="06 Course & Bond">06 Course &amp; Bond</option>
+              <option value="05 Keystone Arch">05 Keystone Arch</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="wordmark-notes">Notes / graft</label>
+            <textarea id="wordmark-notes" data-field="notes"></textarea>
+          </div>
+        </div>
+
+        <!-- Decision 3: Hero -->
+        <div class="decision" data-key="hero">
+          <div class="decision-no">DECISION 03</div>
+          <div class="decision-name">Hero layout</div>
+          <div class="field field--primary">
+            <label for="hero-primary">Primary</label>
+            <select id="hero-primary" data-field="primary">
+              <option value="hero-c">Hero C, Split statement plus live artifact (9)</option>
+              <option value="hero-a">Hero A, Asymmetric statement (8)</option>
+              <option value="hero-b">Hero B, Centered kinetic type (7)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="hero-secondary">Secondary (optional)</label>
+            <select id="hero-secondary" data-field="secondary">
+              <option value="">None</option>
+              <option value="hero-c">Hero C, Split statement plus live artifact</option>
+              <option value="hero-a">Hero A, Asymmetric statement</option>
+              <option value="hero-b">Hero B, Centered kinetic type</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="hero-notes">Notes / graft</label>
+            <textarea id="hero-notes" data-field="notes"></textarea>
+          </div>
+        </div>
+
+        <!-- Decision 4: Conversion -->
+        <div class="decision" data-key="conversion">
+          <div class="decision-no">DECISION 04</div>
+          <div class="decision-name">Conversion layout</div>
+          <div class="field field--primary">
+            <label for="conversion-primary">Primary</label>
+            <select id="conversion-primary" data-field="primary">
+              <option value="conversion-a">Conversion A, Embedded scheduler card (9)</option>
+              <option value="conversion-b">Conversion B, Two-path, clear hierarchy (7)</option>
+              <option value="conversion-c">Conversion C, Conversational single-field (7)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="conversion-secondary">Secondary (optional)</label>
+            <select id="conversion-secondary" data-field="secondary">
+              <option value="">None</option>
+              <option value="conversion-a">Conversion A, Embedded scheduler card</option>
+              <option value="conversion-b">Conversion B, Two-path, clear hierarchy</option>
+              <option value="conversion-c">Conversion C, Conversational single-field</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="conversion-notes">Notes / graft</label>
+            <textarea id="conversion-notes" data-field="notes"></textarea>
+          </div>
+        </div>
+
+        <!-- Handoff -->
+        <div class="handoff">
+          <div class="handoff-label">Handoff</div>
+          <div class="field field--overall">
+            <label for="overall-note">Overall direction note</label>
+            <textarea id="overall-note"></textarea>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn--primary" id="copyBtn">Copy to clipboard</button>
+            <button type="button" class="btn btn--ghost" id="downloadBtn">Download txt</button>
+          </div>
+          <div class="copied" id="copiedMsg" role="status" aria-live="polite"></div>
+          <pre class="summary-pre" id="summaryPreview" aria-label="Live handoff preview"></pre>
+        </div>
+
+      </form>
+    </div>
+  </aside>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "cm-brand-bakeoff";
+
+  // Decision metadata: human label + judge recommendation defaults (notes pre-seeded with graft).
+  var DECISIONS = [
+    {
+      key: "identity",
+      label: "Identity direction",
+      defaults: {
+        primary: "3",
+        secondary: "",
+        notes: "Graft into 3: pull Identity 2's mono spec rail (Built by / One operator, Product record / 15 years, Final word / Always yours) into the ledger card; borrow Identity 4's self-drawing motion discipline for the ledger rules and No. 001 slip; keep oxblood as the only accent, never on anything reading as error or urgency; hold Identity 1's warmer near-black (#1c1814 over #f5f1ea) as the de-risk fallback if oxblood-on-bone tests too polarizing. Replace the JN monogram seal with a real founder photo before production."
+      }
+    },
+    {
+      key: "wordmark",
+      label: "Wordmark and mark",
+      defaults: {
+        primary: "04 The Quoin",
+        secondary: "03 Maker's Stamp CM",
+        notes: "Build The Quoin. Graft three: lock the three-stone favicon inside an implied square box edge-to-edge (Maker's Stamp discipline) so the favicon is the same mark with infill hidden, not a redraw; ship a flat one-color variant where the 0.42 infill becomes a true tint or thin outline (Setting Line robustness) for one-color print and busy grounds; adopt Course & Bond as the secondary pattern language under the Quoin primary. Test the lockup against both a serif treatment and tight-tracked Geist before locking type."
+      }
+    },
+    {
+      key: "hero",
+      label: "Hero layout",
+      defaults: {
+        primary: "hero-c",
+        secondary: "hero-a",
+        notes: "Build Hero C. Graft: take Hero A's negative-right-margin bleed and right-of-center seam to push the artifact card onto its own plane and make the asymmetry register in a thumbnail; borrow Hero B's per-line headline weight choreography and self-drawing underscore for C's single-weight headline; carry Hero B's full-aria-label-on-split-H1 pattern if C ever splits its headline; resolve C's snippet truncation band (760 to 960px) before build."
+      }
+    },
+    {
+      key: "conversion",
+      label: "Conversion layout",
+      defaults: {
+        primary: "conversion-a",
+        secondary: "",
+        notes: "Build Conversion A. Graft: take Conversion C's in-place post-submit confirmation swap (Sent. The conversation is open. restating the 45-minute promise and the final-word guarantee) and apply it to A's confirm button so the click closes the loop; sharpen A's after-steps rail with Conversion B's per-route numbered ladder treatment; adopt C's spoken-agency field labels for any optional name/email capture A adds at the real-scheduler wiring step; keep the async intake row free of accent and bold; at page assembly, demote the nav Book a call to outline so oxblood appears once dominant per viewport. Wire to a real scheduler with live availability and timezone detection before ship."
+      }
+    }
+  ];
+
+  var OVERALL_DEFAULT = "Lock Identity 3 (Craftsperson's Ledger) as the system, with The Quoin as the mark, Hero C, and Conversion A. This is the recommended set: the only combination that escapes the generic-AI floor decisively (light editorial canvas, serif display, oxblood, recurring ledger structure) while landing the calm-authority, principal-protective register the brief locks. Honor the hard constraints throughout: one dominant CTA in oxblood, the AI-plan demoted to a ruled link, anonymized studio and five-figure stakes, no pricing, plain-agency trust ladder verbatim, reduced-motion aware. Replace the founder monogram with a real photo and contrast-audit Fraunces italic oxblood at body sizes on mobile before production.";
+
+  var form = document.getElementById("decisionForm");
+  var overallEl = document.getElementById("overall-note");
+  var saveStatus = document.getElementById("saveStatus");
+  var preview = document.getElementById("summaryPreview");
+  var copiedMsg = document.getElementById("copiedMsg");
+
+  // Apply judge defaults to every control. Used on first load and as the seed.
+  function applyDefaults() {
+    DECISIONS.forEach(function (d) {
+      setVal(d.key + "-primary", d.defaults.primary);
+      setVal(d.key + "-secondary", d.defaults.secondary);
+      setVal(d.key + "-notes", d.defaults.notes);
+    });
+    overallEl.value = OVERALL_DEFAULT;
+  }
+
+  function setVal(id, val) {
+    var el = document.getElementById(id);
+    if (el) { el.value = (val === undefined || val === null) ? "" : val; }
+  }
+
+  function getVal(id) {
+    var el = document.getElementById(id);
+    return el ? el.value : "";
+  }
+
+  // Read the whole form into a plain object.
+  function readState() {
+    var state = { decisions: {}, overall: overallEl.value };
+    DECISIONS.forEach(function (d) {
+      state.decisions[d.key] = {
+        primary: getVal(d.key + "-primary"),
+        secondary: getVal(d.key + "-secondary"),
+        notes: getVal(d.key + "-notes")
+      };
+    });
+    return state;
+  }
+
+  // Write a saved state object back onto the form.
+  function writeState(state) {
+    if (!state || !state.decisions) { return; }
+    DECISIONS.forEach(function (d) {
+      var s = state.decisions[d.key];
+      if (!s) { return; }
+      if (typeof s.primary === "string") { setVal(d.key + "-primary", s.primary); }
+      if (typeof s.secondary === "string") { setVal(d.key + "-secondary", s.secondary); }
+      if (typeof s.notes === "string") { setVal(d.key + "-notes", s.notes); }
+    });
+    if (typeof state.overall === "string") { overallEl.value = state.overall; }
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(readState()));
+      saveStatus.textContent = "saved " + new Date().toLocaleTimeString();
+    } catch (e) {
+      saveStatus.textContent = "save unavailable (storage blocked)";
+    }
+  }
+
+  function load() {
+    var raw = null;
+    try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { raw = null; }
+    if (!raw) { return false; }
+    try {
+      writeState(JSON.parse(raw));
+      saveStatus.textContent = "restored saved selection";
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Pretty label lookup from the matching select option.
+  function labelFor(key, role, value) {
+    if (!value) { return "(none)"; }
+    var sel = document.getElementById(key + "-" + role);
+    if (sel) {
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === value) { return sel.options[i].text; }
+      }
+    }
+    return value;
+  }
+
+  // Build the structured, paste-back-able handoff text.
+  function buildSummary() {
+    var state = readState();
+    var lines = [];
+    lines.push("CITIZEN MASON V2 BRAND BAKE-OFF, SELECTION HANDOFF");
+    lines.push("Generated: " + new Date().toISOString());
+    lines.push("==================================================");
+    lines.push("");
+    DECISIONS.forEach(function (d, idx) {
+      var s = state.decisions[d.key];
+      lines.push((idx + 1) + ". " + d.label.toUpperCase());
+      lines.push("   Primary:   " + labelFor(d.key, "primary", s.primary));
+      lines.push("   Secondary: " + labelFor(d.key, "secondary", s.secondary));
+      lines.push("   Notes:     " + (s.notes ? s.notes : "(none)"));
+      lines.push("");
+    });
+    lines.push("OVERALL DIRECTION");
+    lines.push("   " + (state.overall ? state.overall : "(none)"));
+    lines.push("");
+    lines.push("==================================================");
+    lines.push("End of handoff.");
+    return lines.join("\n");
+  }
+
+  function refreshPreview() {
+    preview.textContent = buildSummary();
+  }
+
+  function flash(msg) {
+    copiedMsg.textContent = msg;
+    copiedMsg.classList.add("show");
+    window.setTimeout(function () { copiedMsg.classList.remove("show"); }, 2200);
+  }
+
+  // Copy to clipboard with a textarea fallback for non-secure contexts.
+  function copySummary() {
+    var text = buildSummary();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        flash("Copied to clipboard.");
+      }, function () {
+        fallbackCopy(text);
+      });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "absolute";
+    ta.style.left = "-9999px";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    flash(ok ? "Copied to clipboard." : "Copy failed, select the preview text.");
+  }
+
+  function downloadSummary() {
+    var text = buildSummary();
+    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "cm-brand-bakeoff-selection.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    flash("Downloaded cm-brand-bakeoff-selection.txt");
+  }
+
+  // Wire it up. Defaults first, then overlay any saved state, then live-bind.
+  applyDefaults();
+  load();
+  refreshPreview();
+
+  form.addEventListener("input", function () { save(); refreshPreview(); });
+  form.addEventListener("change", function () { save(); refreshPreview(); });
+  document.getElementById("copyBtn").addEventListener("click", copySummary);
+  document.getElementById("downloadBtn").addEventListener("click", downloadSummary);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Citizen Mason Wordmark and Mark Sheet</title>
+<link rel="stylesheet" href="_kit.css" />
+<style>
+  /* ----------------------------------------------------------------------
+     SHEET-LOCAL STYLES (layout only). Tokens, type, and nav come from _kit.css.
+     The marks themselves are drawn as inline SVG below, currentColor only,
+     so they invert cleanly for the reversed test.
+     -------------------------------------------------------------------- */
+  .sheet-head { padding-block: var(--space-9) var(--space-7); }
+  .sheet-head .h1 { max-width: 18ch; }
+  .sheet-head .lead { max-width: 62ch; margin-top: var(--space-4); }
+
+  .legend {
+    display: grid;
+    grid-template-columns: repeat(4, max-content);
+    gap: var(--space-2) var(--space-6);
+    margin-top: var(--space-6);
+    padding: var(--space-4) var(--space-5);
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-soft);
+    letter-spacing: var(--tracking-wide);
+  }
+  .legend b { color: var(--ink); font-weight: var(--fw-semibold); }
+  @media (max-width: 760px) { .legend { grid-template-columns: 1fr 1fr; } }
+
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    padding-bottom: var(--space-11);
+  }
+  @media (max-width: 920px) { .concept-grid { grid-template-columns: 1fr; } }
+
+  /* One concept cell */
+  .concept {
+    background: var(--surface-1);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  }
+  .concept:hover { border-color: var(--line-strong); box-shadow: var(--shadow-md); }
+
+  .concept__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-5) var(--space-6) var(--space-4);
+    border-bottom: 1px solid var(--line);
+  }
+  .concept__num {
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-faint);
+    letter-spacing: var(--tracking-wide);
+  }
+  .concept__name { font-size: var(--fs-xl); font-weight: var(--fw-semibold); letter-spacing: var(--tracking-tight); }
+  .concept__pair {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--ink-faint);
+    margin-top: var(--space-1);
+  }
+
+  /* The four display contexts, in a 2x2 inside each cell */
+  .contexts {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1px;
+    background: var(--line);
+  }
+  .ctx {
+    background: var(--surface-1);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-height: 132px;
+    justify-content: center;
+  }
+  .ctx--full { grid-column: 1 / -1; align-items: flex-start; }
+  .ctx__label {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--ink-faint);
+  }
+  .ctx__stage { display: flex; align-items: center; gap: var(--space-4); }
+  .ctx--center .ctx__stage { justify-content: center; flex: 1; }
+
+  /* Reversed cell: dark ground, white mark via currentColor */
+  .ctx--reversed { background: var(--ink); color: var(--paper); }
+  .ctx--reversed .ctx__label { color: rgba(251,251,250,0.55); }
+
+  /* Favicon square: a real 32px tile, plus a 2x echo for legibility */
+  .favtile {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .favtile svg { width: 20px; height: 20px; }
+  .favtile--2x { width: 64px; height: 64px; border-radius: 12px; }
+  .favtile--2x svg { width: 40px; height: 40px; }
+  .favtile--light { background: var(--surface-2); color: var(--ink); border: 1px solid var(--line); }
+
+  /* Full lockup: mark + wordmark text */
+  .lockup { display: inline-flex; align-items: center; gap: var(--space-4); }
+  .lockup__type {
+    font-weight: var(--fw-semibold);
+    font-size: 1.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  /* concept-specific lockup type treatments (type-as-composition) */
+  .lockup__type--serif { font-family: Georgia, 'Times New Roman', serif; letter-spacing: 0.015em; font-weight: 600; }
+  .lockup__type--mono  { font-family: var(--font-mono); letter-spacing: 0.04em; font-weight: 600; }
+  .lockup__type--stack { display: inline-flex; flex-direction: column; line-height: 0.96; letter-spacing: 0.12em; gap: 2px; }
+  .lockup__type--stack span:last-child { color: var(--ink-soft); }
+  .lockup .mark { flex: none; }
+
+  /* Nav-size mark stage */
+  .navmark { display: inline-flex; align-items: center; gap: var(--space-3); }
+  .navmark .mark { height: 24px; width: auto; }
+
+  /* Mark sizing helpers */
+  .mark { color: currentColor; }
+  .mark--lockup { height: 40px; width: auto; }
+
+  /* footer note */
+  .sheet-foot { padding-block: var(--space-7) var(--space-10); }
+  .sheet-foot .caption { max-width: 70ch; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .concept { transition: none; }
+  }
+</style>
+</head>
+<body>
+<a href="#sheet" class="skip-link">Skip to sheet</a>
+
+<!-- NAV (kit shell) -->
+<header class="nav">
+  <div class="nav__inner">
+    <span class="nav__wordmark">Citizen Mason Marks</span>
+    <ul class="nav__links">
+      <li><a class="nav__link" href="#sheet">Six concepts</a></li>
+      <li><a class="nav__link" href="#legend">How to read</a></li>
+    </ul>
+    <a class="btn btn--primary nav__cta" href="#sheet">View the sheet</a>
+  </div>
+</header>
+
+<main id="sheet">
+  <!-- HEAD -->
+  <section class="u-container sheet-head">
+    <p class="eyebrow">Wordmark and mark sheet</p>
+    <h1 class="h1">Six owned marks for Citizen Mason, built to survive a thumbnail.</h1>
+    <p class="lead">The name carries the work: masonry, building, civic trust, a thing made by hand. Each concept below is drawn from that root and shown four ways, so the test is the real one. A mark earns the brand when it reads at 32 pixels, holds on a dark ground, and stands beside the words without leaning on them.</p>
+
+    <div class="legend" id="legend">
+      <div><b>A</b> Full lockup</div>
+      <div><b>B</b> Mark at nav size</div>
+      <div><b>C</b> 32px favicon tile</div>
+      <div><b>D</b> Reversed on dark</div>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section class="u-container">
+    <div class="concept-grid">
+
+      <!-- ================= CONCEPT 01: KEYSTONE REBUILT ================= -->
+      <article class="concept">
+        <div class="concept__head">
+          <div>
+            <div class="concept__name">Keystone Rebuilt</div>
+            <div class="concept__pair">Pairs with: Craftsperson's Ledger</div>
+          </div>
+          <span class="concept__num">01</span>
+        </div>
+        <div class="contexts">
+
+          <div class="ctx ctx--full">
+            <span class="ctx__label">A. Full lockup</span>
+            <span class="lockup">
+              <svg class="mark mark--lockup" viewBox="0 0 44 40" fill="none" aria-hidden="true">
+                <!-- evolved keystone: a faceted voussoir with a chiseled inner light line -->
+                <path d="M13 4 H31 L38 36 H6 Z" fill="currentColor"/>
+                <path d="M19 12 L25 12 L28 30 L16 30 Z" fill="var(--surface-1)"/>
+                <path d="M22 12 L22 30" stroke="currentColor" stroke-width="1.4"/>
+              </svg>
+              <span class="lockup__type lockup__type--serif">Citizen&nbsp;Mason</span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">B. Nav size</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 44 40" fill="none" aria-hidden="true" style="height:24px">
+                <path d="M13 4 H31 L38 36 H6 Z" fill="currentColor"/>
+                <path d="M19 12 L25 12 L28 30 L16 30 Z" fill="var(--surface-1)"/>
+                <path d="M22 12 L22 30" stroke="currentColor" stroke-width="1.6"/>
+              </svg>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">C. 32px favicon</span>
+            <span class="ctx__stage">
+              <span class="favtile">
+                <svg viewBox="0 0 44 40" fill="none" aria-hidden="true">
+                  <path d="M13 4 H31 L38 36 H6 Z" fill="currentColor"/>
+                  <path d="M19 13 L25 13 L27.5 30 L16.5 30 Z" fill="var(--ink)"/>
+                </svg>
+              </span>
+              <span class="favtile favtile--2x">
+                <svg viewBox="0 0 44 40" fill="none" aria-hidden="true">
+                  <path d="M13 4 H31 L38 36 H6 Z" fill="currentColor"/>
+                  <path d="M19 13 L25 13 L27.5 30 L16.5 30 Z" fill="var(--ink)"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center ctx--reversed">
+            <span class="ctx__label">D. Reversed</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 44 40" fill="none" aria-hidden="true" style="height:30px">
+                <path d="M13 4 H31 L38 36 H6 Z" fill="currentColor"/>
+                <path d="M19 12 L25 12 L28 30 L16 30 Z" fill="var(--ink)"/>
+                <path d="M22 12 L22 30" stroke="currentColor" stroke-width="1.6"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div style="padding: var(--space-5) var(--space-6)">
+          <p class="caption">The wedge that locks an arch in place, redrawn as a single faceted voussoir with a chiseled light line down the center. It owns the keystone equity already on the site and gives it depth and weight it never had. The serif lockup reads design-principal, not SaaS template.</p>
+        </div>
+      </article>
+
+      <!-- ================= CONCEPT 02: THE SETTING LINE ================= -->
+      <article class="concept">
+        <div class="concept__head">
+          <div>
+            <div class="concept__name">The Setting Line</div>
+            <div class="concept__pair">Pairs with: Operator's Authority</div>
+          </div>
+          <span class="concept__num">02</span>
+        </div>
+        <div class="contexts">
+
+          <div class="ctx ctx--full">
+            <span class="ctx__label">A. Full lockup</span>
+            <span class="lockup">
+              <svg class="mark mark--lockup" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <!-- a mason's chisel stroke: a single decisive bevel cut, the line you build to -->
+                <path d="M8 30 L30 8 L34 12 L18 28 L26 28 L26 34 L8 34 Z" fill="currentColor"/>
+              </svg>
+              <span class="lockup__type lockup__type--mono">Citizen&nbsp;Mason</span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">B. Nav size</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:24px">
+                <path d="M8 30 L30 8 L34 12 L18 28 L26 28 L26 34 L8 34 Z" fill="currentColor"/>
+              </svg>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">C. 32px favicon</span>
+            <span class="ctx__stage">
+              <span class="favtile">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M7 31 L30 8 L34 12 L17 29 L26 29 L26 34 L7 34 Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="favtile favtile--2x">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <path d="M7 31 L30 8 L34 12 L17 29 L26 29 L26 34 L7 34 Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center ctx--reversed">
+            <span class="ctx__label">D. Reversed</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:30px">
+                <path d="M8 30 L30 8 L34 12 L18 28 L26 28 L26 34 L8 34 Z" fill="currentColor"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div style="padding: var(--space-5) var(--space-6)">
+          <p class="caption">A chisel mark that doubles as an L, the setting line a mason works to. One decisive bevel cut, no decoration. Set in mono, the lockup signals founder-built and precise, the operator who ships. The most distinctive silhouette of the six.</p>
+        </div>
+      </article>
+
+      <!-- ================= CONCEPT 03: MAKER'S STAMP CM ================= -->
+      <article class="concept">
+        <div class="concept__head">
+          <div>
+            <div class="concept__name">Maker's Stamp CM</div>
+            <div class="concept__pair">Pairs with: Studio Stamp</div>
+          </div>
+          <span class="concept__num">03</span>
+        </div>
+        <div class="contexts">
+
+          <div class="ctx ctx--full">
+            <span class="ctx__label">A. Full lockup</span>
+            <span class="lockup">
+              <svg class="mark mark--lockup" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <!-- CM cut into a stamped square block, the mark a maker presses into the work -->
+                <rect x="2" y="2" width="36" height="36" rx="5" fill="currentColor"/>
+                <path d="M19 12 A8 8 0 1 0 19 28" stroke="var(--surface-1)" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+                <path d="M24 28 V14 L29 22 L34 14 V28" stroke="var(--surface-1)" stroke-width="3.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+              <span class="lockup__type lockup__type--stack"><span>Citizen</span><span>Mason</span></span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">B. Nav size</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:24px">
+                <rect x="2" y="2" width="36" height="36" rx="5" fill="currentColor"/>
+                <path d="M19 12 A8 8 0 1 0 19 28" stroke="var(--surface-1)" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+                <path d="M24 28 V14 L29 22 L34 14 V28" stroke="var(--surface-1)" stroke-width="3.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">C. 32px favicon</span>
+            <span class="ctx__stage">
+              <span class="favtile" style="background:transparent;box-shadow:none">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" style="width:32px;height:32px">
+                  <rect x="1" y="1" width="38" height="38" rx="6" fill="currentColor"/>
+                  <path d="M19 11 A9 9 0 1 0 19 29" stroke="var(--paper)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+                  <path d="M24 29 V13 L29.5 22 L35 13 V29" stroke="var(--paper)" stroke-width="3.4" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="favtile favtile--2x" style="background:transparent;box-shadow:none">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" style="width:64px;height:64px">
+                  <rect x="1" y="1" width="38" height="38" rx="6" fill="currentColor"/>
+                  <path d="M19 11 A9 9 0 1 0 19 29" stroke="var(--paper)" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+                  <path d="M24 29 V13 L29.5 22 L35 13 V29" stroke="var(--paper)" stroke-width="3.4" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center ctx--reversed">
+            <span class="ctx__label">D. Reversed</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:30px">
+                <rect x="2" y="2" width="36" height="36" rx="5" fill="currentColor"/>
+                <path d="M19 12 A8 8 0 1 0 19 28" stroke="var(--ink)" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+                <path d="M24 28 V14 L29 22 L34 14 V28" stroke="var(--ink)" stroke-width="3.2" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div style="padding: var(--space-5) var(--space-6)">
+          <p class="caption">CM cut into a solid block, the mark a maker presses into finished work to claim it. The square is already the favicon, so the thumbnail test is built in. Stacked caps in the lockup give it a stamped, artisanal weight that fits the luxury-studio beachhead.</p>
+        </div>
+      </article>
+
+      <!-- ================= CONCEPT 04: THE QUOIN ================= -->
+      <article class="concept">
+        <div class="concept__head">
+          <div>
+            <div class="concept__name">The Quoin</div>
+            <div class="concept__pair">Pairs with: Unfussy Premium</div>
+          </div>
+          <span class="concept__num">04</span>
+        </div>
+        <div class="contexts">
+
+          <div class="ctx ctx--full">
+            <span class="ctx__label">A. Full lockup</span>
+            <span class="lockup">
+              <svg class="mark mark--lockup" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <!-- quoin: the load-bearing corner stones, an interlocking L of two block sizes -->
+                <rect x="6"  y="6"  width="16" height="9"  rx="1.5" fill="currentColor"/>
+                <rect x="6"  y="17" width="9"  height="8"  rx="1.5" fill="currentColor"/>
+                <rect x="6"  y="27" width="16" height="9"  rx="1.5" fill="currentColor"/>
+                <rect x="24" y="6"  width="10" height="9"  rx="1.5" fill="currentColor" opacity="0.42"/>
+                <rect x="17" y="17" width="17" height="8"  rx="1.5" fill="currentColor" opacity="0.42"/>
+                <rect x="24" y="27" width="10" height="9"  rx="1.5" fill="currentColor" opacity="0.42"/>
+              </svg>
+              <span class="lockup__type">Citizen&nbsp;Mason</span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">B. Nav size</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:24px">
+                <rect x="6"  y="6"  width="16" height="9"  rx="1.5" fill="currentColor"/>
+                <rect x="6"  y="17" width="9"  height="8"  rx="1.5" fill="currentColor"/>
+                <rect x="6"  y="27" width="16" height="9"  rx="1.5" fill="currentColor"/>
+                <rect x="24" y="6"  width="10" height="9"  rx="1.5" fill="currentColor" opacity="0.42"/>
+                <rect x="17" y="17" width="17" height="8"  rx="1.5" fill="currentColor" opacity="0.42"/>
+                <rect x="24" y="27" width="10" height="9"  rx="1.5" fill="currentColor" opacity="0.42"/>
+              </svg>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">C. 32px favicon</span>
+            <span class="ctx__stage">
+              <span class="favtile">
+                <!-- favicon simplified to the bold L only, drops the faint blocks -->
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <rect x="7"  y="6"  width="17" height="10" rx="1.5" fill="currentColor"/>
+                  <rect x="7"  y="17" width="10" height="9"  rx="1.5" fill="currentColor"/>
+                  <rect x="7"  y="27" width="17" height="10" rx="1.5" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="favtile favtile--2x">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <rect x="7"  y="6"  width="17" height="10" rx="1.5" fill="currentColor"/>
+                  <rect x="7"  y="17" width="10" height="9"  rx="1.5" fill="currentColor"/>
+                  <rect x="7"  y="27" width="17" height="10" rx="1.5" fill="currentColor"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center ctx--reversed">
+            <span class="ctx__label">D. Reversed</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:30px">
+                <rect x="6"  y="6"  width="16" height="9"  rx="1.5" fill="currentColor"/>
+                <rect x="6"  y="17" width="9"  height="8"  rx="1.5" fill="currentColor"/>
+                <rect x="6"  y="27" width="16" height="9"  rx="1.5" fill="currentColor"/>
+                <rect x="24" y="6"  width="10" height="9"  rx="1.5" fill="currentColor" opacity="0.5"/>
+                <rect x="17" y="17" width="17" height="8"  rx="1.5" fill="currentColor" opacity="0.5"/>
+                <rect x="24" y="27" width="10" height="9"  rx="1.5" fill="currentColor" opacity="0.5"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div style="padding: var(--space-5) var(--space-6)">
+          <p class="caption">A quoin is the dressed corner stone that carries the load where two walls meet. The mark interlocks two block sizes into a corner, full weight for the structural course, half weight for the infill. At favicon scale it reduces to a clean L of three stones. Geometric, premium, unfussy.</p>
+        </div>
+      </article>
+
+      <!-- ================= CONCEPT 05: KEYSTONE ARCH ================= -->
+      <article class="concept">
+        <div class="concept__head">
+          <div>
+            <div class="concept__name">Keystone Arch</div>
+            <div class="concept__pair">Pairs with: Reliable Proxy</div>
+          </div>
+          <span class="concept__num">05</span>
+        </div>
+        <div class="contexts">
+
+          <div class="ctx ctx--full">
+            <span class="ctx__label">A. Full lockup</span>
+            <span class="lockup">
+              <svg class="mark mark--lockup" viewBox="0 0 48 40" fill="none" aria-hidden="true">
+                <!-- an arch built of voussoirs with the keystone seated at the crown -->
+                <path d="M6 36 V20 A18 16 0 0 1 42 20 V36" stroke="currentColor" stroke-width="3" fill="none"/>
+                <path d="M20 7 H28 L30 19 H18 Z" fill="currentColor"/>
+                <line x1="14.5" y1="11.5" x2="18" y2="19" stroke="currentColor" stroke-width="2"/>
+                <line x1="33.5" y1="11.5" x2="30" y2="19" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span class="lockup__type lockup__type--serif">Citizen&nbsp;Mason</span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">B. Nav size</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 48 40" fill="none" aria-hidden="true" style="height:24px">
+                <path d="M6 36 V20 A18 16 0 0 1 42 20 V36" stroke="currentColor" stroke-width="3" fill="none"/>
+                <path d="M20 7 H28 L30 19 H18 Z" fill="currentColor"/>
+                <line x1="14.5" y1="11.5" x2="18" y2="19" stroke="currentColor" stroke-width="2"/>
+                <line x1="33.5" y1="11.5" x2="30" y2="19" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">C. 32px favicon</span>
+            <span class="ctx__stage">
+              <span class="favtile">
+                <!-- favicon keeps the arch ring + keystone block, drops the joint lines -->
+                <svg viewBox="0 0 48 40" fill="none" aria-hidden="true">
+                  <path d="M7 35 V20 A17 15 0 0 1 41 20 V35" stroke="currentColor" stroke-width="3.4" fill="none"/>
+                  <path d="M19 7 H29 L31 19 H17 Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="favtile favtile--2x">
+                <svg viewBox="0 0 48 40" fill="none" aria-hidden="true">
+                  <path d="M7 35 V20 A17 15 0 0 1 41 20 V35" stroke="currentColor" stroke-width="3.4" fill="none"/>
+                  <path d="M19 7 H29 L31 19 H17 Z" fill="currentColor"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center ctx--reversed">
+            <span class="ctx__label">D. Reversed</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 48 40" fill="none" aria-hidden="true" style="height:30px">
+                <path d="M6 36 V20 A18 16 0 0 1 42 20 V36" stroke="currentColor" stroke-width="3" fill="none"/>
+                <path d="M20 7 H28 L30 19 H18 Z" fill="currentColor"/>
+                <line x1="14.5" y1="11.5" x2="18" y2="19" stroke="currentColor" stroke-width="2"/>
+                <line x1="33.5" y1="11.5" x2="30" y2="19" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div style="padding: var(--space-5) var(--space-6)">
+          <p class="caption">The keystone seated at the crown of a full arch, where the two words meet and the structure holds. It carries the most literal story of the six, an arch stands because the last stone locks it. The serif lockup reads steady and trusted, the reliable proxy who reads the details for you.</p>
+        </div>
+      </article>
+
+      <!-- ================= CONCEPT 06: COURSE AND BOND ================= -->
+      <article class="concept">
+        <div class="concept__head">
+          <div>
+            <div class="concept__name">Course &amp; Bond</div>
+            <div class="concept__pair">Pairs with: Craftsperson's Ledger / Studio Stamp</div>
+          </div>
+          <span class="concept__num">06</span>
+        </div>
+        <div class="contexts">
+
+          <div class="ctx ctx--full">
+            <span class="ctx__label">A. Full lockup</span>
+            <span class="lockup">
+              <svg class="mark mark--lockup" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <!-- running-bond coursing: staggered brick rows, the offset that makes a wall hold -->
+                <rect x="4"  y="7"  width="14" height="7" rx="1" fill="currentColor"/>
+                <rect x="20" y="7"  width="16" height="7" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="4"  y="16" width="9"  height="7" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="15" y="16" width="16" height="7" rx="1" fill="currentColor"/>
+                <rect x="33" y="16" width="3"  height="7" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="4"  y="25" width="14" height="7" rx="1" fill="currentColor"/>
+                <rect x="20" y="25" width="16" height="7" rx="1" fill="currentColor" opacity="0.55"/>
+              </svg>
+              <span class="lockup__type lockup__type--mono">Citizen&nbsp;Mason</span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">B. Nav size</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:24px">
+                <rect x="4"  y="7"  width="14" height="7" rx="1" fill="currentColor"/>
+                <rect x="20" y="7"  width="16" height="7" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="4"  y="16" width="9"  height="7" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="15" y="16" width="16" height="7" rx="1" fill="currentColor"/>
+                <rect x="33" y="16" width="3"  height="7" rx="1" fill="currentColor" opacity="0.55"/>
+                <rect x="4"  y="25" width="14" height="7" rx="1" fill="currentColor"/>
+                <rect x="20" y="25" width="16" height="7" rx="1" fill="currentColor" opacity="0.55"/>
+              </svg>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center">
+            <span class="ctx__label">C. 32px favicon</span>
+            <span class="ctx__stage">
+              <span class="favtile">
+                <!-- favicon: three bold staggered bricks, the bond pattern at minimum -->
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <rect x="5"  y="8"  width="16" height="8" rx="1" fill="currentColor"/>
+                  <rect x="23" y="8"  width="12" height="8" rx="1" fill="currentColor"/>
+                  <rect x="5"  y="18" width="11" height="8" rx="1" fill="currentColor"/>
+                  <rect x="18" y="18" width="17" height="8" rx="1" fill="currentColor"/>
+                  <rect x="5"  y="28" width="16" height="8" rx="1" fill="currentColor"/>
+                  <rect x="23" y="28" width="12" height="8" rx="1" fill="currentColor"/>
+                </svg>
+              </span>
+              <span class="favtile favtile--2x">
+                <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                  <rect x="5"  y="8"  width="16" height="8" rx="1" fill="currentColor"/>
+                  <rect x="23" y="8"  width="12" height="8" rx="1" fill="currentColor"/>
+                  <rect x="5"  y="18" width="11" height="8" rx="1" fill="currentColor"/>
+                  <rect x="18" y="18" width="17" height="8" rx="1" fill="currentColor"/>
+                  <rect x="5"  y="28" width="16" height="8" rx="1" fill="currentColor"/>
+                  <rect x="23" y="28" width="12" height="8" rx="1" fill="currentColor"/>
+                </svg>
+              </span>
+            </span>
+          </div>
+
+          <div class="ctx ctx--center ctx--reversed">
+            <span class="ctx__label">D. Reversed</span>
+            <span class="navmark">
+              <svg class="mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" style="height:30px">
+                <rect x="4"  y="7"  width="14" height="7" rx="1" fill="currentColor"/>
+                <rect x="20" y="7"  width="16" height="7" rx="1" fill="currentColor" opacity="0.6"/>
+                <rect x="4"  y="16" width="9"  height="7" rx="1" fill="currentColor" opacity="0.6"/>
+                <rect x="15" y="16" width="16" height="7" rx="1" fill="currentColor"/>
+                <rect x="33" y="16" width="3"  height="7" rx="1" fill="currentColor" opacity="0.6"/>
+                <rect x="4"  y="25" width="14" height="7" rx="1" fill="currentColor"/>
+                <rect x="20" y="25" width="16" height="7" rx="1" fill="currentColor" opacity="0.6"/>
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div style="padding: var(--space-5) var(--space-6)">
+          <p class="caption">Running-bond coursing, the staggered joint that lets a wall carry weight no single stone could. Each course offsets the one below it. The pattern scales into a section divider, a loading state, and a hero motif, so the brand has a system, not one lonely glyph. The richest as a kit, the busiest at 32px.</p>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- FOOT -->
+  <section class="u-container sheet-foot">
+    <hr class="u-divider" />
+    <p class="caption" style="margin-top: var(--space-5)">Every mark is drawn as inline SVG on <code>currentColor</code>, so it inverts cleanly between light and dark and carries no external asset. The favicon column shows a true 32px tile beside a 2x echo, so the thumbnail decision is made on the real size, not a scaled-up preview. Color is held neutral here on purpose. The mark decision comes first; the owned charcoal and amber gamut lands on the chosen direction in the identity sheets.</p>
+  </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason, hero transformation bake-off</title>
+<meta name="description" content="Focused bake-off for the hero transformation visual. Review six concepts and record the pick." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ---------------------------------------------------------------------------
+   TOKENS - locked from identity-3 "Craftsperson's Ledger"
+   ------------------------------------------------------------------------- */
+:root {
+  --bone:        #f3ede1;
+  --paper:       #f7f2e8;
+  --paper-2:     #fbf8f1;
+  --paper-3:     #fdfcf8;
+
+  --ink:         #211d18;
+  --ink-soft:    #544d42;
+  --ink-faint:   #8a8073;
+
+  --rule:        #ddd2bf;
+  --rule-strong: #c8bba2;
+
+  --oxblood:        #7c2218;
+  --oxblood-deep:   #5f180f;
+  --oxblood-bright: #9a2c1d;
+  --on-oxblood:     #f7f2e8;
+  --oxblood-wash:   #f0e2d6;
+
+  --ochre:        #b07d2b;
+
+  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --maxw: 1180px;
+  --gutter: clamp(20px, 5vw, 64px);
+
+  --dur: 200ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--paper);
+  background-image:
+    radial-gradient(120% 80% at 88% -10%, rgba(176,125,43,0.06), transparent 60%),
+    radial-gradient(100% 70% at -10% 110%, rgba(124,34,24,0.04), transparent 55%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 500; line-height: 1.06; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.label--ox { color: var(--oxblood); }
+
+/* ---------------------------------------------------------------------------
+   HEADER / NAV
+   ------------------------------------------------------------------------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  backdrop-filter: saturate(120%) blur(8px);
+  border-bottom: 1px solid var(--rule);
+}
+.nav__bar { display: flex; align-items: center; justify-content: space-between; height: 70px; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand .mark .face { fill: var(--ink); }
+.brand .mark .chisel { fill: var(--paper-3); }
+.brand .mark .seam { stroke: var(--ochre); stroke-width: 0.9; opacity: 0.85; }
+.brand__word {
+  font-family: var(--font-display); font-weight: 500; font-size: 1.18rem;
+  letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+}
+.nav__meta {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+
+/* ---------------------------------------------------------------------------
+   ORIENTATION
+   ------------------------------------------------------------------------- */
+.intro { padding-top: clamp(40px, 6vw, 72px); padding-bottom: clamp(28px, 4vw, 44px); }
+.intro__eyebrow { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.intro__eyebrow .tick { width: 26px; height: 1px; background: var(--oxblood); flex: none; }
+.intro h1 { font-size: clamp(2.1rem, 4.6vw, 3.3rem); letter-spacing: -0.018em; max-width: 20ch; }
+.intro h1 .it { font-style: italic; font-weight: 400; }
+.intro h1 .ox { color: var(--oxblood); }
+.intro__lead { margin-top: 22px; max-width: 60ch; font-size: 1.12rem; line-height: 1.6; color: var(--ink-soft); }
+.intro__goal {
+  margin-top: 24px; padding: 16px 20px;
+  background: var(--paper-3); border: 1px solid var(--rule); border-left: 3px solid var(--oxblood);
+  max-width: 64ch; font-family: var(--font-display); font-size: 1.04rem; line-height: 1.5;
+}
+.intro__goal b { font-weight: 600; }
+
+/* ---------------------------------------------------------------------------
+   SECTION HEADERS
+   ------------------------------------------------------------------------- */
+.sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+.sec-head .rule { flex: 1; height: 1px; background: var(--rule-strong); }
+
+.section { padding-block: clamp(36px, 5vw, 56px); }
+.section--bone { background: var(--bone); border-block: 1px solid var(--rule); }
+
+/* ---------------------------------------------------------------------------
+   CONCEPT CARDS
+   ------------------------------------------------------------------------- */
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+@media (max-width: 920px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+
+.card {
+  position: relative; display: flex; flex-direction: column;
+  background: var(--paper-3);
+  border: 1px solid var(--rule);
+  border-top: 2px solid var(--ink);
+  box-shadow: 0 24px 50px -42px rgba(33,29,24,0.45);
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.card:hover { transform: translateY(-3px); box-shadow: 0 34px 64px -42px rgba(33,29,24,0.55); }
+.card--rec { border-top-color: var(--oxblood); }
+.card--rec::before {
+  content: ""; position: absolute; left: 13px; top: 0; bottom: 0; width: 1px;
+  background: var(--oxblood-wash);
+}
+
+.card__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  padding: 18px 22px 12px; border-bottom: 1px solid var(--rule);
+}
+.card__no { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.1em; color: var(--oxblood); }
+.card__badge {
+  font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--on-oxblood); background: var(--oxblood); padding: 4px 9px; white-space: nowrap;
+}
+.card__body { padding: 16px 22px 4px; flex: 1; }
+.card__name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; line-height: 1.15; }
+.card__name .it { font-style: italic; font-weight: 400; }
+.card__concept { margin-top: 10px; font-size: 0.98rem; line-height: 1.5; color: var(--ink-soft); }
+.card__read {
+  margin-top: 14px; padding-top: 12px; border-top: 1px dotted var(--rule-strong);
+  font-size: 0.86rem; line-height: 1.45; color: var(--ink);
+}
+.card__read .lab {
+  display: block; font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-faint); margin-bottom: 5px;
+}
+.card__score {
+  margin-top: 14px; display: flex; align-items: baseline; gap: 8px;
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.card__score b { font-family: var(--font-display); font-size: 1.05rem; color: var(--ink); letter-spacing: 0; text-transform: none; }
+.card--rec .card__score b { color: var(--oxblood); }
+
+.card__foot { padding: 14px 22px 18px; }
+.card__open {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); border: 1px solid var(--rule-strong); padding: 10px 16px;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.card__open .arr { transition: transform var(--dur) var(--ease); color: var(--ink-faint); }
+.card__open:hover { border-color: var(--ink); }
+.card__open:hover .arr { transform: translateX(3px); }
+.card--rec .card__open { border-color: var(--oxblood-wash); color: var(--oxblood); }
+.card--rec .card__open:hover { border-color: var(--oxblood); }
+.card--rec .card__open .arr { color: var(--oxblood); }
+
+/* ---------------------------------------------------------------------------
+   DECISION CONTROLS
+   ------------------------------------------------------------------------- */
+.decide__head { margin-bottom: 26px; }
+.decide__lead { margin-top: 14px; max-width: 60ch; color: var(--ink-soft); font-size: 1.04rem; }
+
+.decide__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+@media (max-width: 760px) { .decide__grid { grid-template-columns: 1fr; } }
+
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field__label {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--ink-soft);
+}
+.field__label .req { color: var(--oxblood); }
+.select, .textarea {
+  font-family: var(--font-sans); font-size: 1rem; color: var(--ink);
+  background: var(--paper-3); border: 1px solid var(--rule-strong);
+  padding: 12px 14px; width: 100%;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.select { appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ink-faint) 50%), linear-gradient(135deg, var(--ink-faint) 50%, transparent 50%);
+  background-position: calc(100% - 18px) center, calc(100% - 13px) center;
+  background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 36px;
+}
+.select:focus, .textarea:focus { outline: none; border-color: var(--oxblood); box-shadow: 0 0 0 3px var(--oxblood-wash); }
+.textarea { resize: vertical; min-height: 220px; line-height: 1.55; }
+
+.field--notes { margin-top: 22px; }
+.field__hint { font-family: var(--font-mono); font-size: 0.64rem; letter-spacing: 0.04em; color: var(--ink-faint); }
+
+.decide__actions {
+  margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--rule);
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase;
+  cursor: pointer; border: 1px solid transparent; padding: 13px 22px;
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease),
+              color var(--dur) var(--ease), box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.btn:focus-visible { outline: 2px solid var(--oxblood); outline-offset: 3px; }
+.btn--primary {
+  background: var(--oxblood); color: var(--on-oxblood);
+  box-shadow: 0 1px 0 var(--oxblood-deep), 0 10px 24px -14px rgba(124,34,24,0.7);
+}
+.btn--primary:hover { background: var(--oxblood-deep); transform: translateY(-1px); }
+.btn--outline { background: transparent; color: var(--ink); border-color: var(--rule-strong); }
+.btn--outline:hover { border-color: var(--ink); transform: translateY(-1px); }
+.decide__status {
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em;
+  color: var(--ink-faint); min-height: 1em;
+}
+.decide__status.is-on { color: var(--oxblood); }
+
+/* ---------------------------------------------------------------------------
+   FOOTER
+   ------------------------------------------------------------------------- */
+.footer {
+  background: var(--bone); border-top: 1px solid var(--rule-strong);
+  padding-block: 40px; margin-top: clamp(40px, 6vw, 72px);
+}
+.footer__inner { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em; color: var(--ink-faint); }
+
+.skip { position: absolute; left: -999px; top: 0; }
+.skip:focus { left: 12px; top: 12px; z-index: 100; background: var(--ink); color: var(--paper); padding: 10px 16px; font-family: var(--font-mono); font-size: 0.8rem; }
+</style>
+</head>
+
+<body>
+<a href="#cards" class="skip">Skip to concepts</a>
+
+<!-- ===================== NAV ===================== -->
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a href="#top" class="brand" aria-label="Citizen Mason">
+      <svg class="mark" width="26" height="30" viewBox="0 0 26 30" aria-hidden="true">
+        <path class="face" d="M3 6 L23 6 L20 27 L6 27 Z" />
+        <path class="chisel" d="M6 9 L20 9 L18.6 24 L7.4 24 Z" />
+        <line class="seam" x1="13" y1="9.6" x2="13" y2="23.4" />
+        <line class="seam" x1="8.4" y1="16.5" x2="17.6" y2="16.5" />
+      </svg>
+      <span class="brand__word">Citizen Mason</span>
+    </a>
+    <span class="nav__meta">Hero transformation &middot; Bake-off</span>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ===================== ORIENTATION ===================== -->
+<section class="intro">
+  <div class="wrap">
+    <div class="intro__eyebrow">
+      <span class="tick" aria-hidden="true"></span>
+      <span class="label label--ox">Focused bake-off</span>
+    </div>
+    <h1>The hero <span class="it ox">transformation visual.</span></h1>
+    <p class="intro__lead">One artifact, the right side of the hero. The headline and left column are locked. This round designs only the visual that shows the shift: the slow, manual, expensive work that holds a business back becomes AI systems that run on their own, and the owner stays in control.</p>
+    <p class="intro__goal"><b>The bar:</b> the transformation reads in a single glance, as a visual and not as prose, with minimal words, for a broad audience of small-business founders, agencies, and SMB leaders. The prior text-heavy ledger was rejected for burying the value prop. These six concepts each attack the same brief a different way. Open each in a new tab, judge by eye, then record the pick below.</p>
+  </div>
+</section>
+
+<!-- ===================== CONCEPT CARDS ===================== -->
+<section class="section section--bone" id="cards">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="label">Six concepts</span>
+      <span class="rule" aria-hidden="true"></span>
+    </div>
+
+    <div class="cards">
+
+      <!-- 1. FLOW (RECOMMENDED) -->
+      <article class="card card--rec">
+        <div class="card__head">
+          <span class="card__no">01</span>
+          <span class="card__badge">Recommended</span>
+        </div>
+        <div class="card__body">
+          <h3 class="card__name">Pipeline <span class="it">flow</span></h3>
+          <p class="card__concept">Scattered manual inputs converge along ruled tracks into one keystone engine that runs on its own, then exit through a You-approve gate to a finished result. Many-to-one and owner-control shown as a mechanism.</p>
+          <div class="card__read">
+            <span class="lab">Transformation read</span>
+            Reads as a mechanism in one pass with no prose. The system node is the Quoin keystone, the most native use of the identity. Lowest word count of the strong field. Static and reduced-motion resolve to the full diagram with the token landed at the gate.
+          </div>
+          <div class="card__score"><span>Judge</span> <b>90</b></div>
+        </div>
+        <div class="card__foot">
+          <a class="card__open" href="hero-tx-flow.html" target="_blank" rel="noopener">Open concept <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 2. STATE -->
+      <article class="card">
+        <div class="card__head">
+          <span class="card__no">02</span>
+        </div>
+        <div class="card__body">
+          <h3 class="card__name">Before and after <span class="it">state</span></h3>
+          <p class="card__concept">A crowded, faintly restless field of task chips over a heavy hours number on the left, one oxblood seam arrow, then a near-empty panel with one calm pulsing system tile and a bold black 1.</p>
+          <div class="card__read">
+            <span class="lab">Transformation read</span>
+            The strongest pure before/after. Carried by visual weight and density, so it survives at thumbnail size with almost no reading. Crowded-many versus calm-one pictures taking the repetitive work off the team. Reduced-motion keeps the contrast.
+          </div>
+          <div class="card__score"><span>Judge</span> <b>86</b></div>
+        </div>
+        <div class="card__foot">
+          <a class="card__open" href="hero-tx-state.html" target="_blank" rel="noopener">Open concept <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 3. BUILD -->
+      <article class="card">
+        <div class="card__head">
+          <span class="card__no">03</span>
+        </div>
+        <div class="card__body">
+          <h3 class="card__name">Masonry <span class="it">build</span></h3>
+          <p class="card__concept">A clean nine-voussoir stone arch on piers, with the oxblood Quoin keystone seated at the apex carrying the engraved seam, on graph-paper ground. Reads as built and structural.</p>
+          <div class="card__read">
+            <span class="lab">Transformation read</span>
+            The most distinctive and most on-brand for the Citizen Mason name. Reads instantly as built, not abstract. Static and reduced-motion both show the finished locked arch. The before-state is quiet, so the shift reads more as a finished object than a transformation.
+          </div>
+          <div class="card__score"><span>Judge</span> <b>80</b></div>
+        </div>
+        <div class="card__foot">
+          <a class="card__open" href="hero-tx-build.html" target="_blank" rel="noopener">Open concept <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 4. CLEARS -->
+      <article class="card">
+        <div class="card__head">
+          <span class="card__no">04</span>
+        </div>
+        <div class="card__body">
+          <h3 class="card__name">The list that <span class="it">clears itself</span></h3>
+          <p class="card__concept">Four faded, ticked rows stamped Running against one taller bright Fraunces row stamped Needs you in oxblood. Routine handled, the owner's one decision standing alone.</p>
+          <div class="card__read">
+            <span class="lab">Transformation read</span>
+            Lands four props at once: work taken off the team, capacity, a partner who builds it, owner stays in control. Static and reduced-motion show the cleared end-state. A worklist is a familiar pattern, so it earns less novelty; the line-through risks reading as discarded rather than running.
+          </div>
+          <div class="card__score"><span>Judge</span> <b>76</b></div>
+        </div>
+        <div class="card__foot">
+          <a class="card__open" href="hero-tx-clears.html" target="_blank" rel="noopener">Open concept <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 5. CAPACITY -->
+      <article class="card">
+        <div class="card__head">
+          <span class="card__no">05</span>
+        </div>
+        <div class="card__body">
+          <h3 class="card__name">Reclaimed <span class="it">capacity</span></h3>
+          <p class="card__concept">A small hatched block of manual cells against a field of open freed cells, with a gauge sweeping from Buried to Room to grow and a counter settling on a reclaimed-capacity number.</p>
+          <div class="card__read">
+            <span class="lab">Transformation read</span>
+            Lands grow-without-hiring cleanly, with two reinforcing reads so it holds at thumbnail. Only data animates, never layout. A gauge plus a grid is two devices in one card, and the hatched cells lean toward a dashboard look that needs the ledger framing to stay editorial.
+          </div>
+          <div class="card__score"><span>Judge</span> <b>73</b></div>
+        </div>
+        <div class="card__foot">
+          <a class="card__open" href="hero-tx-capacity.html" target="_blank" rel="noopener">Open concept <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+
+      <!-- 6. SWITCH -->
+      <article class="card">
+        <div class="card__head">
+          <span class="card__no">06</span>
+        </div>
+        <div class="card__body">
+          <h3 class="card__name">The work becomes the <span class="it">system</span></h3>
+          <p class="card__concept">A scattered cluster of hand-cranked manual-work chits collapses and snaps into one calm keystone tile, enacting the headline as a single visual move.</p>
+          <div class="card__read">
+            <span class="lab">Transformation read</span>
+            Best concept on paper, but disqualifying on the primary axis: the static, reduced-motion, and post-morph end-state all collapse to a single calm tile that restates the headline, with no visible before to contrast against. Most viewers land after the move and see only the after.
+          </div>
+          <div class="card__score"><span>Judge</span> <b>58</b></div>
+        </div>
+        <div class="card__foot">
+          <a class="card__open" href="hero-tx-switch.html" target="_blank" rel="noopener">Open concept <span class="arr" aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DECISION CONTROLS ===================== -->
+<section class="section" id="decide">
+  <div class="wrap">
+    <div class="decide__head">
+      <div class="sec-head">
+        <span class="label label--ox">Record the decision</span>
+        <span class="rule" aria-hidden="true"></span>
+      </div>
+      <h2>Pick the direction.</h2>
+      <p class="decide__lead">Pre-set to the judge recommendation. Change it if your eye disagrees. The notes carry the hybrid path forward. Your choice saves in this browser, and you can copy or download a paste-back-able handoff.</p>
+    </div>
+
+    <div class="decide__grid">
+      <div class="field">
+        <label class="field__label" for="primary">Primary direction <span class="req">*</span></label>
+        <select class="select" id="primary">
+          <option value="flow">Pipeline flow (judge pick, 90)</option>
+          <option value="state">Before and after state (86)</option>
+          <option value="build">Masonry build (80)</option>
+          <option value="clears">The list that clears itself (76)</option>
+          <option value="capacity">Reclaimed capacity (73)</option>
+          <option value="switch">The work becomes the system (58)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="secondary">Secondary direction (optional)</label>
+        <select class="select" id="secondary">
+          <option value="">None</option>
+          <option value="flow">Pipeline flow (90)</option>
+          <option value="state">Before and after state (86)</option>
+          <option value="build">Masonry build (80)</option>
+          <option value="clears">The list that clears itself (76)</option>
+          <option value="capacity">Reclaimed capacity (73)</option>
+          <option value="switch">The work becomes the system (58)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field field--notes">
+      <label class="field__label" for="notes">Notes and hybrid direction</label>
+      <textarea class="textarea" id="notes"></textarea>
+      <span class="field__hint">Saved to this browser under cm-hero-transform.</span>
+    </div>
+
+    <div class="decide__actions">
+      <button class="btn btn--primary" id="copy" type="button">Copy handoff</button>
+      <button class="btn btn--outline" id="download" type="button">Download .txt</button>
+      <span class="decide__status" id="status" role="status" aria-live="polite"></span>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="wrap footer__inner">
+    <span>Citizen Mason &middot; Hero transformation bake-off</span>
+    <span>Identity locked &middot; Craftspersons Ledger</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "cm-hero-transform";
+
+  var LABELS = {
+    flow:     "Pipeline flow",
+    state:    "Before and after state",
+    build:    "Masonry build",
+    clears:   "The list that clears itself",
+    capacity: "Reclaimed capacity",
+    switch:   "The work becomes the system"
+  };
+
+  var DEFAULT_NOTES = [
+    "Recommended: Pipeline flow (90). It is the only candidate that renders the whole message as a single legible mechanism: scattered manual inputs become one keystone engine that runs on its own, then one finished result passes through a You-approve gate. It shows many-to-one and owner-in-control structurally, the system node IS the Quoin keystone, and it carries the lowest word count of the strong field. State (86) is the safe fallback if a thumbnail-robust pure before/after is wanted.",
+    "",
+    "Hybrid to build into Flow:",
+    "1. From State: give the input side visibly more, heavier, faintly restless chips so the before reads crowded and expensive at a glance. Flow's tidy chips under-sell the pain that State nails.",
+    "2. From Build: on reduced-motion or once the live pass completes, settle the result and gate as a locked end-state (a one-time lock-ring on the gate check, echoing the keystone seating) so the finished, held quality reads with motion off.",
+    "3. From Clears: keep the explicit Needs you / You approve framing on the gate so owner-control is unmistakable, and use a Running stamp on the system node to reinforce runs on its own.",
+    "",
+    "Fix Flow's own risks before ship: pin the SVG track start-points to chip and node centers (or use a uniform viewBox) to kill anchor drift at width extremes, and dial back the repeating ledger ruling behind the diagram so it does not read as noise on high-DPI screens. Drop Switch's morph-only approach; its lesson is the warning, not a graft."
+  ].join("\n");
+
+  var elPrimary = document.getElementById("primary");
+  var elSecondary = document.getElementById("secondary");
+  var elNotes = document.getElementById("notes");
+  var elStatus = document.getElementById("status");
+  var elCopy = document.getElementById("copy");
+  var elDownload = document.getElementById("download");
+
+  // Seed defaults, then overlay any saved state.
+  elPrimary.value = "flow";
+  elSecondary.value = "";
+  elNotes.value = DEFAULT_NOTES;
+
+  function load() {
+    try {
+      var raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) { return; }
+      var saved = JSON.parse(raw);
+      if (saved && typeof saved === "object") {
+        if (saved.primary && LABELS[saved.primary]) { elPrimary.value = saved.primary; }
+        if (typeof saved.secondary === "string") { elSecondary.value = saved.secondary; }
+        if (typeof saved.notes === "string") { elNotes.value = saved.notes; }
+      }
+    } catch (err) {
+      /* corrupt or unavailable storage: fall back to seeded defaults */
+    }
+  }
+
+  function save() {
+    var payload = {
+      primary: elPrimary.value,
+      secondary: elSecondary.value,
+      notes: elNotes.value
+    };
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch (err) {
+      /* storage unavailable: in-memory state still works for copy/download */
+    }
+  }
+
+  function labelFor(id) {
+    return LABELS[id] || "None";
+  }
+
+  function buildHandoff() {
+    var primaryId = elPrimary.value;
+    var secondaryId = elSecondary.value;
+    var lines = [];
+    lines.push("CITIZEN MASON, HERO TRANSFORMATION VISUAL, DECISION");
+    lines.push("Primary: " + labelFor(primaryId) + " (hero-tx-" + primaryId + ".html)");
+    if (secondaryId) {
+      lines.push("Secondary: " + labelFor(secondaryId) + " (hero-tx-" + secondaryId + ".html)");
+    } else {
+      lines.push("Secondary: none");
+    }
+    lines.push("");
+    lines.push("Notes:");
+    lines.push(elNotes.value);
+    return lines.join("\n");
+  }
+
+  function flash(msg) {
+    elStatus.textContent = msg;
+    elStatus.classList.add("is-on");
+    window.setTimeout(function () {
+      elStatus.classList.remove("is-on");
+    }, 2400);
+  }
+
+  function copyHandoff() {
+    var text = buildHandoff();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        flash("Copied to clipboard.");
+      }, function () {
+        legacyCopy(text);
+      });
+    } else {
+      legacyCopy(text);
+    }
+  }
+
+  function legacyCopy(text) {
+    try {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "absolute";
+      ta.style.left = "-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      flash("Copied to clipboard.");
+    } catch (err) {
+      flash("Copy failed, select the notes manually.");
+    }
+  }
+
+  function downloadHandoff() {
+    var text = buildHandoff();
+    var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "cm-hero-transform-decision.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    flash("Downloaded cm-hero-transform-decision.txt");
+  }
+
+  elPrimary.addEventListener("change", save);
+  elSecondary.addEventListener("change", save);
+  elNotes.addEventListener("input", save);
+  elCopy.addEventListener("click", copyHandoff);
+  elDownload.addEventListener("click", downloadHandoff);
+
+  load();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Citizen Mason - Conversion A: Embedded scheduler card</title>
+  <link rel="stylesheet" href="_kit.css" />
+  <style>
+    /* ========================================================================
+       CONVERSION A: "EMBEDDED SCHEDULER CARD"  (module layout, neutral kit)
+       ------------------------------------------------------------------------
+       Layout only. Color comes entirely from _kit.css tokens. No bespoke
+       palette. The fix for the mailto problem: a real-looking inline booking
+       card is the single visually-dominant ask. The accent lives on the
+       selected slot chip and the confirm button, nowhere else.
+
+       Structure:
+         - Left rail: the frame-of-reference copy. What the call is, and the
+           three things that happen after the click (so the prospect knows the
+           next step before booking). Left-ranged, narrow.
+         - Right: the scheduler card, raised and offset, the page anchor.
+           Day column + time-slot chips + a live confirm line + confirm button.
+         - Below both: ONE quiet secondary row for the AI opportunity plan,
+           clearly lower weight (bordered row, text link, no button, no accent).
+
+       The asymmetry: an unequal 2-col split and a card hung a step lower than
+       the copy baseline. One deliberate break, not a scattered pattern.
+       ===================================================================== */
+
+    .conv {
+      position: relative;
+      padding-block: var(--space-11) var(--space-10);
+      overflow: clip;
+    }
+
+    /* one faint structural ruling marking the column seam (not a dot-grid) */
+    .conv__seam {
+      position: absolute;
+      top: var(--space-9);
+      bottom: var(--space-9);
+      left: calc(50% - 1rem);   /* pushed left of center: the split is NOT 50/50 */
+      width: 1px;
+      background: linear-gradient(to bottom,
+        transparent 0,
+        var(--line) 14%,
+        var(--line) 80%,
+        transparent 100%);
+      pointer-events: none;
+    }
+
+    .conv__inner {
+      position: relative;
+      width: 100%;
+      max-width: var(--container);
+      margin-inline: auto;
+      padding-inline: var(--space-5);
+      display: grid;
+      /* unequal: the copy rail is narrower, the booking card dominates */
+      grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+      column-gap: var(--space-10);
+      align-items: start;
+    }
+
+    /* ---------- LEFT: frame-of-reference copy ---------- */
+    .conv__copy {
+      max-width: 38ch;
+      /* drops one step to sit centered against the taller card */
+      padding-top: var(--space-6);
+    }
+    .conv__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin: 0 0 var(--space-5);
+    }
+    /* keystone tick: available equity, kept tiny and quiet (not a logo claim) */
+    .conv__tick {
+      width: 7px;
+      height: 9px;
+      flex: none;
+      background: var(--ink);
+      clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%);
+      opacity: 0.78;
+    }
+    .conv__headline {
+      font-size: var(--fs-3xl);
+      font-weight: var(--fw-semibold);
+      line-height: var(--lh-snug);
+      letter-spacing: var(--tracking-tight);
+      color: var(--ink);
+      margin: 0;
+      text-wrap: balance;
+    }
+    /* the 45-minute line, the frame of reference, set above the card weight */
+    .conv__forl {
+      margin: var(--space-5) 0 0;
+      font-size: var(--fs-lg);
+      line-height: var(--lh-relaxed);
+      color: var(--ink-soft);
+    }
+    .conv__forl .u-mono { color: var(--ink); font-weight: var(--fw-medium); }
+
+    /* the three things that happen after the click: low-key, scannable */
+    .conv__after {
+      list-style: none;
+      margin: var(--space-7) 0 0;
+      padding: 0;
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-4);
+    }
+    .conv__after-item {
+      counter-increment: step;
+      position: relative;
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-4);
+    }
+    .conv__after-item::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: var(--font-mono);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semibold);
+      color: var(--ink-faint);
+      flex: none;
+      width: 2ch;
+      padding-top: 1px;
+    }
+    .conv__after-label {
+      font-size: var(--fs-sm);
+      color: var(--ink-soft);
+      line-height: var(--lh-normal);
+    }
+    .conv__after-label strong {
+      color: var(--ink);
+      font-weight: var(--fw-medium);
+      display: block;
+    }
+
+    /* a single quiet reassurance, no objection-preemption, no urgency */
+    .conv__note {
+      margin: var(--space-7) 0 0;
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      line-height: var(--lh-normal);
+      max-width: 34ch;
+    }
+
+    /* ---------- RIGHT: the scheduler card (the anchor) ---------- */
+    .conv__cardwrap {
+      /* the deliberate vertical drop: the card hangs below the copy baseline */
+      margin-top: var(--space-7);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: var(--space-3);
+    }
+    /* mono tag floating above the card, small kinetic-type touch */
+    .conv__cardtag {
+      font-family: var(--font-mono);
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      align-self: flex-start;
+      padding-left: var(--space-1);
+    }
+
+    /* widen the kit scheduler from its 420px default and make it the focal weight */
+    .conv .scheduler {
+      max-width: 560px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+    }
+    /* a one-line context strip under the head so it reads as a real booking flow */
+    .conv__sched-sub {
+      padding: var(--space-3) var(--space-5) 0;
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .conv__sched-sub .dot {
+      width: 6px; height: 6px; border-radius: var(--radius-full);
+      background: var(--accent); flex: none;
+    }
+    /* the card body: day column a touch wider, three slot columns on desktop */
+    .conv .scheduler__body { grid-template-columns: 104px 1fr; }
+    .conv .scheduler__slots { grid-template-columns: repeat(3, 1fr); }
+
+    /* live confirmation line: appears once a day + slot are chosen */
+    .conv__confirm-line {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-4) var(--space-5);
+      margin: 0 var(--space-5);
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius-md);
+      background: var(--surface-2);
+      font-size: var(--fs-sm);
+      color: var(--ink-soft);
+      min-height: 52px;
+    }
+    .conv__confirm-line .u-mono { color: var(--ink); font-weight: var(--fw-medium); }
+    .conv__confirm-line.is-ready {
+      border-style: solid;
+      border-color: var(--ink-faint);
+      background: var(--surface-1);
+    }
+    .conv__confirm-check {
+      width: 18px; height: 18px; flex: none;
+      display: grid; place-items: center;
+      border-radius: var(--radius-full);
+      background: var(--surface-3);
+      color: var(--ink-faint);
+      transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+    }
+    .conv__confirm-line.is-ready .conv__confirm-check {
+      background: var(--accent);
+      color: var(--on-accent);
+    }
+    .conv__confirm-check svg { width: 11px; height: 11px; }
+
+    /* confirm button: the single primary ask, disabled until a slot is chosen */
+    .conv .scheduler__foot { padding-top: var(--space-5); }
+    .conv__confirm-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .conv__confirm-btn .arr {
+      font-family: var(--font-mono);
+      transition: transform var(--dur-fast) var(--ease);
+    }
+    .conv__confirm-btn:not(:disabled):hover .arr { transform: translateX(2px); }
+
+    /* a tiny mock-disclosure caption under the card, honest about the wiring */
+    .conv__cardfoot {
+      align-self: flex-start;
+      font-size: var(--fs-xs);
+      color: var(--ink-faint);
+      padding-left: var(--space-1);
+      max-width: 46ch;
+    }
+
+    /* ---------- BELOW: secondary AI-opportunity-plan row (clearly lower weight) ---------- */
+    .conv__secondary {
+      width: 100%;
+      max-width: var(--container);
+      margin: var(--space-10) auto 0;
+      padding-inline: var(--space-5);
+    }
+    .conv__secondary-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-5);
+      padding: var(--space-5) var(--space-6);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-1);
+      transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+    }
+    .conv__secondary-inner:hover {
+      border-color: var(--line-strong);
+      background: var(--surface-2);
+    }
+    .conv__secondary-text { color: var(--ink-soft); font-size: var(--fs-sm); }
+    .conv__secondary-text strong { color: var(--ink); font-weight: var(--fw-medium); }
+    .conv__secondary-text .u-mono {
+      font-size: var(--fs-eyebrow);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-eyebrow);
+      color: var(--ink-faint);
+      display: block;
+      margin-bottom: 2px;
+    }
+    /* the secondary action is a quiet text link, never a button, never accent */
+    .conv__secondary-link {
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      white-space: nowrap;
+      border-bottom: 1px solid var(--line-strong);
+      padding-bottom: 2px;
+      transition: gap var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+    }
+    .conv__secondary-link:hover { gap: var(--space-3); border-color: var(--ink); }
+    .conv__secondary-link .arr { font-family: var(--font-mono); }
+
+    /* ---------- entrance motion: fast, earned, reduced-motion aware ---------- */
+    @keyframes conv-rise {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .conv__copy > *,
+    .conv__cardwrap > *,
+    .conv__secondary {
+      animation: conv-rise var(--dur) var(--ease) both;
+    }
+    .conv__eyebrow   { animation-delay: 0ms; }
+    .conv__headline  { animation-delay: 60ms; }
+    .conv__forl      { animation-delay: 110ms; }
+    .conv__after     { animation-delay: 160ms; }
+    .conv__note      { animation-delay: 200ms; }
+    .conv__cardtag   { animation-delay: 140ms; }
+    .conv .scheduler { animation-delay: 200ms; }
+    .conv__cardfoot  { animation-delay: 260ms; }
+    .conv__secondary { animation-delay: 320ms; }
+
+    /* ---------- responsive: collapse the asymmetry to a clean stack ---------- */
+    @media (max-width: 960px) {
+      .conv__seam { display: none; }
+      .conv__inner {
+        grid-template-columns: 1fr;
+        row-gap: var(--space-9);
+      }
+      .conv__copy { max-width: 46ch; padding-top: 0; }
+      .conv__cardwrap {
+        margin-top: 0;
+        align-items: stretch;
+      }
+      .conv .scheduler { max-width: none; }
+      .conv__cardtag { align-self: flex-start; }
+    }
+    @media (max-width: 760px) {
+      .conv { padding-block: var(--space-9) var(--space-8); }
+      .conv .scheduler__body { grid-template-columns: 1fr; }
+      .conv .scheduler__days {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: var(--space-1);
+      }
+      .conv .scheduler__day { min-width: 76px; flex: none; }
+      .conv .scheduler__slots { grid-template-columns: repeat(2, 1fr); }
+      .conv__secondary-inner { flex-direction: column; align-items: flex-start; gap: var(--space-4); }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav__inner">
+      <a href="#" class="nav__wordmark">
+        <span aria-hidden="true">[ &#9672; ]</span> Citizen Mason
+      </a>
+      <ul class="nav__links">
+        <li><a class="nav__link" href="#">Who it is for</a></li>
+        <li><a class="nav__link" href="#">How it works</a></li>
+        <li><a class="nav__link" href="#">Proof</a></li>
+      </ul>
+      <a href="#main" class="btn btn--primary btn--sm nav__cta">Book a call</a>
+    </div>
+  </nav>
+
+  <!-- ===================== CONVERSION A: EMBEDDED SCHEDULER ===================== -->
+  <section class="conv" id="main" aria-labelledby="conv-head">
+    <span class="conv__seam" aria-hidden="true"></span>
+    <div class="conv__inner">
+
+      <!-- LEFT: frame-of-reference copy -->
+      <div class="conv__copy">
+        <p class="eyebrow conv__eyebrow">
+          <span class="conv__tick" aria-hidden="true"></span>
+          Book a discovery call
+        </p>
+        <h2 class="conv__headline" id="conv-head">
+          Pick a time. We find the one workflow worth building first.
+        </h2>
+        <p class="conv__forl">
+          <span class="u-mono">A 45-minute call.</span> Understanding before scope.
+        </p>
+
+        <ol class="conv__after">
+          <li class="conv__after-item">
+            <span class="conv__after-label">
+              <strong>We walk your week.</strong>
+              The repetitive work, the parts that wait on you, the place a missed detail costs the most.
+            </span>
+          </li>
+          <li class="conv__after-item">
+            <span class="conv__after-label">
+              <strong>We name one workflow.</strong>
+              The first system worth building, on the tools you already run.
+            </span>
+          </li>
+          <li class="conv__after-item">
+            <span class="conv__after-label">
+              <strong>You leave with a plan.</strong>
+              What it reads, what it drafts, and where you stay the final word.
+            </span>
+          </li>
+        </ol>
+
+        <p class="conv__note">
+          Held over video. You keep every call that matters. Nothing client-facing moves without your yes.
+        </p>
+      </div>
+
+      <!-- RIGHT: the scheduler card (the anchor) -->
+      <div class="conv__cardwrap">
+        <span class="conv__cardtag">Select a day and a time</span>
+
+        <div class="scheduler" role="group" aria-label="Book a 45-minute discovery call">
+          <div class="scheduler__head">
+            <span class="scheduler__title">Discovery call</span>
+            <span class="scheduler__meta" id="sched-tz">45 min &middot; PT</span>
+          </div>
+
+          <p class="conv__sched-sub">
+            <span class="dot" aria-hidden="true"></span>
+            Times shown for the week of June 23.
+          </p>
+
+          <div class="scheduler__body">
+            <!-- day column -->
+            <div class="scheduler__days" role="tablist" aria-label="Choose a day">
+              <button type="button" class="scheduler__day is-active" role="tab" aria-selected="true" data-day="Tue, Jun 24">
+                <span class="scheduler__day-dow">Tue</span>
+                <span class="scheduler__day-num">24</span>
+              </button>
+              <button type="button" class="scheduler__day" role="tab" aria-selected="false" data-day="Wed, Jun 25">
+                <span class="scheduler__day-dow">Wed</span>
+                <span class="scheduler__day-num">25</span>
+              </button>
+              <button type="button" class="scheduler__day" role="tab" aria-selected="false" data-day="Thu, Jun 26">
+                <span class="scheduler__day-dow">Thu</span>
+                <span class="scheduler__day-num">26</span>
+              </button>
+              <button type="button" class="scheduler__day" role="tab" aria-selected="false" data-day="Fri, Jun 27">
+                <span class="scheduler__day-dow">Fri</span>
+                <span class="scheduler__day-num">27</span>
+              </button>
+            </div>
+
+            <!-- time-slot chips -->
+            <div class="scheduler__slots" role="group" aria-label="Choose a time">
+              <button type="button" class="slot-chip" data-slot="9:00 AM">9:00 AM</button>
+              <button type="button" class="slot-chip" data-slot="10:30 AM">10:30 AM</button>
+              <button type="button" class="slot-chip" data-slot="11:15 AM">11:15 AM</button>
+              <button type="button" class="slot-chip" data-slot="1:00 PM">1:00 PM</button>
+              <button type="button" class="slot-chip" data-slot="2:30 PM">2:30 PM</button>
+              <button type="button" class="slot-chip" data-slot="4:00 PM">4:00 PM</button>
+            </div>
+          </div>
+
+          <!-- live confirmation line -->
+          <div class="conv__confirm-line" id="confirm-line" aria-live="polite">
+            <span class="conv__confirm-check" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none"><path d="M2.5 6.2 5 8.5 9.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span id="confirm-text">Pick a time to continue.</span>
+          </div>
+
+          <div class="scheduler__foot">
+            <button type="button" class="btn btn--primary btn--lg btn--block conv__confirm-btn" id="confirm-btn" disabled>
+              Confirm booking
+              <span class="arr" aria-hidden="true">&rarr;</span>
+            </button>
+          </div>
+        </div>
+
+        <p class="conv__cardfoot">
+          Mock scheduler for layout review. Wire to Cal.com or Calendly before build.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- BELOW: secondary AI-opportunity-plan row (clearly lower weight) -->
+    <div class="conv__secondary">
+      <div class="conv__secondary-inner">
+        <p class="conv__secondary-text">
+          <span class="u-mono">Not ready for a call</span>
+          <strong>Get your AI opportunity plan.</strong>
+          Answer 10 questions. A plan in one week, no call required.
+        </p>
+        <a href="#" class="conv__secondary-link">
+          Start the intake
+          <span class="arr" aria-hidden="true">&rarr;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* Minimal JS: tab + selection state only. No build step.
+       Selecting a day and a slot writes a live confirmation and enables the
+       primary button. Honest mock; no network, wire to a real scheduler later. */
+    (function () {
+      var days = Array.prototype.slice.call(document.querySelectorAll('.scheduler__day'));
+      var slots = Array.prototype.slice.call(document.querySelectorAll('.slot-chip'));
+      var line = document.getElementById('confirm-line');
+      var text = document.getElementById('confirm-text');
+      var btn = document.getElementById('confirm-btn');
+
+      var selDay = 'Tue, Jun 24';
+      var selSlot = null;
+
+      function render() {
+        if (selSlot) {
+          line.classList.add('is-ready');
+          text.innerHTML = 'Booking <span class="u-mono">' + selDay + '</span> at <span class="u-mono">' + selSlot + '</span>.';
+          btn.disabled = false;
+        } else {
+          line.classList.remove('is-ready');
+          text.textContent = 'Pick a time to continue.';
+          btn.disabled = true;
+        }
+      }
+
+      days.forEach(function (d) {
+        d.addEventListener('click', function () {
+          days.forEach(function (x) { x.classList.remove('is-active'); x.setAttribute('aria-selected', 'false'); });
+          d.classList.add('is-active');
+          d.setAttribute('aria-selected', 'true');
+          selDay = d.getAttribute('data-day');
+          render();
+        });
+      });
+
+      slots.forEach(function (s) {
+        s.addEventListener('click', function () {
+          slots.forEach(function (x) { x.classList.remove('is-active'); x.setAttribute('aria-pressed', 'false'); });
+          s.classList.add('is-active');
+          s.setAttribute('aria-pressed', 'true');
+          selSlot = s.getAttribute('data-slot');
+          render();
+        });
+      });
+
+      btn.addEventListener('click', function () {
+        if (!selSlot) return;
+        text.innerHTML = 'Hold this slot? Wire to a real scheduler to confirm <span class="u-mono">' + selDay + ', ' + selSlot + '</span>.';
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Citizen Mason</title>
+<meta name="description" content="A second pair of senior eyes that prepares the work. You keep the final call.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================================
+   IDENTITY 1: "EVOLVE-CURRENT" / The best possible version of today.
+   Warm ink + custom ochre + Geist, mono as composition, keystone as structure.
+   Light-first, committed. One accent on one CTA. One deliberate asymmetry.
+   ========================================================================== */
+
+:root{
+  /* warm-shifted near-black ink (brown-black, not cold charcoal) */
+  --ink:        #1c1814;
+  --ink-2:      #2c2620;   /* raised dark panels */
+  --body:       #57514a;   /* secondary warm-gray text */
+  --faint:      #8c857c;   /* tertiary / captions */
+
+  /* warm paper, not cold #FAFAFA */
+  --paper:      #f5f1ea;   /* page canvas, warm cream */
+  --surface:    #fbf8f2;   /* raised cards */
+  --surface-2:  #ece6da;   /* subtle warm fill / wells */
+  --line:       #ddd4c5;   /* hairline borders, warm */
+  --line-strong:#c9bda8;
+
+  /* custom ochre: richer, earthier than default SaaS amber */
+  --ochre:        #b07410;   /* primary accent */
+  --ochre-deep:   #8f5c0a;   /* hover / pressed */
+  --ochre-bright: #d99320;   /* highlight, used once */
+  --on-ochre:     #1c1814;
+
+  --maxw: 1140px;
+  --ease: cubic-bezier(.2,0,0,1);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Geist","Segoe UI",Roboto,system-ui,sans-serif;
+  font-weight:450;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--ochre);color:var(--on-ochre)}
+
+.mono{font-family:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+
+/* eyebrow / label: mono as composition */
+.eyebrow{
+  font-family:"Geist Mono",monospace;
+  font-size:11.5px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ochre-deep);
+}
+.label-faint{
+  font-family:"Geist Mono",monospace;
+  font-size:11px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--faint);
+}
+
+/* ---- skip link / a11y ---- */
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--paper);padding:10px 16px;z-index:200}
+.skip:focus{left:12px;top:12px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ochre);outline-offset:3px;border-radius:2px}
+
+/* ============================================================================
+   KEYSTONE MARK: the structural motif. Chiseled trapezoid, wider at top.
+   Used: nav mark, oversized hero watermark, section coursing markers, footer.
+   ========================================================================== */
+.keystone{display:inline-block;line-height:0;color:var(--ink)}
+.keystone svg{display:block;overflow:visible}
+.ks-face{fill:currentColor}
+.ks-chisel{fill:currentColor;opacity:.34}      /* depth bevel */
+.ks-hair{fill:none;stroke:currentColor;stroke-width:1.4;opacity:.5}
+
+/* set animation: the keystone "settles" into its course on load */
+@keyframes ks-set{
+  0%{transform:translateY(-7px);opacity:0}
+  100%{transform:translateY(0);opacity:1}
+}
+
+/* ---- mortar coursing rule: hairline with a centered keystone notch ---- */
+.course{position:relative;height:1px;background:var(--line);margin:0}
+.course::after{
+  content:"";position:absolute;left:50%;top:50%;
+  width:9px;height:9px;transform:translate(-50%,-50%) rotate(45deg);
+  background:var(--paper);border:1px solid var(--line-strong);
+}
+
+/* ============================================================================
+   NAV
+   ========================================================================== */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:color-mix(in srgb,var(--paper) 86%, transparent);
+  backdrop-filter:blur(10px) saturate(1.1);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{display:flex;align-items:center;gap:32px;height:70px}
+.brand{display:flex;align-items:center;gap:12px;flex:0 0 auto}
+.brand .keystone{color:var(--ink)}
+.brand-text{
+  font-weight:600;font-size:13.5px;letter-spacing:.18em;text-transform:uppercase;
+}
+.nav-links{display:flex;gap:30px;margin-left:auto}
+.nav-links a{
+  font-family:"Geist Mono",monospace;
+  font-size:12px;letter-spacing:.08em;color:var(--body);
+  padding:6px 0;position:relative;transition:color .18s var(--ease);
+}
+.nav-links a::after{
+  content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;
+  background:var(--ochre);transition:right .2s var(--ease);
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{right:0}
+.nav-cta{
+  font-family:"Geist Mono",monospace;font-size:12px;letter-spacing:.06em;
+  border:1px solid var(--ink);color:var(--ink);
+  padding:9px 16px;border-radius:3px;
+  transition:background .18s var(--ease),color .18s var(--ease);
+}
+.nav-cta:hover{background:var(--ink);color:var(--paper)}
+
+/* ============================================================================
+   HERO: ranged-left, oversized keystone watermark bleeding off right edge.
+   The deliberate asymmetry.
+   ========================================================================== */
+.hero{position:relative;overflow:hidden;padding:104px 0 96px}
+.hero-grid{position:relative;z-index:2;max-width:760px}
+.hero .eyebrow{display:inline-block;margin-bottom:26px}
+.hero h1{
+  font-size:clamp(2.6rem,5.4vw,4.5rem);
+  font-weight:600;line-height:1.04;letter-spacing:-.022em;
+  margin:0 0 26px;max-width:16ch;
+}
+.hero h1 .accentword{color:var(--ochre)}
+.hero-sub{
+  font-size:clamp(1.05rem,1.5vw,1.22rem);
+  color:var(--body);max-width:52ch;margin:0 0 38px;line-height:1.6;
+}
+.hero-cta{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+
+/* the ONE amber CTA */
+.btn-primary{
+  display:inline-flex;align-items:center;gap:11px;
+  background:var(--ochre);color:var(--on-ochre);
+  font-weight:600;font-size:15.5px;letter-spacing:.005em;
+  padding:15px 26px;border-radius:4px;border:none;cursor:pointer;
+  box-shadow:0 1px 0 var(--ochre-deep), 0 10px 26px -12px rgba(143,92,10,.6);
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease),background .18s var(--ease);
+}
+.btn-primary .arr{transition:transform .2s var(--ease)}
+.btn-primary:hover{background:var(--ochre-deep);transform:translateY(-1px);box-shadow:0 1px 0 var(--ochre-deep),0 16px 34px -14px rgba(143,92,10,.7)}
+.btn-primary:hover .arr{transform:translateX(4px)}
+
+.btn-secondary{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:"Geist Mono",monospace;font-size:12.5px;letter-spacing:.04em;
+  color:var(--ink);position:relative;padding:6px 0;
+}
+.btn-secondary::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--line-strong);transition:background .18s var(--ease)}
+.btn-secondary:hover::after{background:var(--ochre)}
+
+/* oversized keystone watermark: bleeds off the right, asymmetric anchor */
+.hero-mark{
+  position:absolute;top:50%;right:-120px;transform:translateY(-50%);
+  z-index:1;color:var(--ink);opacity:.05;pointer-events:none;
+}
+.hero-mark svg{width:560px;height:auto}
+
+/* faint masonry coursing in the hero floor, NOT a dot-grid */
+.hero-courses{position:absolute;left:0;right:0;bottom:0;height:140px;z-index:1;pointer-events:none;opacity:.5}
+.hero-courses span{display:block;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin-top:22px}
+
+/* ============================================================================
+   TRUST LADDER ROW: three rungs, mono numerals, plain agency.
+   ========================================================================== */
+.ladder{padding:70px 0}
+.ladder-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:36px;flex-wrap:wrap}
+.ladder-head h2{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:600;letter-spacing:-.018em;margin:0;max-width:24ch}
+.ladder-rungs{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--surface)}
+.rung{padding:30px 28px;position:relative}
+.rung + .rung{border-left:1px solid var(--line)}
+.rung-num{font-family:"Geist Mono",monospace;font-size:12px;color:var(--ochre-deep);letter-spacing:.18em;margin-bottom:16px}
+.rung-act{font-size:1.45rem;font-weight:600;letter-spacing:-.01em;margin:0 0 8px}
+.rung-note{font-size:.95rem;color:var(--body);margin:0}
+/* the ochre rises with the ladder: depth cue on the last rung */
+.rung:nth-child(3){background:linear-gradient(180deg,var(--surface),#faf3e4)}
+.rung:nth-child(3) .rung-act{color:var(--ochre-deep)}
+
+/* ============================================================================
+   PROOF: founder line, record + product pills, three workflow patterns.
+   ========================================================================== */
+.proof{padding:78px 0 30px}
+.proof-founder{
+  display:flex;gap:18px;align-items:flex-start;
+  border-left:3px solid var(--ochre);padding-left:22px;margin-bottom:42px;max-width:70ch;
+}
+.proof-founder .keystone{margin-top:4px;color:var(--ochre-deep)}
+.proof-founder p{margin:0;font-size:1.18rem;font-weight:500;line-height:1.5;letter-spacing:-.01em}
+.proof-founder p .soft{color:var(--body);font-weight:450}
+
+.pill-group{margin-bottom:14px}
+.pill-group-label{margin-bottom:12px}
+.pills{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:30px}
+.pill{
+  font-family:"Geist Mono",monospace;font-size:11.5px;letter-spacing:.04em;
+  padding:7px 13px;border-radius:3px;border:1px solid var(--line-strong);
+  color:var(--body);background:var(--surface);
+  transition:border-color .16s var(--ease),color .16s var(--ease);
+}
+.pill:hover{border-color:var(--ochre);color:var(--ink)}
+.pill-live{border-color:var(--ink);color:var(--ink);background:transparent}
+.pill-live::before{content:"●";color:var(--ochre);font-size:8px;margin-right:7px;vertical-align:1px}
+
+/* three workflow patterns: varied composition, numbered, keystone-marked */
+.patterns{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:46px}
+.pattern{
+  background:var(--surface);border:1px solid var(--line);border-radius:7px;
+  padding:26px 24px 28px;position:relative;overflow:hidden;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease);
+}
+.pattern:hover{transform:translateY(-3px);box-shadow:0 20px 40px -26px rgba(28,24,20,.4);border-color:var(--line-strong)}
+/* keystone coursing tick top-left of each pattern */
+.pattern-tick{position:absolute;top:0;left:26px;width:9px;height:9px;background:var(--ochre);transform:translateY(-50%) rotate(45deg);transition:transform .2s var(--ease)}
+.pattern:hover .pattern-tick{transform:translateY(-50%) rotate(135deg)}
+.pattern-idx{font-family:"Geist Mono",monospace;font-size:12px;color:var(--faint);letter-spacing:.16em;margin:6px 0 16px}
+.pattern h3{font-size:1.22rem;font-weight:600;letter-spacing:-.012em;margin:0 0 10px}
+.pattern p{font-size:.96rem;color:var(--body);margin:0;line-height:1.55}
+
+/* ============================================================================
+   CONVERSION: dark warm-ink panel, ranged-left, ochre CTA primary.
+   ========================================================================== */
+.convert{padding:46px 0 90px}
+.convert-panel{
+  background:var(--ink);color:var(--paper);
+  border-radius:12px;padding:60px 56px;position:relative;overflow:hidden;
+}
+/* repeating keystone motif, embossed into the dark panel */
+.convert-mark{position:absolute;right:-60px;bottom:-90px;color:#fff;opacity:.045;pointer-events:none}
+.convert-mark svg{width:380px;height:auto}
+.convert-inner{position:relative;z-index:2;max-width:60ch}
+.convert .eyebrow{color:var(--ochre-bright)}
+.convert h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:600;letter-spacing:-.02em;line-height:1.08;margin:18px 0 16px}
+.convert-frame{font-family:"Geist Mono",monospace;font-size:13px;letter-spacing:.02em;color:#cdc4b7;margin:0 0 34px;line-height:1.6}
+.convert-cta{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.convert .btn-secondary{color:var(--paper)}
+.convert .btn-secondary::after{background:#5a5147}
+.convert .btn-secondary:hover::after{background:var(--ochre-bright)}
+
+/* ============================================================================
+   FOOTER
+   ========================================================================== */
+.foot{border-top:1px solid var(--line);padding:46px 0 56px}
+.foot-inner{display:flex;align-items:flex-start;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.foot-brand{display:flex;align-items:center;gap:12px}
+.foot-brand .brand-text{font-size:13px}
+.foot-tag{font-family:"Geist Mono",monospace;font-size:12px;color:var(--faint);letter-spacing:.04em;margin-top:12px}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap}
+.foot-links a{font-family:"Geist Mono",monospace;font-size:12px;color:var(--body);letter-spacing:.04em}
+.foot-links a:hover{color:var(--ochre-deep)}
+
+/* ============================================================================
+   SCROLL-REVEAL: keystone markers settle on entry. Fast, earned.
+   ========================================================================== */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+
+/* ============================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width:860px){
+  .nav-links{display:none}
+  .hero{padding:72px 0 64px}
+  .hero-mark{right:-180px;opacity:.04}
+  .hero-mark svg{width:420px}
+  .ladder-rungs{grid-template-columns:1fr}
+  .rung + .rung{border-left:none;border-top:1px solid var(--line)}
+  .patterns{grid-template-columns:1fr}
+  .convert-panel{padding:42px 28px}
+}
+@media (max-width:520px){
+  .wrap{padding:0 20px}
+  .hero h1{font-size:2.3rem}
+  .hero-cta{gap:16px}
+  .proof-founder p{font-size:1.05rem}
+}
+
+/* ---- on load, the nav + hero keystones set into course ---- */
+@media (prefers-reduced-motion:no-preference){
+  .ks-set{animation:ks-set .42s var(--ease) both}
+  .btn-primary{will-change:transform}
+}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  *{scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#" aria-label="Citizen Mason home">
+      <span class="keystone ks-set" aria-hidden="true">
+        <svg width="22" height="26" viewBox="0 0 22 26">
+          <path class="ks-face" d="M2 2 H20 L17 24 H5 Z"/>
+          <path class="ks-chisel" d="M2 2 H20 L18.4 13 H3.6 Z"/>
+          <path class="ks-hair" d="M11 4 V22"/>
+        </svg>
+      </span>
+      <span class="brand-text">Citizen&nbsp;Mason</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#who">Who it is for</a>
+      <a href="#how">How it works</a>
+      <a href="#proof">Proof</a>
+    </nav>
+    <a class="nav-cta" href="#book">Book a call</a>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============================ HERO ============================ -->
+<section class="hero">
+  <div class="hero-mark" aria-hidden="true">
+    <svg viewBox="0 0 220 260">
+      <path class="ks-face" d="M20 18 H200 L168 240 H52 Z"/>
+      <path class="ks-chisel" d="M20 18 H200 L184 120 H36 Z"/>
+      <path class="ks-hair" d="M110 28 V232"/>
+    </svg>
+  </div>
+  <div class="wrap hero-grid">
+    <span class="eyebrow">Fractional AI-Ops partner</span>
+    <h1>Turn the work that slows you down into <span class="accentword">software that runs itself.</span></h1>
+    <p class="hero-sub">Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. You stay in control of every call that matters.</p>
+    <div class="hero-cta">
+      <a class="btn-primary" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+      <a class="btn-secondary" href="#book">Get your AI opportunity plan</a>
+    </div>
+  </div>
+  <div class="hero-courses" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</section>
+
+<div class="wrap"><div class="course" aria-hidden="true"></div></div>
+
+<!-- ===================== TRUST LADDER / WHO ===================== -->
+<section class="ladder" id="who">
+  <div class="wrap">
+    <div class="ladder-head reveal">
+      <h2>The practice earns access one rung at a time.</h2>
+      <span class="label-faint">For principals who stay the final word</span>
+    </div>
+    <div class="ladder-rungs reveal">
+      <div class="rung">
+        <div class="rung-num">Rung 01</div>
+        <p class="rung-act">You read it.</p>
+        <p class="rung-note">The system prepares the work overnight. Nothing moves without you.</p>
+      </div>
+      <div class="rung">
+        <div class="rung-num">Rung 02</div>
+        <p class="rung-act">You approve the draft.</p>
+        <p class="rung-note">It writes the response. You edit a line, or you wave it through.</p>
+      </div>
+      <div class="rung">
+        <div class="rung-num">Rung 03</div>
+        <p class="rung-act">You hit Send.</p>
+        <p class="rung-note">The last call is always yours. The work just arrives ready.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap"><div class="course" aria-hidden="true"></div></div>
+
+<!-- ============================ PROOF ============================ -->
+<section class="proof" id="proof">
+  <div class="wrap">
+    <span class="eyebrow reveal" style="display:inline-block;margin-bottom:24px">Proof</span>
+    <div class="proof-founder reveal">
+      <span class="keystone" aria-hidden="true">
+        <svg width="24" height="28" viewBox="0 0 22 26">
+          <path class="ks-face" d="M2 2 H20 L17 24 H5 Z"/>
+          <path class="ks-chisel" d="M2 2 H20 L18.4 13 H3.6 Z"/>
+        </svg>
+      </span>
+      <p>Built by an operator who ships, not an agency. <span class="soft">A 15-year product record, behind the systems that run your studio.</span></p>
+    </div>
+
+    <div class="pill-group reveal">
+      <div class="label-faint pill-group-label">Track record</div>
+      <div class="pills">
+        <span class="pill">Deloitte</span>
+        <span class="pill">NFL Digital Media</span>
+        <span class="pill">Miami HEAT</span>
+        <span class="pill">Kraken</span>
+        <span class="pill">Scopely</span>
+        <span class="pill">Maestro</span>
+      </div>
+    </div>
+
+    <div class="pill-group reveal" id="how">
+      <div class="label-faint pill-group-label">Live products</div>
+      <div class="pills">
+        <span class="pill pill-live">Crafted</span>
+        <span class="pill pill-live">Phase</span>
+        <span class="pill pill-live">Netrunner</span>
+        <span class="pill pill-live">Magic Eden</span>
+      </div>
+    </div>
+
+    <div class="patterns">
+      <article class="pattern reveal">
+        <span class="pattern-tick" aria-hidden="true"></span>
+        <div class="pattern-idx">Pattern 01 / Read</div>
+        <h3>Morning Brief</h3>
+        <p>Reads the inbox overnight and returns room-tagged items you scan in minutes, grouped by thread, before the day starts.</p>
+      </article>
+      <article class="pattern reveal">
+        <span class="pattern-tick" aria-hidden="true"></span>
+        <div class="pattern-idx">Pattern 02 / Compare</div>
+        <h3>Shop Drawing Compare</h3>
+        <p>Pairs an instruction with the contractor response and flags what was not addressed. One missed detail can cost tens of thousands.</p>
+      </article>
+      <article class="pattern reveal">
+        <span class="pattern-tick" aria-hidden="true"></span>
+        <div class="pattern-idx">Pattern 03 / File</div>
+        <h3>Autofiler</h3>
+        <p>Incoming documents sort and file themselves into the structure you already keep. The folders stay exactly where you put them.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= CONVERSION ========================= -->
+<section class="convert" id="book">
+  <div class="wrap">
+    <div class="convert-panel reveal">
+      <div class="convert-mark" aria-hidden="true">
+        <svg viewBox="0 0 220 260">
+          <path class="ks-face" d="M20 18 H200 L168 240 H52 Z"/>
+          <path class="ks-chisel" d="M20 18 H200 L184 120 H36 Z"/>
+          <path class="ks-hair" d="M110 28 V232"/>
+        </svg>
+      </div>
+      <div class="convert-inner">
+        <span class="eyebrow">Start here</span>
+        <h2>Find the one workflow worth building first.</h2>
+        <p class="convert-frame">A 45-minute call. We find the one workflow worth building first. Understanding before scope.</p>
+        <div class="convert-cta">
+          <a class="btn-primary" href="#book">Book a discovery call <span class="arr" aria-hidden="true">&rarr;</span></a>
+          <a class="btn-secondary" href="#book">Get your AI opportunity plan</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <div>
+      <div class="foot-brand">
+        <span class="keystone" aria-hidden="true">
+          <svg width="20" height="24" viewBox="0 0 22 26">
+            <path class="ks-face" d="M2 2 H20 L17 24 H5 Z"/>
+            <path class="ks-chisel" d="M2 2 H20 L18.4 13 H3.6 Z"/>
+          </svg>
+        </span>
+        <span class="brand-text">Citizen&nbsp;Mason</span>
+      </div>
+      <p class="foot-tag">A second pair of senior eyes that prepares the work. You keep the final call.</p>
+    </div>
+    <nav class="foot-links" aria-label="Footer">
+      <a href="#who">Who it is for</a>
+      <a href="#how">How it works</a>
+      <a href="#proof">Proof</a>
+      <a href="#book">Book a call</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* scroll-reveal: keystone markers settle into course as sections enter */
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    els.forEach(function(e){e.classList.add('in')});
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}
+    });
+  },{threshold:.16,rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>

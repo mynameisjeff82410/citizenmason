@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Citizen Mason</title>
+<meta name="description" content="A second pair of senior eyes that prepares the work. You keep the final call." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ============================================================
+     IDENTITY 2. OPERATOR'S AUTHORITY
+     Ink-black canvas. Copper accent (metallic, not neon).
+     Geist display with tight tracking. Geist Mono as the
+     signature hierarchy device. A chiseled CM/ builder's mark.
+     ============================================================ */
+
+  :root {
+    /* Ink gamut. warm-cool ink, not pure #000, not generic charcoal */
+    --ink:        #0B0B0C;   /* canvas */
+    --ink-2:      #111113;   /* raised surface */
+    --ink-3:      #17171A;   /* card */
+    --ink-line:   #232327;   /* hairline */
+    --ink-line-2: #2E2E33;   /* stronger hairline */
+
+    /* Paper / bone text. warm white, never clinical */
+    --bone:       #EDE8E1;   /* primary text */
+    --bone-dim:   #A39C92;   /* secondary text */
+    --bone-faint: #6F6A62;   /* tertiary / mono labels */
+
+    /* Copper accent. warm metallic, the only accent on the page */
+    --copper:        #C77B4E;
+    --copper-bright: #DD9266;
+    --copper-deep:   #A45F38;
+    --copper-glow:   rgba(199, 123, 78, 0.16);
+
+    --radius: 4px;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-sharp: cubic-bezier(0.4, 0, 0.1, 1);
+
+    --maxw: 1140px;
+    --gutter: clamp(20px, 5vw, 64px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--ink);
+    color: var(--bone);
+    font-family: "Geist", system-ui, -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* Faint quarried-stone backdrop: two crossing hairline planes,
+     never a dot grid, never an orbiting network. Reads as a
+     drafting surface, not a tech motif. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(var(--ink-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--ink-line) 1px, transparent 1px);
+    background-size: 100% 96px, 96px 100%;
+    opacity: 0.30;
+    mask-image: radial-gradient(ellipse 120% 80% at 70% -10%, #000 0%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 120% 80% at 70% -10%, #000 0%, transparent 70%);
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: var(--maxw);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .mono {
+    font-family: "Geist Mono", ui-monospace, "SF Mono", monospace;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /* Mono eyebrow/label. the signature device */
+  .label {
+    font-family: "Geist Mono", ui-monospace, monospace;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bone-faint);
+  }
+  .label .tick { color: var(--copper); }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--copper); color: var(--ink); }
+
+  :focus-visible {
+    outline: 2px solid var(--copper-bright);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--copper);
+    color: var(--ink);
+    padding: 10px 16px;
+    z-index: 999;
+    font-weight: 600;
+  }
+  .skip:focus { left: 12px; top: 12px; }
+
+  /* ---------- The chiseled builder's mark: CM/ ---------- */
+  .mark {
+    display: inline-flex;
+    align-items: baseline;
+    font-family: "Geist Mono", monospace;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    user-select: none;
+  }
+  .mark .cm { color: var(--bone); }
+  .mark .slash {
+    color: var(--copper);
+    /* the chisel cut: a forward slash that reads as a stonemason's stroke */
+    display: inline-block;
+    transform: translateY(0.02em);
+    transition: transform 0.18s var(--ease);
+  }
+  .mark:hover .slash { transform: translateY(0.02em) translateX(1px) skewX(-2deg); }
+
+  /* ============================================================
+     NAV
+     ============================================================ */
+  header.nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(11, 11, 12, 0.72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--ink-line);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+  }
+  .wordmark {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .wordmark .mark { font-size: 1.15rem; }
+  .wordmark .name {
+    font-family: "Geist", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--bone);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+  }
+  .nav-links a.link {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--bone-dim);
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.18s var(--ease);
+  }
+  .nav-links a.link::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 100%; height: 1px;
+    background: var(--copper);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.22s var(--ease);
+  }
+  .nav-links a.link:hover { color: var(--bone); }
+  .nav-links a.link:hover::after { transform: scaleX(1); }
+
+  .btn {
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: -0.005em;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.16s var(--ease-sharp), background 0.18s, box-shadow 0.2s, border-color 0.18s, color 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    white-space: nowrap;
+  }
+  /* Copper lives here, and almost nowhere else. */
+  .btn-primary {
+    background: var(--copper);
+    color: var(--ink);
+    padding: 11px 20px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18);
+  }
+  .btn-primary:hover {
+    background: var(--copper-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px var(--copper-glow), inset 0 1px 0 rgba(255,255,255,0.22);
+  }
+  .btn-primary:active { transform: translateY(0); background: var(--copper-deep); }
+  .btn-primary .arrow { transition: transform 0.18s var(--ease); }
+  .btn-primary:hover .arrow { transform: translateX(3px); }
+
+  .btn-lg { padding: 15px 26px; font-size: 0.95rem; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--bone);
+    border-color: var(--ink-line-2);
+    padding: 11px 20px;
+  }
+  .btn-ghost:hover { border-color: var(--bone-faint); background: var(--ink-3); }
+
+  .nav .btn-primary { padding: 9px 18px; font-size: 0.8rem; }
+
+  /* ============================================================
+     HERO . asymmetric: headline ranged left, mono spec rail right
+     ============================================================ */
+  .hero { padding: clamp(64px, 11vw, 132px) 0 clamp(56px, 8vw, 96px); }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: clamp(32px, 6vw, 80px);
+    align-items: end;
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--copper);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--copper);
+  }
+  h1.hero-head {
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    color: var(--bone);
+    max-width: 16ch;
+  }
+  /* the "chisel cut": copper rule draws under the keyword on load */
+  .cut {
+    position: relative;
+    white-space: nowrap;
+    color: var(--bone);
+  }
+  .cut::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0.08em;
+    height: 0.5em;
+    width: 100%;
+    background: linear-gradient(90deg, var(--copper-deep), var(--copper));
+    opacity: 0.26;
+    transform: scaleX(0);
+    transform-origin: left;
+    z-index: -1;
+    animation: chiselCut 0.9s var(--ease) 0.5s forwards;
+  }
+  @keyframes chiselCut { to { transform: scaleX(1); } }
+
+  .hero-sub {
+    margin-top: 30px;
+    font-size: clamp(1.02rem, 1.5vw, 1.16rem);
+    line-height: 1.62;
+    color: var(--bone-dim);
+    max-width: 46ch;
+  }
+  .hero-sub strong { color: var(--bone); font-weight: 500; }
+
+  .hero-cta {
+    margin-top: 38px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .cta-aside {
+    margin-top: 18px;
+  }
+  .cta-aside .mono {
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    color: var(--bone-faint);
+  }
+  .secondary-link {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--bone-dim);
+    border-bottom: 1px solid var(--ink-line-2);
+    padding-bottom: 2px;
+    transition: color 0.18s, border-color 0.18s;
+  }
+  .secondary-link:hover { color: var(--bone); border-color: var(--copper); }
+
+  /* Mono spec rail. Mercury-style mono hierarchy as a hero column */
+  .spec-rail {
+    border-left: 1px solid var(--ink-line);
+    padding-left: clamp(20px, 2.5vw, 32px);
+    padding-bottom: 6px;
+  }
+  .spec-rail .spec-title {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-faint);
+    margin-bottom: 22px;
+  }
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px dashed var(--ink-line);
+  }
+  .spec-row:last-child { border-bottom: 0; }
+  .spec-row .k {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.02em;
+    color: var(--bone-dim);
+  }
+  .spec-row .v {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: var(--bone);
+    text-align: right;
+  }
+  .spec-row .v.acc { color: var(--copper-bright); }
+
+  /* ============================================================
+     TRUST LADDER ROW
+     ============================================================ */
+  .section { padding: clamp(56px, 8vw, 104px) 0; }
+  .rule-top { border-top: 1px solid var(--ink-line); }
+
+  .sec-head { margin-bottom: 48px; max-width: 60ch; }
+  .sec-head .label { margin-bottom: 16px; display: block; }
+  .sec-head h2 {
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3vw, 2.3rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--bone);
+  }
+  .sec-head p {
+    margin-top: 16px;
+    color: var(--bone-dim);
+    font-size: 1.04rem;
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+
+  .ladder {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border: 1px solid var(--ink-line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .rung {
+    padding: 32px clamp(20px, 2.4vw, 32px) 34px;
+    border-right: 1px solid var(--ink-line);
+    position: relative;
+    transition: background 0.22s var(--ease);
+  }
+  .rung:last-child { border-right: 0; }
+  .rung:hover { background: var(--ink-2); }
+  .rung .step {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    color: var(--copper);
+    margin-bottom: 18px;
+  }
+  .rung .agency {
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: 1.32rem;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+    margin-bottom: 10px;
+  }
+  .rung .gloss {
+    font-size: 0.94rem;
+    line-height: 1.55;
+    color: var(--bone-dim);
+  }
+  /* the rung fills copper from the floor up on hover */
+  .rung::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 100%; height: 2px;
+    background: var(--copper);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .rung:hover::after { transform: scaleX(1); }
+
+  /* ============================================================
+     PROOF
+     ============================================================ */
+  .proof-founder {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--ink-line);
+    margin-bottom: 36px;
+  }
+  .proof-founder .lead {
+    font-family: "Geist", sans-serif;
+    font-weight: 500;
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    letter-spacing: -0.02em;
+    color: var(--bone);
+  }
+  .proof-founder .lead em {
+    font-style: normal;
+    color: var(--copper-bright);
+  }
+  .proof-founder .sub {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    color: var(--bone-faint);
+  }
+
+  .pill-block { margin-bottom: 16px; }
+  .pill-block .pl {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bone-faint);
+    margin-bottom: 14px;
+  }
+  .pills { display: flex; flex-wrap: wrap; gap: 9px; }
+  .pill {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--bone-dim);
+    background: var(--ink-2);
+    border: 1px solid var(--ink-line);
+    border-radius: 100px;
+    padding: 7px 15px;
+    transition: color 0.18s var(--ease), border-color 0.18s var(--ease), transform 0.16s var(--ease-sharp);
+  }
+  .pill:hover {
+    color: var(--bone);
+    border-color: var(--bone-faint);
+    transform: translateY(-1px);
+  }
+  .pill.live::before {
+    content: "";
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--copper);
+    margin-right: 8px;
+    vertical-align: middle;
+    box-shadow: 0 0 8px var(--copper);
+  }
+  .pill.live:hover { border-color: var(--copper-deep); }
+
+  /* Workflow patterns. three cards, mono ticker on hover */
+  .patterns {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 44px;
+  }
+  .pattern {
+    background: var(--ink-3);
+    border: 1px solid var(--ink-line);
+    border-radius: var(--radius);
+    padding: 26px 24px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.22s var(--ease), transform 0.2s var(--ease-sharp);
+  }
+  .pattern:hover { border-color: var(--ink-line-2); transform: translateY(-2px); }
+  .pattern .idx {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--copper);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pattern .idx .glyph { color: var(--bone-faint); }
+  .pattern h3 {
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: 1.16rem;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+    margin-bottom: 10px;
+  }
+  .pattern p {
+    font-size: 0.92rem;
+    line-height: 1.56;
+    color: var(--bone-dim);
+  }
+  .pattern .stakes {
+    margin-top: 14px;
+    font-family: "Geist Mono", monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.01em;
+    color: var(--copper-bright);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.24s var(--ease), transform 0.24s var(--ease);
+  }
+  .pattern:hover .stakes { opacity: 1; transform: translateY(0); }
+  .pattern::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--copper), transparent);
+    transform: translateX(-101%);
+    transition: transform 0.5s var(--ease);
+  }
+  .pattern:hover::before { transform: translateX(101%); }
+
+  /* ============================================================
+     CONVERSION
+     ============================================================ */
+  .convert {
+    border: 1px solid var(--ink-line);
+    border-radius: 8px;
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(199,123,78,0.07), transparent 55%),
+      var(--ink-2);
+    padding: clamp(40px, 6vw, 72px) clamp(28px, 5vw, 64px);
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  .convert .label { margin-bottom: 18px; display: block; }
+  .convert h2 {
+    font-family: "Geist", sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.7rem, 3.2vw, 2.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--bone);
+  }
+  .convert .frame {
+    margin-top: 20px;
+    font-size: 1.02rem;
+    line-height: 1.6;
+    color: var(--bone-dim);
+    max-width: 42ch;
+  }
+  .convert .frame b { color: var(--bone); font-weight: 500; }
+  .convert-action { display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+  .convert-action .btn { width: auto; }
+  .convert-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+  .convert-divider .ln { flex: 1; height: 1px; background: var(--ink-line); }
+  .convert-divider .or {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.66rem;
+    letter-spacing: 0.18em;
+    color: var(--bone-faint);
+    text-transform: uppercase;
+  }
+  .convert-secondary { display: flex; flex-direction: column; gap: 6px; }
+  .convert-secondary .sl-label {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+    color: var(--bone-faint);
+  }
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  footer.foot {
+    border-top: 1px solid var(--ink-line);
+    padding: 52px 0 56px;
+    margin-top: clamp(40px, 7vw, 88px);
+  }
+  .foot-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .foot-left { max-width: 36ch; }
+  .foot-left .wordmark { margin-bottom: 16px; }
+  .foot-tag {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    color: var(--bone-dim);
+  }
+  .foot-tag .mono { color: var(--bone-faint); display: block; margin-top: 10px; font-size: 0.74rem; letter-spacing: 0.03em; }
+  .foot-nav { display: flex; gap: 56px; flex-wrap: wrap; }
+  .foot-col { display: flex; flex-direction: column; gap: 12px; }
+  .foot-col .ch {
+    font-family: "Geist Mono", monospace;
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bone-faint);
+    margin-bottom: 4px;
+  }
+  .foot-col a {
+    font-size: 0.88rem;
+    color: var(--bone-dim);
+    transition: color 0.16s var(--ease);
+  }
+  .foot-col a:hover { color: var(--copper-bright); }
+
+  /* ============================================================
+     RESPONSIVE
+     ============================================================ */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 44px; align-items: start; }
+    .spec-rail { border-left: 0; border-top: 1px solid var(--ink-line); padding-left: 0; padding-top: 28px; }
+    .convert { grid-template-columns: 1fr; gap: 36px; }
+    .ladder { grid-template-columns: 1fr; }
+    .rung { border-right: 0; border-bottom: 1px solid var(--ink-line); }
+    .rung:last-child { border-bottom: 0; }
+    .patterns { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 680px) {
+    .nav-links .link { display: none; }
+    h1.hero-head { font-size: clamp(2.2rem, 9vw, 3rem); }
+    .cut { white-space: normal; }
+    .foot-nav { gap: 36px; }
+    .proof-founder { flex-direction: column; gap: 8px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .cut::after { transform: scaleX(1); }
+  }
+</style>
+</head>
+<body>
+  <a href="#main" class="skip">Skip to content</a>
+
+  <!-- ===================== NAV ===================== -->
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="#" class="wordmark" aria-label="Citizen Mason home">
+        <span class="mark" aria-hidden="true"><span class="cm">CM</span><span class="slash">/</span></span>
+        <span class="name">Citizen Mason</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a class="link" href="#who">Who it is for</a>
+        <a class="link" href="#how">How it works</a>
+        <a class="link" href="#proof">Proof</a>
+        <a class="btn btn-primary" href="#book">Book a call</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ===================== HERO ===================== -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <span class="hero-eyebrow">
+            <span class="dot" aria-hidden="true"></span>
+            <span class="label">Fractional AI<span class="tick">-</span>Ops partner</span>
+          </span>
+          <h1 class="hero-head">Turn the work that <span class="cut">slows you down</span> into software that runs itself.</h1>
+          <p class="hero-sub">Citizen Mason builds AI systems that take the repetitive, expensive work off your team and run it, on the tools you already use. <strong>You stay in control of every call that matters.</strong></p>
+          <div class="hero-cta">
+            <a class="btn btn-primary btn-lg" href="#book">Book a discovery call <span class="arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="secondary-link" href="#book">Get your AI opportunity plan</a>
+          </div>
+          <div class="cta-aside">
+            <span class="mono">A 45-minute call. We find the one workflow worth building first.</span>
+          </div>
+        </div>
+
+        <!-- Mono spec rail: Mercury-style hierarchy as a hero column -->
+        <aside class="spec-rail" aria-label="At a glance">
+          <div class="spec-title">// The arrangement</div>
+          <div class="spec-row"><span class="k">Built by</span><span class="v">One operator</span></div>
+          <div class="spec-row"><span class="k">Product record</span><span class="v acc">15 years</span></div>
+          <div class="spec-row"><span class="k">Runs on</span><span class="v">Your own tools</span></div>
+          <div class="spec-row"><span class="k">Final word</span><span class="v acc">Always yours</span></div>
+          <div class="spec-row"><span class="k">First build</span><span class="v">One workflow</span></div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===================== WHO IT IS FOR / TRUST LADDER ===================== -->
+    <section class="section rule-top" id="who">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="label"><span class="tick">/</span> How the trust gets earned</span>
+          <h2>The work reaches you ready. You decide what leaves the building.</h2>
+          <p>Access is earned one rung at a time. Every workflow ships read-first, then draft, then send, and nothing client-facing moves without you.</p>
+        </div>
+        <div class="ladder">
+          <div class="rung">
+            <div class="step">01 / READ</div>
+            <div class="agency">You read it.</div>
+            <p class="gloss">The system prepares the work overnight and hands you a clean read in the morning. Nothing is sent. Nothing is signed.</p>
+          </div>
+          <div class="rung">
+            <div class="step">02 / APPROVE</div>
+            <div class="agency">You approve the draft.</div>
+            <p class="gloss">Once the read holds up, it starts drafting the response. You edit, you approve, you keep the voice of the studio.</p>
+          </div>
+          <div class="rung">
+            <div class="step">03 / SEND</div>
+            <div class="agency">You hit Send.</div>
+            <p class="gloss">The last move is always a person. The system never sends, signs, or speaks for you. You hold the final call.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PROOF ===================== -->
+    <section class="section rule-top" id="proof">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="label"><span class="tick">/</span> Proof</span>
+          <h2>Built by an operator who ships, not an agency.</h2>
+        </div>
+
+        <div class="proof-founder">
+          <span class="lead">A <em>15-year product record</em> behind every system.</span>
+          <span class="sub">// shipped to market, not slideware</span>
+        </div>
+
+        <div class="pill-block">
+          <div class="pl">Led to market</div>
+          <div class="pills">
+            <span class="pill">Deloitte</span>
+            <span class="pill">NFL Digital Media</span>
+            <span class="pill">Miami HEAT</span>
+            <span class="pill">Kraken</span>
+            <span class="pill">Scopely</span>
+            <span class="pill">Maestro</span>
+          </div>
+        </div>
+        <div class="pill-block">
+          <div class="pl">Built and live</div>
+          <div class="pills">
+            <span class="pill live">Crafted</span>
+            <span class="pill live">Phase</span>
+            <span class="pill live">Netrunner</span>
+            <span class="pill live">Magic Eden</span>
+          </div>
+        </div>
+
+        <!-- Three workflow patterns -->
+        <div class="patterns" id="how">
+          <article class="pattern">
+            <div class="idx">PATTERN 01 <span class="glyph" aria-hidden="true">/</span></div>
+            <h3>Morning Brief</h3>
+            <p>Reads the inbox overnight and returns room-tagged items you scan in minutes, not hours.</p>
+            <div class="stakes">// the read is ready before coffee is</div>
+          </article>
+          <article class="pattern">
+            <div class="idx">PATTERN 02 <span class="glyph" aria-hidden="true">/</span></div>
+            <h3>Shop Drawing Compare</h3>
+            <p>Pairs an instruction with the contractor response and flags what was not addressed.</p>
+            <div class="stakes">// one missed detail can cost tens of thousands</div>
+          </article>
+          <article class="pattern">
+            <div class="idx">PATTERN 03 <span class="glyph" aria-hidden="true">/</span></div>
+            <h3>Autofiler</h3>
+            <p>Incoming documents sort and file themselves into the structure you already keep.</p>
+            <div class="stakes">// nothing lands in the wrong folder again</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CONVERSION ===================== -->
+    <section class="section rule-top" id="book">
+      <div class="wrap">
+        <div class="convert">
+          <div class="convert-copy">
+            <span class="label"><span class="tick">/</span> Start here</span>
+            <h2>Find the one workflow worth building first.</h2>
+            <p class="frame">A <b>45-minute call</b>. We sit down together, look at where senior time goes, and name the first system to build. <b>Understanding before scope.</b></p>
+          </div>
+          <div class="convert-action">
+            <a class="btn btn-primary btn-lg" href="#book">Book a discovery call <span class="arrow" aria-hidden="true">&rarr;</span></a>
+            <div class="convert-divider"><span class="ln" aria-hidden="true"></span><span class="or">or</span><span class="ln" aria-hidden="true"></span></div>
+            <div class="convert-secondary">
+              <span class="sl-label">// prefer a written start</span>
+              <a class="secondary-link" href="#book">Get your AI opportunity plan</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="foot">
+    <div class="wrap foot-inner">
+      <div class="foot-left">
+        <a href="#" class="wordmark" aria-label="Citizen Mason home">
+          <span class="mark" aria-hidden="true"><span class="cm">CM</span><span class="slash">/</span></span>
+          <span class="name">Citizen Mason</span>
+        </a>
+        <p class="foot-tag">
+          A second pair of senior eyes that prepares the work. You keep the final call.
+          <span class="mono">// fractional AI-Ops and product partner</span>
+        </p>
+      </div>
+      <nav class="foot-nav" aria-label="Footer">
+        <div class="foot-col">
+          <span class="ch">The practice</span>
+          <a href="#who">Who it is for</a>
+          <a href="#how">How it works</a>
+          <a href="#proof">Proof</a>
+        </div>
+        <div class="foot-col">
+          <span class="ch">Start</span>
+          <a href="#book">Book a discovery call</a>
+          <a href="#book">AI opportunity plan</a>
+        </div>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
